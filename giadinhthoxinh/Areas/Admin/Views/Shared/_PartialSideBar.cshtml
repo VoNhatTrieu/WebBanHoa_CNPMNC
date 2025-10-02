@@ -1,0 +1,394 @@
+﻿<link href="~/Content/assets/styles/_PartialSideBar.css" rel="stylesheet" />
+<link href="~/Content/assets/styles/Index1.css" rel="stylesheet" />
+
+<style>
+    /* Hiệu ứng cho các nút trong sidebar */
+
+    /* Cải thiện transition cho tất cả nav-link */
+    .sidebar .nav-link {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        margin: 4px 8px;
+    }
+
+    /* Hiệu ứng hover với gradient */
+    .sidebar .nav-link:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff !important;
+        transform: translateX(8px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Hiệu ứng active */
+    .sidebar .nav-link.active {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: #fff !important;
+        box-shadow: 0 4px 20px rgba(245, 87, 108, 0.5);
+    }
+
+    /* Hiệu ứng gợn sóng khi click */
+    .sidebar .nav-link::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .sidebar .nav-link:active::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    /* Hiệu ứng cho icon */
+    .sidebar .nav-icon {
+        transition: all 0.3s ease;
+    }
+
+    .sidebar .nav-link:hover .nav-icon {
+        transform: rotate(360deg) scale(1.2);
+        color: #fff;
+    }
+
+    /* Hiệu ứng cho mũi tên dropdown */
+    .sidebar .nav-link .right {
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar .nav-link:hover .right {
+        transform: rotate(180deg);
+    }
+
+    /* Hiệu ứng cho submenu */
+    .sidebar .nav-treeview .nav-link {
+        padding-left: 2.5rem;
+        background: transparent;
+    }
+
+    .sidebar .nav-treeview .nav-link:hover {
+        background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.2) 100%);
+        border-left: 4px solid #667eea;
+        transform: translateX(4px);
+    }
+
+    /* Hiệu ứng cho user panel */
+    .sidebar .user-panel {
+        transition: all 0.3s ease;
+        border-radius: 10px;
+        padding: 15px !important;
+    }
+
+    .sidebar .user-panel:hover {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hiệu ứng cho ảnh logo */
+    .sidebar .user-panel .image img {
+        transition: all 0.3s ease;
+        border: 3px solid transparent;
+    }
+
+    .sidebar .user-panel:hover .image img {
+        border-color: #667eea;
+        transform: rotate(5deg) scale(1.1);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Hiệu ứng cho nút "Quay lại trang chủ" */
+    .sidebar .color-name {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: #fff !important;
+        font-weight: 600;
+    }
+
+    .sidebar .color-name:hover {
+        background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+        transform: translateX(-8px);
+        box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+    }
+
+    .sidebar .color-name .color-text {
+        color: #fff !important;
+    }
+
+    /* Animation cho mũi tên trong submenu */
+    .sidebar .nav-treeview .fa-arrow-right {
+        transition: all 0.3s ease;
+    }
+
+    .sidebar .nav-treeview .nav-link:hover .fa-arrow-right {
+        transform: translateX(5px);
+        color: #667eea;
+    }
+
+    /* Hiệu ứng pulse cho icon chat */
+    .sidebar .nav-link .fa-comments {
+        animation: pulse 2s infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    /* Hiệu ứng khi nav-item được mở */
+    .sidebar .nav-item.menu-open > .nav-link {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+    }
+
+    /* Smooth scroll cho sidebar */
+    .sidebar {
+        scroll-behavior: smooth;
+    }
+
+    /* Hiệu ứng shadow cho toàn bộ sidebar */
+    .sidebar {
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+    }
+
+    .sidebar:hover {
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Thêm hiệu ứng cho text trong nav-link */
+    .sidebar .nav-link p {
+        transition: all 0.3s ease;
+    }
+
+    .sidebar .nav-link:hover p {
+        letter-spacing: 0.5px;
+        font-weight: 600;
+    }
+</style>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Sidebar user (optional) -->
+    @*<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            <img src="~/Content/assets/images/logo/logoshop.jpg" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+            <a href="/admin/products" class="d-block">Flower KingDom</a>
+        </div>
+    </div>*@
+
+
+
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+            with font-awesome or any other icon font library -->
+
+            <li class="nav-item">
+                <a href="/admin/categories/index" class="nav-link">
+                    <i class="nav-icon fas fa-edit"></i>
+                    <p>
+                        Quản lý danh mục
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Quản lý sản phẩm
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="/admin/products/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Sản phẩm</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/images/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Hình ảnh</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/productprices/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Giá bán</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/productcolors/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Màu sắc</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/productsizes/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Kích thước</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Quản lý hóa đơn bán
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview space-nav-item">
+                    <li class="nav-item">
+                        @*<a href="/admin/orders/index" class="nav-link">
+                                <i class="fa fa-arrow-right"></i>
+                                <p>Hóa đơn bán hàng</p>
+                            </a>*@
+                    </li>
+                    <li class="nav-item">
+                        @*<a href="@Url.Action("Search","Orders")" class="nav-link">
+                                <i class="fa fa-arrow-right"></i>
+                                <p>Tìm kiếm hóa đơn</p>
+                            </a>*@
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/checkoutdetails/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Chi tiết hóa đơn bán</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Quản lý hóa đơn nhập
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview space-nav-item">
+                    <li class="nav-item">
+                        <a href="/admin/importorders/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Hóa đơn nhập hàng</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/checkindetails/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Chi tiết phiếu nhập sản phẩm</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="/admin/importmaterials/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Chi tiết phiếu nhập nguyên liệu</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="/Admin/Chat/Index" class="nav-link">
+                    <i class="nav-icon fas fa-comments"></i>
+                    <p>Chat với khách</p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
+                        Quản lý nguyên liệu
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview space-nav-item">
+                    <li class="nav-item">
+                        <a href="/admin/materials/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Nguyên liệu</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/matercolors/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Màu nguyên liệu</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/matersizes/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Kích thước nguyên liệu</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/admin/materpriceimports/index" class="nav-link">
+                            <i class="fa fa-arrow-right"></i>
+                            <p>Giá nguyên liệu</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="/admin/users/index" class="nav-link">
+                    <i class="nav-icon fas fa-edit"></i>
+                    <p>
+                        Quản lý nhà tài khoản
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/admin/suppliers/index" class="nav-link">
+                    <i class="nav-icon fas fa-edit"></i>
+                    <p>
+                        Quản lý nhà cung cấp
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/admin/promotes/index" class="nav-link">
+                    <i class="nav-icon fas fa-edit"></i>
+                    <p>
+                        Quản lý khuyến mãi
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/home/index" class="nav-link color-name">
+                    <i class="fa fa-arrow-left color-text" aria-hidden="true"></i>
+                    <p class="color-text">
+                        Quay lại trang chủ
+                    </p>
+                </a>
+            </li>
+
+
+        </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->

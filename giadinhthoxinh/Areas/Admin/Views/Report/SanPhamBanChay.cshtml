@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "SanPhamBanChay";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title text-lg text-danger">Top 5 sản phẩm bán chạy</h1>
+
+
+        </div>
+
+        <div class="card-body table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            Mã sản phẩm
+                        </th>
+                        <th>
+                            Tên sản phẩm
+                        </th>
+                        <th>
+                            Mô tả
+                        </th>
+                        <th>
+                            Đơn giá
+                        </th>
+                        <th>
+                            Số lượng đã bán
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.MyList)
+                    {
+                        <tr>
+                            <td>
+                                @item.ID
+                            </td>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Description
+                            </td>
+                            <td>
+                                @item.Price
+                            </td>
+                            <td>
+                                @item.Quatity
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+</section>
+
+
+
+
+

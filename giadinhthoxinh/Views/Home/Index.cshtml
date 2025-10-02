@@ -1,0 +1,304 @@
+﻿@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using PagedList.Mvc
+@model PagedList.IPagedList<giadinhthoxinh.Models.tblProduct>
+
+<style>
+    .new_arrivals, .best_sellers {
+        padding: 40px 0;
+        background: #f9f9f9;
+    }
+
+    .section_title h1, .section_title h3 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        position: relative;
+        margin-bottom: 40px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+        .section_title h1::after, .section_title h3::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+    .product-grid, .product_slider {
+        margin: 0 auto;
+    }
+
+    .product-item {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin: 15px;
+    }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+    .product_image img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-item:hover .product_image img {
+        transform: scale(1.05);
+    }
+
+    .product_bubble {
+        position: absolute;
+        top: 15px;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #fff;
+        transition: all 0.3s ease;
+    }
+
+    .product_bubble_right {
+        right: 15px;
+        background: #ff4b2b;
+    }
+
+    .product_bubble_left {
+        left: 15px;
+        background: #28a745;
+    }
+
+    .product_bubble:hover {
+        transform: scale(1.1);
+    }
+
+    .product_info {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .product_name a {
+        font-size: 1.1rem;
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .product_name a:hover {
+            color: #ff416c;
+        }
+
+    .product_price {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #ff4b2b;
+        margin-top: 10px;
+    }
+
+    .red_button a {
+        display: inline-block;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+        .red_button a:hover {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+        }
+
+        .red_button a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            top: 50%;
+            left: 50%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+
+        .red_button a:active::after {
+            width: 150px;
+            height: 150px;
+        }
+
+    .product_slider_container {
+        position: relative;
+    }
+
+    .product_slider .owl-item {
+        padding: 10px;
+    }
+
+    .product_slider_nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+    }
+
+        .product_slider_nav:hover {
+            background: #ff416c;
+            color: #fff;
+        }
+
+    .product_slider_nav_left {
+        left: -60px;
+    }
+
+    .product_slider_nav_right {
+        right: -60px;
+    }
+
+    .product_slider_nav i {
+        font-size: 1.2rem;
+    }
+</style>
+
+<div class="new_arrivals">
+    <div class="container">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_title new_arrivals_title">
+                    <h1>Sản phẩm mới</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="product-grid" data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <div class="product-item men">
+                                <div class="product discount product_filter">
+                                    <div class="product_image">
+                                        <a href="/home/productdetail?id=@item.PK_iProductID"><img src="@Url.Content(item.sImage)" alt="@item.sDescribe" /></a>
+                                    </div>
+                                    <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>-$10</span></div>
+                                    <div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
+                                    <div class="product_info">
+                                        <h6 class="product_name"><a href="/home/productdetail?id=@item.PK_iProductID">@item.sDescribe</a></h6>
+                                        <div class="product_price">@item.fPrice</div>
+                                    </div>
+                                </div>
+                                <div class="red_button add_to_cart_button"><a href="/home/productdetail?id=@item.PK_iProductID">XEM NGAY</a></div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Không có sản phẩm mới để hiển thị.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4" style="text-align: center;">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+</div>
+
+<div class="best_sellers">
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_title new_arrivals_title" style="margin-top: 0">
+                    <h2>Sản phẩm bán chạy</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="product_slider_container">
+                    <div class="owl-carousel owl-theme product_slider" style="overflow: hidden; height: 360px;">
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <div class="owl-item product_slider_item">
+                                    <div class="product-item women">
+                                        <div class="product">
+                                            <div class="product_image">
+                                                <a href="/home/productdetail?id=@item.PK_iProductID"><img src="@Url.Content(item.sImage)" alt="@item.sDescribe" /></a>
+                                            </div>
+                                            <div class="favorite"></div>
+                                            <div class="product_bubble product_bubble_left product_bubble_green d-flex flex-column align-items-center"><span>new</span></div>
+                                            <div class="product_info">
+                                                <h6 class="product_name"><a href="/home/productdetail?id=@item.PK_iProductID">@item.sDescribe</a></h6>
+                                                <div class="product_price">@item.fPrice</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>Không có sản phẩm bán chạy để hiển thị.</p>
+                        }
+                    </div>
+
+                    <div class="product_slider_nav_left product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                    </div>
+                    <div class="product_slider_nav_right product_slider_nav d-flex align-items-center justify-content-center flex-column">
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.product_slider').owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            dots: false,
+            navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+            responsive: {
+                0: { items: 1 },
+                600: { items: 2 },
+                1000: { items: 3 }
+            }
+        });
+    });
+</script>

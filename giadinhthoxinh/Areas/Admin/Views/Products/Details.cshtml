@@ -1,0 +1,110 @@
+﻿@model giadinhthoxinh.Models.tblProduct
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="text-danger text-lg ">Chi tiết thông tin mã sản phẩm : <span class="text-primary text-lg">@Model.PK_iProductID</span></h3>
+        </div>
+
+        <div class="card-body">
+            <div>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sProductName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sProductName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sDescribe)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sDescribe)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.fPrice)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.fPrice)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sColor)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sColor)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sSize)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sSize)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sImage)
+                    </dt>
+
+                    <dd>
+                        @*@Html.DisplayFor(model => model.sImage)*@
+                        <img src="@Url.Content(Model.sImage)" style="width: 70px; height: 70px; object-fit: cover" />
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sUnit)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sUnit)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.tblCategory.sCategoryName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.tblCategory.sCategoryName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.tblPromote.sPromoteName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.tblPromote.sPromoteName)
+                    </dd>
+
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("quay lại", "Index", null, new { @class = "btn btn-primary btn-secondary" }) |
+                @Html.ActionLink("sửa", "Edit", new { id = Model.PK_iProductID }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+</section>

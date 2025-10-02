@@ -1,0 +1,95 @@
+﻿@model giadinhthoxinh.Models.tblUser
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/assets/styles/Index1.css" rel="stylesheet" />
+
+
+
+<div>
+    <section class="custom-section" style="background-color: #8fc4b7; width: 100vw; height: 150vh;">
+        <div class="container py-5 h-100 small-container">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="card rounded-3 small-card">
+                        <img src="~/Content/assets/images/banner/banner3.jpg"
+                             class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                             alt="Sample photo">
+                        <div class="card-body p-4 p-md-5">
+                            <h2 class="mb-3 pb-2 pb-md-0 mb-md-5 px-md-2 text-center m-0">Đăng ký tài khoản</h2>
+                           
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()//Bảo vệ form khỏi các cuộc tấn công CSRF(Cross-Site Request Forgery)
+
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @{
+                                        // Tạo danh sách chỉ có một lựa chọn với giá trị là 1 và văn bản là "Lựa chọn mặc định"
+                                        var selectList = new SelectList(new List<SelectListItem>
+                                        {
+                                            new SelectListItem { Value = "1", Text = "Khách hàng" }
+                                         }, "Value", "Text");
+                                    }
+                                    @Html.DropDownList("FK_iPermissionID", selectList, htmlAttributes: new { @class = "form-control",@style="padding-bottom: 0px;padding-top: 0px;padding-left: 8px;" })
+                                    @Html.ValidationMessageFor(model => model.FK_iPermissionID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group ">
+                                <div class="col-md-10 ">
+                                    @Html.EditorFor(model => model.sEmail, new { htmlAttributes = new { @class = "form-control", placeholder = "Email" } })
+                                    @Html.ValidationMessageFor(model => model.sEmail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.sPass, new { htmlAttributes = new { @class = "form-control", placeholder = "Mật khẩu" } })
+                                    @Html.ValidationMessageFor(model => model.sPass, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.sUserName, new { htmlAttributes = new { @class = "form-control", placeholder = "Tên người dùng" } })
+                                    @Html.ValidationMessageFor(model => model.sUserName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.sPhone, new { htmlAttributes = new { @class = "form-control", placeholder = "SĐT" } })
+                                    @Html.ValidationMessageFor(model => model.sPhone, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.sAddress, new { htmlAttributes = new { @class = "form-control", placeholder = "Địa chỉ" } })
+                                    @Html.ValidationMessageFor(model => model.sAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="d-flex" style="justify-content: space-evenly; width: 60%; margin: 0 auto">
+                                <a class="small text-primary" href="/user/login" style="text-decoration:none; margin-top: 8px">Về trang đăng nhập</a>
+                                
+                                <input type="submit" value="Đăng ký" class="btn color-main btn-sm" />
+                            </div>
+
+                            
+                        </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

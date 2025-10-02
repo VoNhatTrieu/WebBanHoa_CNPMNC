@@ -1,0 +1,76 @@
+﻿@model giadinhthoxinh.Models.tblImportOrder
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="text-danger text-lg ">Chi tiết thông tin mã hóa đơn nhập: <span class="text-primary text-lg">@Model.PK_iImportOrderID</span></h3>
+        </div>
+
+        <div class="card-body">
+            <div>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.dtDateAdded)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.dtDateAdded)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sDeliver)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sDeliver)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.iState)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.iState)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.tblUser.sEmail)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.tblUser.sEmail)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.tblSupplier.sSupplierName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.tblSupplier.sSupplierName)
+                    </dd>
+
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("quay lại", "Index", null, new { @class = "btn btn-primary btn-secondary" }) |
+                @Html.ActionLink("sửa", "Edit", new { id = Model.PK_iImportOrderID }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+</section>

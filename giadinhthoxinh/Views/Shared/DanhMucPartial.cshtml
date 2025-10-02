@@ -1,0 +1,19 @@
+﻿@model IEnumerable<giadinhthoxinh.Models.tblCategory>
+@{ int? activeId = ViewBag.ActiveCategoryId as int?; }
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown">
+        <i class="fa fa-leaf me-1"></i> Sản phẩm
+    </a>
+    <ul class="dropdown-menu shadow-sm">
+        @foreach (var c in Model)
+        {
+            <li>
+                <a class="dropdown-item @(activeId == c.PK_iCategoryID ? "active" : "")"
+                   href="/Home/SanPhamTheoDanhMuc/@c.PK_iCategoryID">
+                    @c.sCategoryName
+                </a>
+            </li>
+        }
+    </ul>
+</li>

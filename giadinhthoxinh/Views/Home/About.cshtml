@@ -1,0 +1,414 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<style>
+    @@keyframes gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @@keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-30px) rotate(5deg); }
+    }
+
+    @@keyframes flower-bloom {
+        0% { transform: scale(0) rotate(0deg); opacity: 0; }
+        50% { transform: scale(1.1) rotate(180deg); }
+        100% { transform: scale(1) rotate(360deg); opacity: 1; }
+    }
+
+    @@keyframes sparkle-move {
+        0%, 100% { transform: translate(0, 0) scale(0); opacity: 0; }
+        50% { transform: translate(10px, -10px) scale(1); opacity: 1; }
+    }
+
+    @@keyframes wave {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(20px); }
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .about-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        position: relative;
+    }
+
+    .background-flowers {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .flower {
+        position: absolute;
+        font-size: 40px;
+        opacity: 0.15;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .flower:nth-child(1) {
+        top: 10%;
+        left: 5%;
+        animation-delay: 0s;
+    }
+
+    .flower:nth-child(2) {
+        top: 50%;
+        right: 10%;
+        animation-delay: 2s;
+        font-size: 50px;
+    }
+
+    .flower:nth-child(3) {
+        bottom: 15%;
+        left: 15%;
+        animation-delay: 4s;
+        font-size: 35px;
+    }
+
+    .flower:nth-child(4) {
+        top: 30%;
+        right: 25%;
+        animation-delay: 6s;
+        font-size: 45px;
+    }
+
+    .about-hero {
+        text-align: center;
+        padding: 80px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background-size: 200% 200%;
+        animation: gradient-shift 8s ease infinite;
+        border-radius: 30px;
+        color: white;
+        margin-bottom: 60px;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+    }
+
+    .about-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: spin-slow 20s linear infinite;
+    }
+
+    .about-hero h3 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 1;
+        animation: flower-bloom 1s ease-out;
+    }
+
+    .about-hero .subtitle {
+        font-size: 1.3em;
+        opacity: 0;
+        font-weight: 300;
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 1s ease forwards;
+        animation-delay: 0.5s;
+    }
+
+    .floating-emoji {
+        position: absolute;
+        font-size: 30px;
+        animation: sparkle-move 3s ease-in-out infinite;
+    }
+
+    .floating-emoji:nth-child(1) {
+        top: 20%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .floating-emoji:nth-child(2) {
+        top: 30%;
+        right: 15%;
+        animation-delay: 1s;
+    }
+
+    .floating-emoji:nth-child(3) {
+        bottom: 25%;
+        left: 20%;
+        animation-delay: 2s;
+    }
+
+    .about-content {
+        background: white;
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        line-height: 1.8;
+        color: #2c3e50;
+        position: relative;
+        opacity: 0;
+        animation: fadeInUp 1s ease forwards;
+        animation-delay: 0.8s;
+    }
+
+    .about-content::before {
+        content: '🌺';
+        position: absolute;
+        top: -30px;
+        right: 30px;
+        font-size: 60px;
+        animation: float 4s ease-in-out infinite;
+    }
+
+    .about-content p {
+        font-size: 1.1em;
+        margin-bottom: 30px;
+        text-align: justify;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+
+    .feature-card {
+        padding: 35px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 15px;
+        transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        border-left: 5px solid #667eea;
+        position: relative;
+        overflow: hidden;
+        opacity: 0;
+        transform: translateY(50px);
+        animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .feature-card:nth-child(1) {
+        animation-delay: 1s;
+    }
+
+    .feature-card:nth-child(2) {
+        animation-delay: 1.2s;
+    }
+
+    .feature-card:nth-child(3) {
+        animation-delay: 1.4s;
+    }
+
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-card:hover::after {
+        opacity: 1;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        border-left-width: 8px;
+    }
+
+    .feature-card h4 {
+        color: #667eea;
+        font-size: 1.4em;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .feature-card .number {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2em;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        transition: all 0.4s ease;
+    }
+
+    .feature-card:hover .number {
+        transform: rotate(360deg) scale(1.2);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+
+    .feature-card p {
+        color: #34495e;
+        font-size: 1em;
+        line-height: 1.6;
+        margin: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .intro-text {
+        background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        background-size: 200% 200%;
+        animation: gradient-shift 10s ease infinite;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        border-left: 5px solid #f39c12;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 5px 20px rgba(243, 156, 18, 0.3);
+    }
+
+    .intro-text::before {
+        content: '✨';
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 30px;
+        animation: wave 2s ease-in-out infinite;
+    }
+
+    .intro-text p {
+        margin: 0;
+        color: #2c3e50;
+        font-weight: 500;
+        position: relative;
+        z-index: 1;
+    }
+
+    @@media (max-width: 768px) {
+        .about-hero h3 {
+            font-size: 2em;
+        }
+
+        .about-content {
+            padding: 30px 25px;
+        }
+
+        .feature-card {
+            padding: 25px;
+        }
+
+        .flower {
+            font-size: 30px;
+        }
+    }
+</style>
+
+<div class="background-flowers">
+    <div class="flower">🌸</div>
+    <div class="flower">🌺</div>
+    <div class="flower">🌼</div>
+    <div class="flower">🌻</div>
+</div>
+
+<div class="about-container">
+    <div class="about-hero">
+        <div class="floating-emoji">✨</div>
+        <div class="floating-emoji">🦋</div>
+        <div class="floating-emoji">🌿</div>
+        <h3>🌸 Flower Kingdom 🌸</h3>
+        <p class="subtitle">Vương Quốc Hoa - Nơi Thiên Nhiên Và Vẻ Đẹp Giao Hòa</p>
+    </div>
+
+    <div class="about-content">
+        <div class="intro-text">
+            <p>
+                <strong>Flower Kingdom (Vương quốc Hoa)</strong> là một thuật ngữ có thể dùng để miêu tả một thế giới hoặc vương quốc tưởng tượng,
+                nơi mà hoa và thiên nhiên đóng vai trò trung tâm trong mọi hoạt động và văn hóa.
+            </p>
+        </div>
+
+        <p>
+            Tuy nhiên, nếu bạn đang nhắc đến một tổ chức, sản phẩm, hay dự án có tên "Flower Kingdom" cụ thể,
+            thì có thể bạn đang nói đến một thương hiệu, một khu du lịch, hay một hoạt động gắn liền với hoa và thiên nhiên.
+        </p>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>
+                    <span class="number">1</span>
+                    Văn hóa dân gian
+                </h4>
+                <p>
+                    Trong các câu chuyện dân gian hoặc tác phẩm văn học fantasy, một "Flower Kingdom" có thể là một vương quốc kỳ diệu
+                    nơi mà hoa cỏ là sinh vật sống, có khả năng di chuyển và giao tiếp. Nơi này có thể là nơi cư trú của các sinh vật thần thoại,
+                    tiên nữ, hoặc các vị thần của thiên nhiên.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h4>
+                    <span class="number">2</span>
+                    Khu du lịch
+                </h4>
+                <p>
+                    Một "Flower Kingdom" cũng có thể là tên của một khu vườn, công viên hoa hoặc điểm tham quan nổi tiếng.
+                    Một số địa điểm du lịch có thể tạo dựng một không gian đẹp như trong một vương quốc hoa, nơi du khách có thể
+                    chiêm ngưỡng các loài hoa phong phú và tham gia các lễ hội hoa.
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h4>
+                    <span class="number">3</span>
+                    Thương mại
+                </h4>
+                <p>
+                    Flower Kingdom có thể là tên của một thương hiệu hoặc cửa hàng chuyên cung cấp hoa tươi, cây cảnh,
+                    hoặc các sản phẩm liên quan đến hoa. Một số cửa hàng hoặc dịch vụ có thể sử dụng tên này để gợi lên
+                    sự tươi mới, đẹp đẽ và trang nhã của những sản phẩm mình cung cấp.
+                </p>
+            </div>
+        </div>
+
+        <p style="margin-top: 40px; text-align: center; font-style: italic; color: #7f8c8d;">
+            Nếu bạn có thêm thông tin về ngữ cảnh cụ thể của "Flower Kingdom" mà bạn đang muốn tìm hiểu,
+            chúng tôi có thể cung cấp thêm chi tiết.
+        </p>
+    </div>
+</div>

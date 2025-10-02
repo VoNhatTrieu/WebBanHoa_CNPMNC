@@ -1,0 +1,83 @@
+﻿@model giadinhthoxinh.Models.tblPromote
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-lg text-danger">Thông tin thêm mới khuyến mãi</h3>
+        </div>
+
+        <div class="card-body">
+            <div class="bs-stepper-content">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sPromoteName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.sPromoteName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sPromoteName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sPromoteRate, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.sPromoteRate, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sPromoteRate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Ngày bắt đầu</label>
+                            <div class="col-md-10">
+                                <input class="form-control" name="dtStartDay" value="@Html.Raw(DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T'))" type="datetime-local" />
+                                @Html.ValidationMessageFor(model => model.dtStartDay, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Ngày kết thúc</label>
+                            <div class="col-md-10">
+                                <input class="form-control" name="dtEndDay" value="@Html.Raw(DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T'))" type="datetime-local" />
+                                @Html.ValidationMessageFor(model => model.dtEndDay, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                @Html.ActionLink("quay lại", "Index", null, new { @class = "btn btn-primary btn-secondary" }) |
+                                <input type="submit" value="thêm" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </div>
+</section>

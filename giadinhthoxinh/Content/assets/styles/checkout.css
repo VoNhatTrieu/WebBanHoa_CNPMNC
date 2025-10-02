@@ -1,0 +1,89 @@
+﻿:root {
+    --color-main: #ffd74b !important;
+    --bg-content-main: #8fc4b7 !important; /*#fff7ff */
+    --color-text: #ffd74b !important;
+    --color-name: #ff04af !important;
+    --font-main: 14px !important;
+}
+
+.color-main {
+    background-color: var(--color-main);
+}
+
+.bg-content-main {
+    background-color: var(--bg-content-main);
+}
+
+.color-text {
+    color: var(--color-text);
+}
+
+.color-name {
+    color: var(--color-name);
+}
+
+.font-main {
+    font-size: var(--font-main);
+}
+
+.custom-hr {
+    height: 2px;
+    background-color: var(--color-main);
+    border: none;
+}
+
+.progress-checkout {
+    height: 38px;
+    color: #000000;
+}
+
+    .progress-checkout:hover {
+        background-color: cornflowerblue;
+        color: white;
+    }
+
+.width-input {
+    max-width: 360px;
+}
+
+.checkout-method {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.align-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media only screen and (max-width: 768px) {
+    .checkout-method {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 0 10px;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .checkout-method {
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        padding: 0 10px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 990px) {
+    .align-center {
+        display: block;
+    }
+
+        .align-center p {
+            text-align: center;
+            color: red;
+        }
+
+            .align-center p a button {
+                width: 95%;
+            }
+}

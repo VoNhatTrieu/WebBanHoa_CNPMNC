@@ -1,0 +1,143 @@
+﻿.body-cart {
+    padding-top: 70px ;
+}
+:root {
+    --color-main: #ffd74b !important;
+    --bg-content-main: #8fc4b7 !important; /*#fff7ff */
+    --color-text: #ffd74b !important;
+    --color-name: #ff04af !important;
+    --font-main: 14px !important;
+}
+
+.color-main {
+    background-color: var(--color-main);
+}
+
+.bg-content-main {
+    background-color: var(--bg-content-main);
+}
+
+.color-text {
+    color: var(--color-text);
+}
+
+.color-name {
+    color: var(--color-name);
+}
+
+.font-main {
+    font-size: var(--font-main);
+}
+
+.img-logo {
+    width: 50px;
+    border-radius: 50%;
+    /*margin-left: 80%;*/
+    border: 1px solid #0060ff;
+}
+
+.under-footer {
+    /*    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-bottom:0;*/
+    margin-bott /*om: 10px;
+    margin-top: 100px;*/
+}
+
+.test_css {
+    color: red !important;
+}
+
+.main_slider {
+    background-image: url(/Content/clients/dist/img/template3.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    max-width: 50%;
+}
+
+.img-secondary {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+    /*object-fit: cover*/
+}
+
+.border_form {
+    border: 2px solid var(--color-main);
+}
+
+
+.small-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.small-card {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.custom-section {
+    height: 600px;
+}
+
+.add-cart-btn {
+    width: 140px;
+    text-transform: none;
+    font-size: 14px;
+}
+
+.show-add-cart {
+    visibility: unset;
+    opacity: 1;
+}
+
+/*/cart/cart*/
+.quatity-minus {
+    height: 33px;
+    padding: 0px 10px;
+    margin-right: 4px;
+}
+
+    .quatity-plus {
+        height: 33px;
+        padding: 0px 10px;
+        margin-left: 4px;
+    }
+.custom-hr {
+    height: 2px;
+    background-color: var(--color-main);
+    border: none;
+}
+.progress-checkout{
+    height: 38px;
+    color: white;
+}
+.progress-return {
+    height: 38px;
+    color: #000000;
+}
+.progress-checkout:hover{
+    background-color: cornflowerblue;
+    color: white;
+    opacity: 0.8;
+}
+.align-center {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.progress-return:hover {
+    color: var(--color-name);
+    opacity: 0.8;
+}
+
+.centered-div {
+    display: flex;
+    justify-content: center;
+}
+.header {
+    background: skyblue !important;
+}

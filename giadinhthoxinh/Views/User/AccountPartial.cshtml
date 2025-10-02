@@ -1,0 +1,59 @@
+﻿@if (Session["User"] == null)
+{
+    <li class="account" style="background-color: transparent; width: 130px">
+        <a href="#" style="width:80px">
+
+            <span> Tài Khoản <i class="fa fa-angle-down"></i></span>
+        </a>
+        <ul class="account_selection">
+            <li style="padding: 0; display:block">
+                <a href="/user/login" style=" display: flex; width: 100%; align-items: flex-start; padding: 5px;">
+                    <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng nhập</span></p>
+                </a>
+            </li>
+            <li style="padding: 0; display: block">
+                <a href="/user/register" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
+                    <p><span><i class="fa fa-user-plus" aria-hidden="true"></i>Đăng ký</span> </p>
+                </a>
+            </li>
+            @*<li style="padding: 0; display: block">
+                <a href="/admin/home" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
+                    <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Admin</span> </p>
+                </a>
+            </li>
+            <li style="padding: 0; display: block">
+                <a href="/user/login" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
+                    <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng xuất</span> </p>
+                </a>
+            </li>*@
+        </ul>
+    </li> 
+}
+else
+{
+<li class="account" style="background-color: transparent; width: 130px">
+    
+    <a href="#" style="width:120px">
+        <span> @ViewBag.TenKH<i class="fa fa-angle-down"></i></span>
+
+    </a>
+    <ul class="account_selection">
+        <li style="padding: 0; display: block">
+            <a href="/user/edit" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
+                <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Sửa thông tin</span> </p>
+            </a>
+        </li>
+        <li style="padding: 0; display: block">
+            <a href="/user/EditPassword" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
+                <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đổi mật khẩu</span> </p>
+            </a>
+        </li>
+        <li style="padding: 0; display: block">
+            <a href=@Url.Action("Logout","User") style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
+                <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng xuất</span> </p>
+            </a>
+        </li>
+    </ul>
+</li>
+}
+

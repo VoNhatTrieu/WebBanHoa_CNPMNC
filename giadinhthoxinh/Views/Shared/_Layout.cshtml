@@ -1,0 +1,891 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Flower KingDom</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Colo Shop Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="~/Content/assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.css" rel="stylesheet" />
+    <link href="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.theme.default.css" rel="stylesheet" />
+    <link href="~/Content/assets/plugins/OwlCarousel2-2.2.1/animate.css" rel="stylesheet" />
+    <link href="~/Content/assets/styles/main_styles.css" rel="stylesheet" />
+    <link href="~/Content/assets/styles/responsive.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/assets/styles/Index1.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        /* Existing header styles */
+        header.header {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #87CEEB 0%, #5F9EA0 100%) !important;
+            height: 85px;
+            padding: 0 15px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            color: white !important;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .navbar-brand img {
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-right: 10px;
+            transition: all 0.5s ease;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+        }
+
+        .navbar-brand:hover img {
+            transform: rotate(360deg) scale(1.15);
+            filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));
+            border-color: #fff;
+        }
+
+        /* Hiệu ứng cho chữ Flower KingDom */
+            .navbar-brand span {
+                background: linear-gradient(45deg, #fff, #c92e2e, #933bec, #16fa7c);
+                background-size: 300% 300%;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: gradientFlow 3s ease infinite;
+                font-size: 22px;
+                letter-spacing: 1px;
+                text-shadow: 0 0 20px rgba(255,255,255,0.5);
+                position: relative;
+                display: inline-block;
+                overflow: hidden;
+            }
+
+        @@keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Hiệu ứng glow khi hover */
+        .navbar-brand:hover span {
+            animation: gradientFlow 1.5s ease infinite, textGlow 1.5s ease infinite;
+        }
+
+        @@keyframes textGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+            }
+            50% {
+                filter: drop-shadow(0 0 20px rgba(255,255,255,1));
+            }
+        }
+
+        /* Thêm hiệu ứng shine */
+        .navbar-brand span::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shine 3s infinite;
+            pointer-events: none;
+        }
+
+
+        @@keyframes shine {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .navbar-brand:hover {
+            color: white !important;
+        }
+
+        .main_nav_container, .navbar {
+            width: 100% !important;
+        }
+
+        .navbar-nav {
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-radius: 10px;
+            margin-top: 8px;
+        }
+
+        .dropdown-item.active {
+            background-color: #0d6efd;
+            color: #fff;
+        }
+
+        .dropdown-item:hover {
+            background-color: #87CEEB;
+            color: white;
+        }
+
+        .search-section {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 25px;
+            padding: 2px;
+            min-width: 250px;
+        }
+
+        .search-form .form-control {
+            border: none;
+            background: transparent;
+            padding: 8px 15px;
+            border-radius: 25px;
+        }
+
+        .search-form .form-control:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .search-form .btn {
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2c3e50;
+            border: none;
+        }
+
+        .search-form .btn:hover {
+            background: #34495e;
+            transform: scale(1.05);
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .header-icons > * {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .header-icons a,
+        .header-icons button,
+        .header-icons .btn {
+            background-color: rgba(255,255,255,0.2) !important;
+            color: white !important;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-size: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            margin: 0 5px;
+        }
+
+        .header-icons a:hover,
+        .header-icons button:hover,
+        .header-icons .btn:hover {
+            background-color: rgba(255,255,255,0.3) !important;
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .header-icons .badge,
+        .header-icons [class*="badge"] {
+            position: absolute !important;
+            top: -8px !important;
+            right: -8px !important;
+            background: #ff4757 !important;
+            color: white !important;
+            border-radius: 50% !important;
+            min-width: 20px !important;
+            height: 20px !important;
+            font-size: 12px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: bold !important;
+            border: 2px solid white !important;
+            padding: 0 !important;
+        }
+
+        .header-icons .dropdown-menu,
+        .header-icons .dropdown,
+        .header-icons [class*="dropdown"] {
+            background: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+            padding: 8px 0 !important;
+            min-width: 180px !important;
+            max-width: 200px !important;
+            margin-top: 8px !important;
+            right: 0 !important;
+            left: auto !important;
+            transform: translateX(0) !important;
+            z-index: 1050 !important;
+        }
+
+        .header-icons .dropdown-item,
+        .header-icons .dropdown a,
+        .header-icons [class*="dropdown"] a {
+            padding: 8px 16px !important;
+            color: #333 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            background: transparent !important;
+            font-size: 14px !important;
+            text-align: left !important;
+            white-space: nowrap !important;
+            display: block !important;
+            border-bottom: 1px solid #f0f0f0 !important;
+            text-decoration: none !important;
+        }
+
+        .header-icons .dropdown-item:last-child,
+        .header-icons .dropdown a:last-child,
+        .header-icons [class*="dropdown"] a:last-child {
+            border-bottom: none !important;
+        }
+
+        .header-icons .dropdown-item:hover,
+        .header-icons .dropdown a:hover,
+        .header-icons [class*="dropdown"] a:hover {
+            background-color: #f8f9fa !important;
+            color: #87CEEB !important;
+            transform: none !important;
+        }
+
+        @@media (max-width: 768px) {
+            .header-icons .dropdown-menu,
+            .header-icons .dropdown,
+            .header-icons [class*="dropdown"] {
+                position: absolute !important;
+                right: 0 !important;
+                left: auto !important;
+                min-width: 160px !important;
+            }
+        }
+
+        @@media (max-width: 992px) {
+            .navbar-nav {
+                flex-direction: column;
+                background-color: rgba(255,255,255,0.95);
+                border-radius: 10px;
+                padding: 15px;
+                margin-top: 10px;
+            }
+
+            .navbar-nav .nav-link {
+                color: #333 !important;
+            }
+
+            .search-form {
+                min-width: 200px;
+                margin: 10px 0;
+            }
+        }
+
+        /* Chatbox Styles */
+       /* Chatbox Styles - Thay thế từ dòng 220 trong code gốc */
+.chatbox-container {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1050;
+}
+
+.chatbox-toggle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 26px;
+    border: 3px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.chatbox-toggle:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+}
+
+.chatbox {
+    display: none;
+    width: 380px;
+    height: 550px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.25);
+    overflow: hidden;
+    flex-direction: column;
+    position: absolute;
+    bottom: 90px;
+    right: 0;
+    animation: slideUpChat 0.3s ease-out;
+}
+
+@@keyframes slideUpChat {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chatbox.active {
+    display: flex;
+}
+
+.chatbox-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.chatbox-header .close-chat {
+    cursor: pointer;
+    font-size: 20px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.chatbox-header .close-chat:hover {
+    background: rgba(255,255,255,0.2);
+    transform: rotate(90deg);
+}
+
+.chatbox-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+.chatbox-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chatbox-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chatbox-body::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 10px;
+}
+
+.chatbox-body::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+.chat-message {
+    margin-bottom: 15px;
+    animation: messageSlideIn 0.3s ease-out;
+    clear: both;
+}
+
+@@keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-message strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.chat-message small {
+    font-size: 10px;
+    opacity: 0.6;
+    margin-left: 8px;
+}
+
+.chat-message.user {
+    text-align: right;
+}
+
+.chat-message.user strong,
+.chat-message.user small {
+    text-align: right;
+}
+
+.chat-message.bot {
+    background: white;
+    color: #2d3748;
+    padding: 12px 16px;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    max-width: 80%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    float: left;
+}
+
+.chat-message.user {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 18px;
+    border-bottom-right-radius: 4px;
+    max-width: 80%;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    float: right;
+}
+
+.chat-message.admin {
+    background: white;
+    color: #2d3748;
+    padding: 12px 16px;
+    border-radius: 18px;
+    border-bottom-left-radius: 4px;
+    max-width: 80%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    float: left;
+}
+
+.chatbox-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e2e8f0;
+    background: white;
+}
+
+.chatbox-footer form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #f7fafc;
+    border-radius: 25px;
+    padding: 6px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.chatbox-footer form:focus-within {
+    border-color: #667eea;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.chatbox-footer input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #2d3748;
+}
+
+.chatbox-footer input:focus {
+    outline: none;
+}
+
+.chatbox-footer input::placeholder {
+    color: #a0aec0;
+}
+
+.chatbox-footer button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.chatbox-footer button:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%);
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.chatbox-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 0 20px 15px;
+    background: white;
+}
+
+.chatbox-suggestions .suggestion {
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #4a5568;
+}
+
+.chatbox-suggestions .suggestion:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+@@media (max-width: 576px) {
+    .chatbox {
+        width: calc(100vw - 50px);
+        height: calc(100vh - 150px);
+        max-width: 380px;
+        max-height: 550px;
+    }
+
+    .chatbox-toggle {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="super_container">
+
+        <!-- Header -->
+        <header class="header trans_300">
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <div class="row w-100 align-items-center">
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <a class="navbar-brand" href="/home/index">
+                                <img src="~/Content/assets/images/logo/logoshop.jpg" alt="logo" width="45" height="45" />
+                                <span>Flower KingDom</span>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 d-lg-none text-end">
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" style="border: none; color: white;">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </div>
+                        <div class="col-lg-6 col-12">
+                            <div class="collapse navbar-collapse" id="mainNavbar">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item"><a class="nav-link" href="/home/index">Trang chủ</a></li>
+                                    @Html.Action("DanhMucPartial", "Home", new { activeId = ViewBag.ActiveCategoryId })
+                                    <li class="nav-item"><a class="nav-link" href="/home/about">Giới thiệu</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="/home/contact">Liên hệ</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-12">
+                            <div class="search-section">
+                                @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "search-form" }))
+                                {
+                                    var searchVal = Session["Search"] != null ? Session["Search"].ToString() : "";
+                                    <input class="form-control" name="searchString" type="text"
+                                           placeholder="Tìm kiếm sản phẩm" value="@searchVal" />
+                                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
+                                }
+                                <div class="header-icons">
+                                    @Html.Action("AccountPartial", "User")
+                                    @Html.Action("CartPartial", "Cart")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Body -->
+        <div class="body-content">
+            @RenderBody()
+        </div>
+        <!-- Chatbox -->
+        <div class="chatbox-container">
+            <div class="chatbox-toggle">
+                <i class="fa fa-comment"></i>
+            </div>
+            <div class="chatbox">
+                <div class="chatbox-header">
+                    <span>Flower KingDom Support</span>
+                    <span class="close-chat"><i class="fa fa-times"></i></span>
+                </div>
+                <div class="chatbox-body" id="chatbox-body">
+                    <div class="chat-message bot">Xin chào! Chào mừng bạn đến với Flower KingDom. Hôm nay tôi có thể giúp gì cho bạn?</div>
+                </div>
+                <div class="chatbox-footer">
+                    <form id="chatbox-form">
+                        <input type="text" id="chatbox-input" placeholder="Nhập tin nhắn..." autocomplete="off" />
+                        <button type="submit"><i class="fa fa-paper-plane"></i></button>
+                    </form>
+                    <div class="chatbox-suggestions">
+                        <button type="button" class="suggestion" data-reply="Dạ shop có giao hàng toàn quốc ạ.">Shop có giao hàng không?</button>
+                        <button type="button" class="suggestion" data-reply="Giá hoa hôm nay từ 200.000đ tuỳ loại và mẫu bạn nhé.">Giá hoa hôm nay?</button>
+                        <button type="button" class="suggestion" data-reply="Bạn có thể gọi hotline 0123 456 789 để gặp nhân viên tư vấn.">Liên hệ nhân viên tư vấn</button>
+                        <button type="button" class="suggestion" data-reply="Chúng tôi mở cửa từ 8h sáng đến 9h tối mỗi ngày.">Thời gian mở cửa?</button>
+                        <button type="button" class="suggestion" data-reply="Shop thường có khuyến mãi vào cuối tuần, bạn có thể theo dõi Fanpage.">Có khuyến mãi gì không?</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Footer -->
+        <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-3 col-md-6">
+                        <h2 class="fw-bold text-primary mt-4"><span class="text-secondary">Flower</span>KingDom</h2>
+                        <p>Hoa là âm nhạc của trái đất, mỗi bông hoa là một linh hồn nở rộ trong tự nhiên mang lại hy vọng cho sự sống.</p>
+                        <div class="d-flex pt-2 justify-content-center">
+                            <a class="btn btn-square btn-outline-light rounded-circle me-1" href="https://www.facebook.com/..."><i class="fa fa-facebook"></i></a>
+                            <a class="btn btn-square btn-outline-light rounded-circle me-0" href="https://www.instagram.com/..."><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="text-light mb-4">Địa chỉ</h4>
+                        <p><i class="fa fa-map-marker-alt me-3"></i>HM, TPHCM</p>
+                        <p><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                        <p><i class="fa fa-envelope me-3"></i>Nam@gmail.com</p>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="text-light mb-4">Liên kết nhanh</h4>
+                        <a class="btn btn-link" href="">Về chúng tôi</a>
+                        <a class="btn btn-link" href="">Liên hệ</a>
+                        <a class="btn btn-link" href="">Dịch vụ</a>
+                        <a class="btn btn-link" href="">Điều khoản & Điều kiện</a>
+                        <a class="btn btn-link" href="">Hỗ trợ</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h4 class="text-light mb-4">Góp ý</h4>
+                        <p>Hãy nói cho chúng tôi biết vấn đề của bạn nhé!</p>
+                        <div class="position-relative mx-auto" style="max-width: 400px;">
+                            <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text" placeholder="Your email">
+                            <button type="button" class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid copyright">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a href="#">Flower KingDom</a>, All Right Reserved.
+                        </div>
+                        <div class="col-md-6 text-center text-md-end"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+
+        <script src="~/Content/assets/js/jquery-3.2.1.min.js"></script>
+        <script src="~/Content/assets/plugins/Isotope/isotope.pkgd.min.js"></script>
+        <script src="~/Content/assets/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+        <script src="~/Content/assets/plugins/easing/easing.js"></script>
+        <script src="~/Content/assets/js/custom.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- thêm SignalR -->
+        <script src="~/Scripts/jquery-3.6.0.min.js"></script>
+        <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+        <script src="/signalr/hubs"></script>
+
+        <script>
+    $(function () {
+        console.log("=== FRONTEND CHAT DEBUG ===");
+
+        // Toggle chatbox
+        $('.chatbox-toggle').click(function () {
+            $('.chatbox').toggleClass('active');
+        });
+
+        $('.close-chat').click(function () {
+            $('.chatbox').removeClass('active');
+        });
+
+        var chat = $.connection.chatHub;
+        var isConnected = false;
+
+        // Lấy tên user (nếu chưa login thì dùng Guest)
+        var currentUser = '@(User.Identity.IsAuthenticated ? User.Identity.Name : "Guest")';
+
+        // Nhận tin nhắn từ server
+        chat.client.broadcastMessage = function (user, message) {
+            var timestamp = new Date().toLocaleTimeString();
+            var cssClass = user === "Admin" ? "bot" : "user";
+            var displayName = user === "Admin" ? "Hỗ trợ" : user;
+
+            var messageHtml = '<div class="chat-message ' + cssClass + '">' +
+                '<strong>' + displayName + ':</strong> ' + message +
+                ' <small style="font-size:11px; opacity:0.7;">(' + timestamp + ')</small>' +
+                '</div>';
+
+            $('#chatbox-body').append(messageHtml);
+            $('#chatbox-body').scrollTop($('#chatbox-body')[0].scrollHeight);
+        };
+        $(document).on('click', '.chatbox-suggestions .suggestion', function () {
+            var question = $(this).text();
+            var answer = $(this).data("reply");
+            var timestamp = new Date().toLocaleTimeString();
+
+            var userMsg = '<div class="chat-message user"><strong>Bạn:</strong> ' + question +
+                ' <small>(' + timestamp + ')</small></div>';
+            $('#chatbox-body').append(userMsg);
+
+            var botMsg = '<div class="chat-message bot"><strong>Hỗ trợ:</strong> ' + answer +
+                ' <small>(' + timestamp + ')</small></div>';
+            $('#chatbox-body').append(botMsg);
+
+            $('#chatbox-body').scrollTop($('#chatbox-body')[0].scrollHeight);
+        });
+        // Kết nối SignalR
+        $.connection.hub.start()
+            .done(function () {
+                console.log("SignalR connected successfully");
+                isConnected = true;
+                $('.chatbox-header span:first').text('Flower KingDom Support (Online)');
+
+                // Gửi tin nhắn
+                $('#chatbox-form').submit(function (e) {
+                    e.preventDefault();
+                    var message = $('#chatbox-input').val().trim();
+                    if (!message) return;
+                    $('#chatbox-input').val('');
+
+                    // Append local (tin của user)
+                    var timestamp = new Date().toLocaleTimeString();
+                    var userMessageHtml = '<div class="chat-message user">' +
+                        '<strong>' + currentUser + ':</strong> ' + message +
+                        ' <small>(' + timestamp + ')</small>' +
+                        '</div>';
+                    $('#chatbox-body').append(userMessageHtml);
+
+                    // Gọi AI Controller để lấy câu trả lời
+                    $.ajax({
+                        url: '/AI/Reply',
+                        type: 'POST',
+                        data: { message: message },
+                        success: function (reply) {
+                            var aiMsg = '<div class="chat-message admin">' +
+                                '<strong>AI:</strong> ' + reply +
+                                ' <small>(' + new Date().toLocaleTimeString() + ')</small>' +
+                                '</div>';
+                            $('#chatbox-body').append(aiMsg);
+                            $('#chatbox-body').scrollTop($('#chatbox-body')[0].scrollHeight);
+                        },
+                        error: function (xhr) {
+                            console.error("AI call failed:", xhr);
+                        }
+                    });
+                });
+
+
+                // Enter để gửi
+                $('#chatbox-input').keypress(function (e) {
+                    if (e.which === 13) {
+                        $('#chatbox-form').submit();
+                    }
+                });
+            })
+            .fail(function (err) {
+                console.error("SignalR connection failed:", err);
+                isConnected = false;
+                $('.chatbox-header span:first').text('Flower KingDom Support (Offline)');
+            });
+    });
+        </script>
+
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "Chat với khách";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content mt-3">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between">
+                <h3 class="card-title">Hộp chat với khách hàng</h3>
+                <span id="connectionStatus" class="badge badge-warning">Đang kết nối...</span>
+            </div>
+
+            <div class="card-body" id="chatbox"
+                 style="height:400px; overflow-y:auto; background:#f8f9fa; border: 1px solid #ddd;">
+                @if (ViewBag.Messages != null)
+                {
+                    foreach (var msg in ViewBag.Messages)
+                    {
+                        @Html.Raw(msg)
+                    }
+                }
+                <div id="debugInfo" style="color: blue; font-size: 12px; margin: 10px 0;">
+                    <div>Debug: Page loaded at <span id="loadTime"></span></div>
+                    <div>jQuery version: <span id="jqueryVer"></span></div>
+                    <div>SignalR status: <span id="signalrStatus">Not loaded</span></div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <div class="input-group">
+                    <input type="text" id="adminInput" class="form-control" placeholder="Nhập tin nhắn..." maxlength="500" />
+                    <button id="adminSend" class="btn btn-primary">Gửi</button>
+                </div>
+                <small class="text-muted mt-1">Nhấn Enter hoặc nút Gửi để gửi tin nhắn</small>
+                <div style="margin-top: 10px;">
+                    <button id="testBtn" class="btn btn-info btn-sm">Test Button</button>
+                    <button id="forceEnable" class="btn btn-warning btn-sm">Force Enable</button>
+                    <span id="eventLog" style="margin-left: 10px; color: green; font-size: 12px;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+<script src="/signalr/hubs"></script>
+
+<script>
+    $(document).ready(function () {
+        console.log("=== CHAT INITIALIZATION ===");
+        console.log("jQuery version:", $.fn.jquery);
+        
+        // Khởi tạo trạng thái
+        $('#loadTime').text(new Date().toLocaleTimeString());
+        $('#jqueryVer').text($.fn.jquery);
+        
+        // Test button
+        $('#testBtn').click(function () {
+            console.log("Test button works!");
+            $('#eventLog').text("jQuery works at " + new Date().toLocaleTimeString());
+        });
+
+        // Force enable button
+        $('#forceEnable').click(function () {
+            console.log("Force enabling send button...");
+            enableSendButton();
+        });
+
+        // Khởi tạo nút gửi ngay lập tức
+        enableSendButton();
+        
+        // Kiểm tra SignalR
+        if (typeof $.connection !== 'undefined') {
+            console.log("SignalR available, initializing...");
+            initializeSignalR();
+        } else {
+            console.log("SignalR not available, using fallback mode");
+            $('#signalrStatus').text("SignalR not available - Fallback mode").css('color', 'orange');
+        }
+
+        function enableSendButton() {
+            // Xóa event handlers cũ
+            $('#adminSend').off('click');
+            $('#adminInput').off('keypress');
+            
+            // Thêm event handlers mới
+            $('#adminSend').prop('disabled', false).click(function () {
+                sendMessage();
+            });
+
+            $('#adminInput').keypress(function (e) {
+                if (e.which === 13) {
+                    sendMessage();
+                }
+            });
+            
+            console.log("Send button enabled");
+            $('#eventLog').text("Send button enabled at " + new Date().toLocaleTimeString());
+        }
+
+        function sendMessage() {
+            var message = $('#adminInput').val().trim();
+            if (message) {
+                console.log("Sending message:", message);
+                
+                // Hiển thị tin nhắn ngay lập tức
+                var msg = '<div class="text-primary"><b>Admin:</b> ' + message + '</div>';
+                $('#chatbox').append(msg);
+                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                
+                // Gửi qua SignalR nếu có
+                if (typeof $.connection !== 'undefined' && $.connection.chatHub) {
+                    try {
+                        $.connection.chatHub.server.sendMessage("Admin", message);
+                    } catch (e) {
+                        console.log("SignalR send failed, but message displayed locally:", e);
+                    }
+                } else {
+                    console.log("SignalR not available, message saved locally only");
+                }
+                
+                // Xóa input
+                $('#adminInput').val('');
+            }
+        }
+
+        function initializeSignalR() {
+            try {
+                var chatHub = $.connection.chatHub;
+                if (!chatHub) {
+                    console.log("ChatHub not found");
+                    $('#signalrStatus').text("ChatHub not found").css('color', 'red');
+                    return;
+                }
+
+                console.log("ChatHub found, setting up...");
+                $('#signalrStatus').text("Setting up...").css('color', 'blue');
+
+                // Setup message handler
+                chatHub.client.broadcastMessage = function (user, message) {
+                    console.log("Received message:", user, message);
+                    var msg = '<div class="text-info"><b>' + user + ':</b> ' + message + '</div>';
+                    $('#chatbox').append(msg);
+                    $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                };
+
+                // Start connection
+                $.connection.hub.start()
+                    .done(function () {
+                        console.log("SignalR connected successfully!");
+                        $('#signalrStatus').text("Connected!").css('color', 'green');
+                        $('#connectionStatus').text("Đã kết nối").removeClass('badge-warning').addClass('badge-success');
+                    })
+                    .fail(function (error) {
+                        console.error("SignalR connection failed:", error);
+                        $('#signalrStatus').text("Connection failed").css('color', 'red');
+                    });
+
+            } catch (e) {
+                console.error("SignalR initialization error:", e);
+                $('#signalrStatus').text("Init error: " + e.message).css('color', 'red');
+            }
+        }
+    });
+</script>

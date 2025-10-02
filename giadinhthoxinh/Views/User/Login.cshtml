@@ -1,0 +1,44 @@
+﻿@model giadinhthoxinh.Models.tblUser
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="bg-content-main" style="width: 100vw; height: 100vh;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-xl-10">
+                <div class="card " style="border-radius: 1rem;">
+                    <div class="row g-0">
+                        <div class="col-md-6 col-lg-5 d-none d-md-block">
+                            <img src="~/Content/assets/images/logo/logo-login.jpg"
+                                 alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                        </div>
+                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                            <div class="card-body p-4 p-lg-5 text-black">
+
+                                
+                                @using (Html.BeginForm("login", "user", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()//Bảo vệ form khỏi các cuộc tấn công CSRF(Cross-Site Request Forgery)
+                                    <div class="form-group">
+                                        Account
+                                        @Html.TextBoxFor(m => m.sEmail, "", new { @class = "form-control", @placeholder = "Email"})
+
+                                    </div>
+                                    <div class="form-group">
+                                        Password
+                                        @Html.PasswordFor(m => m.sPass, new { @class = "form-control", @placeholder = "Password"})
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" name="submit" class="btn btn-primary" value="Đăng nhập" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,56 @@
+﻿@model giadinhthoxinh.Models.tblMaterSize
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="text-danger text-lg ">Bạn có chắc chắn muốn xóa mã : <span class="text-primary text-lg">@Model.PK_iMaterSizeID</span></h3>
+        </div>
+
+        <div class="card-body">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.sMaterSize)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.sMaterSize)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.tblMaterial.sMaterialName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.tblMaterial.sMaterialName)
+                </dd>
+
+            </dl>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-actions no-color">
+                    @Html.ActionLink("quay lại", "Index", null, new { @class = "btn btn-primary btn-secondary" })  |
+                    <input type="submit" value="xóa" class="btn btn-danger" />
+                </div>
+            }
+        </div>
+    </div>
+</section>

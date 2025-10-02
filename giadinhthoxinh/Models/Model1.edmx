@@ -1,0 +1,1907 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="giadinhthoxinhEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblCategory">
+          <Key>
+            <PropertyRef Name="PK_iCategoryID" />
+          </Key>
+          <Property Name="PK_iCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sCategoryName" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="tblCheckinDetail">
+          <Key>
+            <PropertyRef Name="PK_iCheckinDetailID" />
+          </Key>
+          <Property Name="PK_iCheckinDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iImportOrderID" Type="int" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" />
+          <Property Name="iQuatity" Type="int" />
+          <Property Name="fPrice" Type="float" />
+        </EntityType>
+        <EntityType Name="tblCheckoutDetail">
+          <Key>
+            <PropertyRef Name="PK_iCheckoutDetailID" />
+          </Key>
+          <Property Name="PK_iCheckoutDetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iOrderID" Type="int" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" />
+          <Property Name="iQuantity" Type="int" />
+          <Property Name="fPrice" Type="float" />
+        </EntityType>
+        <EntityType Name="tblImage">
+          <Key>
+            <PropertyRef Name="PK_iImageID" />
+          </Key>
+          <Property Name="PK_iImageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" Nullable="false" />
+          <Property Name="sImage" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="tblImportMaterial">
+          <Key>
+            <PropertyRef Name="PK_iImportMaterialID" />
+          </Key>
+          <Property Name="PK_iImportMaterialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iImportOrderID" Type="int" Nullable="false" />
+          <Property Name="FK_iMaterialID" Type="int" Nullable="false" />
+          <Property Name="iQuatity" Type="int" />
+          <Property Name="fPrice" Type="float" />
+        </EntityType>
+        <EntityType Name="tblImportOrder">
+          <Key>
+            <PropertyRef Name="PK_iImportOrderID" />
+          </Key>
+          <Property Name="PK_iImportOrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iAccountID" Type="int" Nullable="false" />
+          <Property Name="FK_iSupplierID" Type="int" Nullable="false" />
+          <Property Name="dtDateAdded" Type="datetime" />
+          <Property Name="sDeliver" Type="nvarchar" MaxLength="80" />
+          <Property Name="iState" Type="int" />
+        </EntityType>
+        <EntityType Name="tblMaterColor">
+          <Key>
+            <PropertyRef Name="PK_iMaterColorID" />
+          </Key>
+          <Property Name="PK_iMaterColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iMaterialID" Type="int" Nullable="false" />
+          <Property Name="sMaterColor" Type="nvarchar" MaxLength="40" />
+        </EntityType>
+        <EntityType Name="tblMaterial">
+          <Key>
+            <PropertyRef Name="PK_iMaterialID" />
+          </Key>
+          <Property Name="PK_iMaterialID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sMaterialName" Type="nvarchar" MaxLength="50" />
+          <Property Name="sDescribe" Type="nvarchar" MaxLength="200" />
+          <Property Name="iQuatity" Type="int" />
+          <Property Name="sUnit" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tblMaterPriceImport">
+          <Key>
+            <PropertyRef Name="PK_iMaterPriceImportID" />
+          </Key>
+          <Property Name="PK_iMaterPriceImportID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iMaterialID" Type="int" Nullable="false" />
+          <Property Name="fMaterPriceImport" Type="float" />
+          <Property Name="dtStartDay" Type="datetime" />
+          <Property Name="dtEndDay" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblMaterSize">
+          <Key>
+            <PropertyRef Name="PK_iMaterSizeID" />
+          </Key>
+          <Property Name="PK_iMaterSizeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iMaterialID" Type="int" Nullable="false" />
+          <Property Name="sMaterSize" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tblOrder">
+          <Key>
+            <PropertyRef Name="PK_iOrderID" />
+          </Key>
+          <Property Name="PK_iOrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iAccountID" Type="int" Nullable="false" />
+          <Property Name="sCustomerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="sCustomerPhone" Type="varchar" MaxLength="15" />
+          <Property Name="sDeliveryAddress" Type="nvarchar" MaxLength="150" />
+          <Property Name="dInvoidDate" Type="datetime" Nullable="false" />
+          <Property Name="sBiller" Type="nvarchar" MaxLength="50" />
+          <Property Name="iDeliveryMethod" Type="int" />
+          <Property Name="fSurcharge" Type="float" />
+          <Property Name="iPaid" Type="int" />
+          <Property Name="sState" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblPermission">
+          <Key>
+            <PropertyRef Name="PK_iPermissionID" />
+          </Key>
+          <Property Name="PK_iPermissionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sPermissionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="iState" Type="int" />
+        </EntityType>
+        <EntityType Name="tblProduct">
+          <Key>
+            <PropertyRef Name="PK_iProductID" />
+          </Key>
+          <Property Name="PK_iProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iCategoryID" Type="int" Nullable="false" />
+          <Property Name="FK_iPromoteID" Type="int" Nullable="false" />
+          <Property Name="sProductName" Type="nvarchar" MaxLength="200" />
+          <Property Name="sDescribe" Type="nvarchar" MaxLength="1000" />
+          <Property Name="fPrice" Type="float" />
+          <Property Name="sColor" Type="nvarchar" MaxLength="40" />
+          <Property Name="sSize" Type="nvarchar" MaxLength="20" />
+          <Property Name="sImage" Type="nvarchar" MaxLength="250" />
+          <Property Name="sUnit" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tblProductColor">
+          <Key>
+            <PropertyRef Name="PK_iProductColorID" />
+          </Key>
+          <Property Name="PK_iProductColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" Nullable="false" />
+          <Property Name="sProductColor" Type="nvarchar" MaxLength="40" />
+        </EntityType>
+        <EntityType Name="tblProductPrice">
+          <Key>
+            <PropertyRef Name="PK_iProductPriceID" />
+          </Key>
+          <Property Name="PK_iProductPriceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" Nullable="false" />
+          <Property Name="fPrice" Type="float" />
+          <Property Name="dtStartDay" Type="datetime" />
+          <Property Name="dtEndDay" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblProductSize">
+          <Key>
+            <PropertyRef Name="PK_iProductSizeID" />
+          </Key>
+          <Property Name="PK_iProductSizeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" Nullable="false" />
+          <Property Name="sSizeName" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="tblPromote">
+          <Key>
+            <PropertyRef Name="PK_iPromoteID" />
+          </Key>
+          <Property Name="PK_iPromoteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sPromoteName" Type="nvarchar" MaxLength="200" />
+          <Property Name="sPromoteRate" Type="float" />
+          <Property Name="dtStartDay" Type="datetime" />
+          <Property Name="dtEndDay" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblReview">
+          <Key>
+            <PropertyRef Name="PK_iReviewID" />
+          </Key>
+          <Property Name="PK_iReviewID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" Nullable="false" />
+          <Property Name="FK_iAccountID" Type="int" Nullable="false" />
+          <Property Name="iStarRating" Type="int" />
+          <Property Name="dtReviewTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblSupplier">
+          <Key>
+            <PropertyRef Name="PK_iSupplierID" />
+          </Key>
+          <Property Name="PK_iSupplierID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sSupplierName" Type="nvarchar" MaxLength="200" />
+          <Property Name="sPhone" Type="varchar" MaxLength="15" />
+          <Property Name="sEmail" Type="varchar" MaxLength="50" />
+          <Property Name="sAddress" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="PK_iAccountID" />
+          </Key>
+          <Property Name="PK_iAccountID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iPermissionID" Type="int" Nullable="false" />
+          <Property Name="sEmail" Type="varchar" MaxLength="50" />
+          <Property Name="sPass" Type="nvarchar" MaxLength="50" />
+          <Property Name="sUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="sPhone" Type="varchar" MaxLength="15" />
+          <Property Name="sAddress" Type="nvarchar" MaxLength="150" />
+          <Property Name="iState" Type="int" />
+        </EntityType>
+        <Association Name="fk_checkinDetail_importOrder">
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="1" />
+          <End Role="tblCheckinDetail" Type="Self.tblCheckinDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblImportOrder">
+              <PropertyRef Name="PK_iImportOrderID" />
+            </Principal>
+            <Dependent Role="tblCheckinDetail">
+              <PropertyRef Name="FK_iImportOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_checkinDetail_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="0..1" />
+          <End Role="tblCheckinDetail" Type="Self.tblCheckinDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblCheckinDetail">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_checkoutDetail_order">
+          <End Role="tblOrder" Type="Self.tblOrder" Multiplicity="1" />
+          <End Role="tblCheckoutDetail" Type="Self.tblCheckoutDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblOrder">
+              <PropertyRef Name="PK_iOrderID" />
+            </Principal>
+            <Dependent Role="tblCheckoutDetail">
+              <PropertyRef Name="FK_iOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_checkoutDetail_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="0..1" />
+          <End Role="tblCheckoutDetail" Type="Self.tblCheckoutDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblCheckoutDetail">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_img_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblImage" Type="Self.tblImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblImage">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_importOrder_account">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblImportOrder">
+              <PropertyRef Name="FK_iAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_importOrder_supplier">
+          <End Role="tblSupplier" Type="Self.tblSupplier" Multiplicity="1" />
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblSupplier">
+              <PropertyRef Name="PK_iSupplierID" />
+            </Principal>
+            <Dependent Role="tblImportOrder">
+              <PropertyRef Name="FK_iSupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_order_account">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblOrder" Type="Self.tblOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblOrder">
+              <PropertyRef Name="FK_iAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_product_category">
+          <End Role="tblCategory" Type="Self.tblCategory" Multiplicity="1" />
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCategory">
+              <PropertyRef Name="PK_iCategoryID" />
+            </Principal>
+            <Dependent Role="tblProduct">
+              <PropertyRef Name="FK_iCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_product_promote">
+          <End Role="tblPromote" Type="Self.tblPromote" Multiplicity="1" />
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPromote">
+              <PropertyRef Name="PK_iPromoteID" />
+            </Principal>
+            <Dependent Role="tblProduct">
+              <PropertyRef Name="FK_iPromoteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_review_account">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblReview" Type="Self.tblReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblReview">
+              <PropertyRef Name="FK_iAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_review_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblReview" Type="Self.tblReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblReview">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblImportMaterial_tblImportOrder">
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="1" />
+          <End Role="tblImportMaterial" Type="Self.tblImportMaterial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblImportOrder">
+              <PropertyRef Name="PK_iImportOrderID" />
+            </Principal>
+            <Dependent Role="tblImportMaterial">
+              <PropertyRef Name="FK_iImportOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblImportMaterial_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblImportMaterial" Type="Self.tblImportMaterial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblImportMaterial">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaterColor_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblMaterColor" Type="Self.tblMaterColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblMaterColor">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaterPriceImport_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblMaterPriceImport" Type="Self.tblMaterPriceImport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblMaterPriceImport">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaterSize_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblMaterSize" Type="Self.tblMaterSize" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblMaterSize">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProductColor_tblProduct">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblProductColor" Type="Self.tblProductColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblProductColor">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProductPrice_tblProduct">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblProductPrice" Type="Self.tblProductPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblProductPrice">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProductSize_tblProduct">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblProductSize" Type="Self.tblProductSize" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblProductSize">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_user_permission">
+          <End Role="tblPermission" Type="Self.tblPermission" Multiplicity="1" />
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermission">
+              <PropertyRef Name="PK_iPermissionID" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="FK_iPermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="pro_getCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pro_getProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pro_getPromote" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pro_getReceiver" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="pro_getSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proAddCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sCategoryName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="proAddCheckoutDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FK_iOrderID" Type="int" Mode="In" />
+          <Parameter Name="FK_iProductID" Type="int" Mode="In" />
+          <Parameter Name="iQuantity" Type="int" Mode="In" />
+          <Parameter Name="iTotalMoney" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proAddPermission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sPermissionName" Type="nvarchar" Mode="In" />
+          <Parameter Name="iState" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proAddPromote" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sPromoteName" Type="nvarchar" Mode="In" />
+          <Parameter Name="sPromoteRate" Type="float" Mode="In" />
+          <Parameter Name="dtStartDay" Type="datetime" Mode="In" />
+          <Parameter Name="dtEndDay" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="proAddReview" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FK_iProductID" Type="int" Mode="In" />
+          <Parameter Name="FK_iAccountID" Type="int" Mode="In" />
+          <Parameter Name="iStarRating" Type="int" Mode="In" />
+          <Parameter Name="dtReviewTime" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="proAddSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sSupplierName" Type="nvarchar" Mode="In" />
+          <Parameter Name="sPhone" Type="varchar" Mode="In" />
+          <Parameter Name="sEmail" Type="varchar" Mode="In" />
+          <Parameter Name="sAddress" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="proAddUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="FK_iPermissionID" Type="int" Mode="In" />
+          <Parameter Name="sEmail" Type="varchar" Mode="In" />
+          <Parameter Name="sPass" Type="nvarchar" Mode="In" />
+          <Parameter Name="sUserName" Type="nvarchar" Mode="In" />
+          <Parameter Name="sPhone" Type="varchar" Mode="In" />
+          <Parameter Name="sAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="iState" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procSelectCheckinDeatailrByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iCheckinDetailID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procSelectImageByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iImageID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procSelectImportOrderByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iImportOrderID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="procSelectUserByID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iAccountID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sCategoryID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteCheckinDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iCheckinDetailID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteCheckoutDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iCheckoutDetailID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteImage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iImageID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteImportOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iImportOrderID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iOrderID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeletePermission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iPermissionID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iProductID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeletePromote" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iPromoteID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iSupplierID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proDeleteUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iAccountID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proGetAllImageToDisplay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proGetImageByIDToDisplay" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proPermissionNameDisplayUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proUpdateCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="sCategoryID" Type="int" Mode="In" />
+          <Parameter Name="sCategoryName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="proUpdateImportOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iImportOrderID" Type="int" Mode="In" />
+          <Parameter Name="FK_iAccountID" Type="int" Mode="In" />
+          <Parameter Name="FK_iSupplierID" Type="int" Mode="In" />
+          <Parameter Name="dtDateAdded" Type="datetime" Mode="In" />
+          <Parameter Name="sDeliver" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="proUpdatePermission" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iPermissionID" Type="int" Mode="In" />
+          <Parameter Name="sPermissionName" Type="nvarchar" Mode="In" />
+          <Parameter Name="iState" Type="int" Mode="In" />
+        </Function>
+        <Function Name="proUpdatePromote" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iPromoteID" Type="int" Mode="In" />
+          <Parameter Name="sPromoteName" Type="nvarchar" Mode="In" />
+          <Parameter Name="sPromoteRate" Type="float" Mode="In" />
+          <Parameter Name="dtStartDay" Type="datetime" Mode="In" />
+          <Parameter Name="dtEndDay" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="proUpdateSupplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iSupplierID" Type="int" Mode="In" />
+          <Parameter Name="sSupplierName" Type="nvarchar" Mode="In" />
+          <Parameter Name="sPhone" Type="varchar" Mode="In" />
+          <Parameter Name="sEmail" Type="varchar" Mode="In" />
+          <Parameter Name="sAddress" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="proUpdateUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PK_iAccountID" Type="int" Mode="In" />
+          <Parameter Name="FK_iPermissionID" Type="int" Mode="In" />
+          <Parameter Name="sEmail" Type="varchar" Mode="In" />
+          <Parameter Name="sPass" Type="nvarchar" Mode="In" />
+          <Parameter Name="sUserName" Type="nvarchar" Mode="In" />
+          <Parameter Name="sPhone" Type="varchar" Mode="In" />
+          <Parameter Name="sAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="iState" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="giadinhthoxinhEntitiesStoreContainer">
+          <EntitySet Name="tblCategory" EntityType="Self.tblCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCheckinDetail" EntityType="Self.tblCheckinDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCheckoutDetail" EntityType="Self.tblCheckoutDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblImage" EntityType="Self.tblImage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblImportMaterial" EntityType="Self.tblImportMaterial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblImportOrder" EntityType="Self.tblImportOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMaterColor" EntityType="Self.tblMaterColor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMaterial" EntityType="Self.tblMaterial" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMaterPriceImport" EntityType="Self.tblMaterPriceImport" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMaterSize" EntityType="Self.tblMaterSize" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblOrder" EntityType="Self.tblOrder" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPermission" EntityType="Self.tblPermission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProduct" EntityType="Self.tblProduct" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProductColor" EntityType="Self.tblProductColor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProductPrice" EntityType="Self.tblProductPrice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProductSize" EntityType="Self.tblProductSize" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPromote" EntityType="Self.tblPromote" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblReview" EntityType="Self.tblReview" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblSupplier" EntityType="Self.tblSupplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUser" EntityType="Self.tblUser" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_checkinDetail_importOrder" Association="Self.fk_checkinDetail_importOrder">
+            <End Role="tblImportOrder" EntitySet="tblImportOrder" />
+            <End Role="tblCheckinDetail" EntitySet="tblCheckinDetail" />
+          </AssociationSet>
+          <AssociationSet Name="fk_checkinDetail_product" Association="Self.fk_checkinDetail_product">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblCheckinDetail" EntitySet="tblCheckinDetail" />
+          </AssociationSet>
+          <AssociationSet Name="fk_checkoutDetail_order" Association="Self.fk_checkoutDetail_order">
+            <End Role="tblOrder" EntitySet="tblOrder" />
+            <End Role="tblCheckoutDetail" EntitySet="tblCheckoutDetail" />
+          </AssociationSet>
+          <AssociationSet Name="fk_checkoutDetail_product" Association="Self.fk_checkoutDetail_product">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblCheckoutDetail" EntitySet="tblCheckoutDetail" />
+          </AssociationSet>
+          <AssociationSet Name="fk_img_product" Association="Self.fk_img_product">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblImage" EntitySet="tblImage" />
+          </AssociationSet>
+          <AssociationSet Name="fk_importOrder_account" Association="Self.fk_importOrder_account">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblImportOrder" EntitySet="tblImportOrder" />
+          </AssociationSet>
+          <AssociationSet Name="fk_importOrder_supplier" Association="Self.fk_importOrder_supplier">
+            <End Role="tblSupplier" EntitySet="tblSupplier" />
+            <End Role="tblImportOrder" EntitySet="tblImportOrder" />
+          </AssociationSet>
+          <AssociationSet Name="fk_order_account" Association="Self.fk_order_account">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblOrder" EntitySet="tblOrder" />
+          </AssociationSet>
+          <AssociationSet Name="fk_product_category" Association="Self.fk_product_category">
+            <End Role="tblCategory" EntitySet="tblCategory" />
+            <End Role="tblProduct" EntitySet="tblProduct" />
+          </AssociationSet>
+          <AssociationSet Name="fk_product_promote" Association="Self.fk_product_promote">
+            <End Role="tblPromote" EntitySet="tblPromote" />
+            <End Role="tblProduct" EntitySet="tblProduct" />
+          </AssociationSet>
+          <AssociationSet Name="fk_review_account" Association="Self.fk_review_account">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblReview" EntitySet="tblReview" />
+          </AssociationSet>
+          <AssociationSet Name="fk_review_product" Association="Self.fk_review_product">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblReview" EntitySet="tblReview" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblImportMaterial_tblImportOrder" Association="Self.FK_tblImportMaterial_tblImportOrder">
+            <End Role="tblImportOrder" EntitySet="tblImportOrder" />
+            <End Role="tblImportMaterial" EntitySet="tblImportMaterial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblImportMaterial_tblMaterial" Association="Self.FK_tblImportMaterial_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterial" />
+            <End Role="tblImportMaterial" EntitySet="tblImportMaterial" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaterColor_tblMaterial" Association="Self.FK_tblMaterColor_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterial" />
+            <End Role="tblMaterColor" EntitySet="tblMaterColor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaterPriceImport_tblMaterial" Association="Self.FK_tblMaterPriceImport_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterial" />
+            <End Role="tblMaterPriceImport" EntitySet="tblMaterPriceImport" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaterSize_tblMaterial" Association="Self.FK_tblMaterSize_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterial" />
+            <End Role="tblMaterSize" EntitySet="tblMaterSize" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProductColor_tblProduct" Association="Self.FK_tblProductColor_tblProduct">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblProductColor" EntitySet="tblProductColor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProductPrice_tblProduct" Association="Self.FK_tblProductPrice_tblProduct">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblProductPrice" EntitySet="tblProductPrice" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProductSize_tblProduct" Association="Self.FK_tblProductSize_tblProduct">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblProductSize" EntitySet="tblProductSize" />
+          </AssociationSet>
+          <AssociationSet Name="fk_user_permission" Association="Self.fk_user_permission">
+            <End Role="tblPermission" EntitySet="tblPermission" />
+            <End Role="tblUser" EntitySet="tblUser" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="giadinhthoxinhEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblCategory">
+          <Key>
+            <PropertyRef Name="PK_iCategoryID" />
+          </Key>
+          <Property Name="PK_iCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sCategoryName" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblProducts" Relationship="Self.fk_product_category" FromRole="tblCategory" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblCheckinDetail">
+          <Key>
+            <PropertyRef Name="PK_iCheckinDetailID" />
+          </Key>
+          <Property Name="PK_iCheckinDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iImportOrderID" Type="Int32" Nullable="false" />
+          <Property Name="FK_iProductID" Type="Int32" />
+          <Property Name="iQuatity" Type="Int32" />
+          <Property Name="fPrice" Type="Double" />
+          <NavigationProperty Name="tblImportOrder" Relationship="Self.fk_checkinDetail_importOrder" FromRole="tblCheckinDetail" ToRole="tblImportOrder" />
+          <NavigationProperty Name="tblProduct" Relationship="Self.fk_checkinDetail_product" FromRole="tblCheckinDetail" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblCheckoutDetail">
+          <Key>
+            <PropertyRef Name="PK_iCheckoutDetailID" />
+          </Key>
+          <Property Name="PK_iCheckoutDetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iOrderID" Type="Int32" Nullable="false" />
+          <Property Name="FK_iProductID" Type="Int32" />
+          <Property Name="iQuantity" Type="Int32" />
+          <Property Name="fPrice" Type="Double" />
+          <NavigationProperty Name="tblOrder" Relationship="Self.fk_checkoutDetail_order" FromRole="tblCheckoutDetail" ToRole="tblOrder" />
+          <NavigationProperty Name="tblProduct" Relationship="Self.fk_checkoutDetail_product" FromRole="tblCheckoutDetail" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblImage">
+          <Key>
+            <PropertyRef Name="PK_iImageID" />
+          </Key>
+          <Property Name="PK_iImageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iProductID" Type="Int32" Nullable="false" />
+          <Property Name="sImage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblProduct" Relationship="Self.fk_img_product" FromRole="tblImage" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblImportMaterial">
+          <Key>
+            <PropertyRef Name="PK_iImportMaterialID" />
+          </Key>
+          <Property Name="PK_iImportMaterialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iImportOrderID" Type="Int32" Nullable="false" />
+          <Property Name="FK_iMaterialID" Type="Int32" Nullable="false" />
+          <Property Name="iQuatity" Type="Int32" />
+          <Property Name="fPrice" Type="Double" />
+          <NavigationProperty Name="tblImportOrder" Relationship="Self.FK_tblImportMaterial_tblImportOrder" FromRole="tblImportMaterial" ToRole="tblImportOrder" />
+          <NavigationProperty Name="tblMaterial" Relationship="Self.FK_tblImportMaterial_tblMaterial" FromRole="tblImportMaterial" ToRole="tblMaterial" />
+        </EntityType>
+        <EntityType Name="tblImportOrder">
+          <Key>
+            <PropertyRef Name="PK_iImportOrderID" />
+          </Key>
+          <Property Name="PK_iImportOrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iAccountID" Type="Int32" Nullable="false" />
+          <Property Name="FK_iSupplierID" Type="Int32" Nullable="false" />
+          <Property Name="dtDateAdded" Type="DateTime" Precision="3" />
+          <Property Name="sDeliver" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="iState" Type="Int32" />
+          <NavigationProperty Name="tblCheckinDetails" Relationship="Self.fk_checkinDetail_importOrder" FromRole="tblImportOrder" ToRole="tblCheckinDetail" />
+          <NavigationProperty Name="tblImportMaterials" Relationship="Self.FK_tblImportMaterial_tblImportOrder" FromRole="tblImportOrder" ToRole="tblImportMaterial" />
+          <NavigationProperty Name="tblUser" Relationship="Self.fk_importOrder_account" FromRole="tblImportOrder" ToRole="tblUser" />
+          <NavigationProperty Name="tblSupplier" Relationship="Self.fk_importOrder_supplier" FromRole="tblImportOrder" ToRole="tblSupplier" />
+        </EntityType>
+        <EntityType Name="tblMaterColor">
+          <Key>
+            <PropertyRef Name="PK_iMaterColorID" />
+          </Key>
+          <Property Name="PK_iMaterColorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iMaterialID" Type="Int32" Nullable="false" />
+          <Property Name="sMaterColor" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblMaterial" Relationship="Self.FK_tblMaterColor_tblMaterial" FromRole="tblMaterColor" ToRole="tblMaterial" />
+        </EntityType>
+        <EntityType Name="tblMaterial">
+          <Key>
+            <PropertyRef Name="PK_iMaterialID" />
+          </Key>
+          <Property Name="PK_iMaterialID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sMaterialName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sDescribe" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="iQuatity" Type="Int32" />
+          <Property Name="sUnit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblImportMaterials" Relationship="Self.FK_tblImportMaterial_tblMaterial" FromRole="tblMaterial" ToRole="tblImportMaterial" />
+          <NavigationProperty Name="tblMaterColors" Relationship="Self.FK_tblMaterColor_tblMaterial" FromRole="tblMaterial" ToRole="tblMaterColor" />
+          <NavigationProperty Name="tblMaterPriceImports" Relationship="Self.FK_tblMaterPriceImport_tblMaterial" FromRole="tblMaterial" ToRole="tblMaterPriceImport" />
+          <NavigationProperty Name="tblMaterSizes" Relationship="Self.FK_tblMaterSize_tblMaterial" FromRole="tblMaterial" ToRole="tblMaterSize" />
+        </EntityType>
+        <EntityType Name="tblMaterPriceImport">
+          <Key>
+            <PropertyRef Name="PK_iMaterPriceImportID" />
+          </Key>
+          <Property Name="PK_iMaterPriceImportID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iMaterialID" Type="Int32" Nullable="false" />
+          <Property Name="fMaterPriceImport" Type="Double" />
+          <Property Name="dtStartDay" Type="DateTime" Precision="3" />
+          <Property Name="dtEndDay" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblMaterial" Relationship="Self.FK_tblMaterPriceImport_tblMaterial" FromRole="tblMaterPriceImport" ToRole="tblMaterial" />
+        </EntityType>
+        <EntityType Name="tblMaterSize">
+          <Key>
+            <PropertyRef Name="PK_iMaterSizeID" />
+          </Key>
+          <Property Name="PK_iMaterSizeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iMaterialID" Type="Int32" Nullable="false" />
+          <Property Name="sMaterSize" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblMaterial" Relationship="Self.FK_tblMaterSize_tblMaterial" FromRole="tblMaterSize" ToRole="tblMaterial" />
+        </EntityType>
+        <EntityType Name="tblOrder">
+          <Key>
+            <PropertyRef Name="PK_iOrderID" />
+          </Key>
+          <Property Name="PK_iOrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iAccountID" Type="Int32" Nullable="false" />
+          <Property Name="sCustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sCustomerPhone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="sDeliveryAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="dInvoidDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="sBiller" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="iDeliveryMethod" Type="Int32" />
+          <Property Name="fSurcharge" Type="Double" />
+          <Property Name="iPaid" Type="Int32" />
+          <Property Name="sState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblCheckoutDetails" Relationship="Self.fk_checkoutDetail_order" FromRole="tblOrder" ToRole="tblCheckoutDetail" />
+          <NavigationProperty Name="tblUser" Relationship="Self.fk_order_account" FromRole="tblOrder" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblPermission">
+          <Key>
+            <PropertyRef Name="PK_iPermissionID" />
+          </Key>
+          <Property Name="PK_iPermissionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sPermissionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="iState" Type="Int32" />
+          <NavigationProperty Name="tblUsers" Relationship="Self.fk_user_permission" FromRole="tblPermission" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblProduct">
+          <Key>
+            <PropertyRef Name="PK_iProductID" />
+          </Key>
+          <Property Name="PK_iProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="FK_iPromoteID" Type="Int32" Nullable="false" />
+          <Property Name="sProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="sDescribe" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="fPrice" Type="Double" />
+          <Property Name="sColor" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="sSize" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="sImage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="sUnit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblCategory" Relationship="Self.fk_product_category" FromRole="tblProduct" ToRole="tblCategory" />
+          <NavigationProperty Name="tblCheckinDetails" Relationship="Self.fk_checkinDetail_product" FromRole="tblProduct" ToRole="tblCheckinDetail" />
+          <NavigationProperty Name="tblCheckoutDetails" Relationship="Self.fk_checkoutDetail_product" FromRole="tblProduct" ToRole="tblCheckoutDetail" />
+          <NavigationProperty Name="tblImages" Relationship="Self.fk_img_product" FromRole="tblProduct" ToRole="tblImage" />
+          <NavigationProperty Name="tblPromote" Relationship="Self.fk_product_promote" FromRole="tblProduct" ToRole="tblPromote" />
+          <NavigationProperty Name="tblReviews" Relationship="Self.fk_review_product" FromRole="tblProduct" ToRole="tblReview" />
+          <NavigationProperty Name="tblProductColors" Relationship="Self.FK_tblProductColor_tblProduct" FromRole="tblProduct" ToRole="tblProductColor" />
+          <NavigationProperty Name="tblProductPrices" Relationship="Self.FK_tblProductPrice_tblProduct" FromRole="tblProduct" ToRole="tblProductPrice" />
+          <NavigationProperty Name="tblProductSizes" Relationship="Self.FK_tblProductSize_tblProduct" FromRole="tblProduct" ToRole="tblProductSize" />
+        </EntityType>
+        <EntityType Name="tblProductColor">
+          <Key>
+            <PropertyRef Name="PK_iProductColorID" />
+          </Key>
+          <Property Name="PK_iProductColorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iProductID" Type="Int32" Nullable="false" />
+          <Property Name="sProductColor" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblProduct" Relationship="Self.FK_tblProductColor_tblProduct" FromRole="tblProductColor" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblProductPrice">
+          <Key>
+            <PropertyRef Name="PK_iProductPriceID" />
+          </Key>
+          <Property Name="PK_iProductPriceID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iProductID" Type="Int32" Nullable="false" />
+          <Property Name="fPrice" Type="Double" />
+          <Property Name="dtStartDay" Type="DateTime" Precision="3" />
+          <Property Name="dtEndDay" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblProduct" Relationship="Self.FK_tblProductPrice_tblProduct" FromRole="tblProductPrice" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblProductSize">
+          <Key>
+            <PropertyRef Name="PK_iProductSizeID" />
+          </Key>
+          <Property Name="PK_iProductSizeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iProductID" Type="Int32" Nullable="false" />
+          <Property Name="sSizeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblProduct" Relationship="Self.FK_tblProductSize_tblProduct" FromRole="tblProductSize" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblPromote">
+          <Key>
+            <PropertyRef Name="PK_iPromoteID" />
+          </Key>
+          <Property Name="PK_iPromoteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sPromoteName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="sPromoteRate" Type="Double" />
+          <Property Name="dtStartDay" Type="DateTime" Precision="3" />
+          <Property Name="dtEndDay" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblProducts" Relationship="Self.fk_product_promote" FromRole="tblPromote" ToRole="tblProduct" />
+        </EntityType>
+        <EntityType Name="tblReview">
+          <Key>
+            <PropertyRef Name="PK_iReviewID" />
+          </Key>
+          <Property Name="PK_iReviewID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iProductID" Type="Int32" Nullable="false" />
+          <Property Name="FK_iAccountID" Type="Int32" Nullable="false" />
+          <Property Name="iStarRating" Type="Int32" />
+          <Property Name="dtReviewTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblProduct" Relationship="Self.fk_review_product" FromRole="tblReview" ToRole="tblProduct" />
+          <NavigationProperty Name="tblUser" Relationship="Self.fk_review_account" FromRole="tblReview" ToRole="tblUser" />
+        </EntityType>
+        <EntityType Name="tblSupplier">
+          <Key>
+            <PropertyRef Name="PK_iSupplierID" />
+          </Key>
+          <Property Name="PK_iSupplierID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sSupplierName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="sPhone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="sEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="sAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblImportOrders" Relationship="Self.fk_importOrder_supplier" FromRole="tblSupplier" ToRole="tblImportOrder" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="PK_iAccountID" />
+          </Key>
+          <Property Name="PK_iAccountID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iPermissionID" Type="Int32" Nullable="false" />
+          <Property Name="sEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="sPass" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sUserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="sPhone" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="sAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="iState" Type="Int32" />
+          <NavigationProperty Name="tblImportOrders" Relationship="Self.fk_importOrder_account" FromRole="tblUser" ToRole="tblImportOrder" />
+          <NavigationProperty Name="tblOrders" Relationship="Self.fk_order_account" FromRole="tblUser" ToRole="tblOrder" />
+          <NavigationProperty Name="tblPermission" Relationship="Self.fk_user_permission" FromRole="tblUser" ToRole="tblPermission" />
+          <NavigationProperty Name="tblReviews" Relationship="Self.fk_review_account" FromRole="tblUser" ToRole="tblReview" />
+        </EntityType>
+        <Association Name="fk_product_category">
+          <End Role="tblCategory" Type="Self.tblCategory" Multiplicity="1" />
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblCategory">
+              <PropertyRef Name="PK_iCategoryID" />
+            </Principal>
+            <Dependent Role="tblProduct">
+              <PropertyRef Name="FK_iCategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_checkinDetail_importOrder">
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="1" />
+          <End Role="tblCheckinDetail" Type="Self.tblCheckinDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblImportOrder">
+              <PropertyRef Name="PK_iImportOrderID" />
+            </Principal>
+            <Dependent Role="tblCheckinDetail">
+              <PropertyRef Name="FK_iImportOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_checkinDetail_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="0..1" />
+          <End Role="tblCheckinDetail" Type="Self.tblCheckinDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblCheckinDetail">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_checkoutDetail_order">
+          <End Role="tblOrder" Type="Self.tblOrder" Multiplicity="1" />
+          <End Role="tblCheckoutDetail" Type="Self.tblCheckoutDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblOrder">
+              <PropertyRef Name="PK_iOrderID" />
+            </Principal>
+            <Dependent Role="tblCheckoutDetail">
+              <PropertyRef Name="FK_iOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_checkoutDetail_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="0..1" />
+          <End Role="tblCheckoutDetail" Type="Self.tblCheckoutDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblCheckoutDetail">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_img_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblImage" Type="Self.tblImage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblImage">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblImportMaterial_tblImportOrder">
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="1" />
+          <End Role="tblImportMaterial" Type="Self.tblImportMaterial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblImportOrder">
+              <PropertyRef Name="PK_iImportOrderID" />
+            </Principal>
+            <Dependent Role="tblImportMaterial">
+              <PropertyRef Name="FK_iImportOrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblImportMaterial_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblImportMaterial" Type="Self.tblImportMaterial" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblImportMaterial">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_importOrder_account">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblImportOrder">
+              <PropertyRef Name="FK_iAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_importOrder_supplier">
+          <End Role="tblSupplier" Type="Self.tblSupplier" Multiplicity="1" />
+          <End Role="tblImportOrder" Type="Self.tblImportOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblSupplier">
+              <PropertyRef Name="PK_iSupplierID" />
+            </Principal>
+            <Dependent Role="tblImportOrder">
+              <PropertyRef Name="FK_iSupplierID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaterColor_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblMaterColor" Type="Self.tblMaterColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblMaterColor">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaterPriceImport_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblMaterPriceImport" Type="Self.tblMaterPriceImport" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblMaterPriceImport">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaterSize_tblMaterial">
+          <End Role="tblMaterial" Type="Self.tblMaterial" Multiplicity="1" />
+          <End Role="tblMaterSize" Type="Self.tblMaterSize" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMaterial">
+              <PropertyRef Name="PK_iMaterialID" />
+            </Principal>
+            <Dependent Role="tblMaterSize">
+              <PropertyRef Name="FK_iMaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_order_account">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblOrder" Type="Self.tblOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblOrder">
+              <PropertyRef Name="FK_iAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_user_permission">
+          <End Role="tblPermission" Type="Self.tblPermission" Multiplicity="1" />
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPermission">
+              <PropertyRef Name="PK_iPermissionID" />
+            </Principal>
+            <Dependent Role="tblUser">
+              <PropertyRef Name="FK_iPermissionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_product_promote">
+          <End Role="tblPromote" Type="Self.tblPromote" Multiplicity="1" />
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPromote">
+              <PropertyRef Name="PK_iPromoteID" />
+            </Principal>
+            <Dependent Role="tblProduct">
+              <PropertyRef Name="FK_iPromoteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_review_product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblReview" Type="Self.tblReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblReview">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProductColor_tblProduct">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblProductColor" Type="Self.tblProductColor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblProductColor">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProductPrice_tblProduct">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblProductPrice" Type="Self.tblProductPrice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblProductPrice">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblProductSize_tblProduct">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblProductSize" Type="Self.tblProductSize" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblProductSize">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_review_account">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblReview" Type="Self.tblReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblReview">
+              <PropertyRef Name="FK_iAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="giadinhthoxinhEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblCategories" EntityType="Self.tblCategory" />
+          <EntitySet Name="tblCheckinDetails" EntityType="Self.tblCheckinDetail" />
+          <EntitySet Name="tblCheckoutDetails" EntityType="Self.tblCheckoutDetail" />
+          <EntitySet Name="tblImages" EntityType="Self.tblImage" />
+          <EntitySet Name="tblImportMaterials" EntityType="Self.tblImportMaterial" />
+          <EntitySet Name="tblImportOrders" EntityType="Self.tblImportOrder" />
+          <EntitySet Name="tblMaterColors" EntityType="Self.tblMaterColor" />
+          <EntitySet Name="tblMaterials" EntityType="Self.tblMaterial" />
+          <EntitySet Name="tblMaterPriceImports" EntityType="Self.tblMaterPriceImport" />
+          <EntitySet Name="tblMaterSizes" EntityType="Self.tblMaterSize" />
+          <EntitySet Name="tblOrders" EntityType="Self.tblOrder" />
+          <EntitySet Name="tblPermissions" EntityType="Self.tblPermission" />
+          <EntitySet Name="tblProducts" EntityType="Self.tblProduct" />
+          <EntitySet Name="tblProductColors" EntityType="Self.tblProductColor" />
+          <EntitySet Name="tblProductPrices" EntityType="Self.tblProductPrice" />
+          <EntitySet Name="tblProductSizes" EntityType="Self.tblProductSize" />
+          <EntitySet Name="tblPromotes" EntityType="Self.tblPromote" />
+          <EntitySet Name="tblReviews" EntityType="Self.tblReview" />
+          <EntitySet Name="tblSuppliers" EntityType="Self.tblSupplier" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+          <AssociationSet Name="fk_product_category" Association="Self.fk_product_category">
+            <End Role="tblCategory" EntitySet="tblCategories" />
+            <End Role="tblProduct" EntitySet="tblProducts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_checkinDetail_importOrder" Association="Self.fk_checkinDetail_importOrder">
+            <End Role="tblImportOrder" EntitySet="tblImportOrders" />
+            <End Role="tblCheckinDetail" EntitySet="tblCheckinDetails" />
+          </AssociationSet>
+          <AssociationSet Name="fk_checkinDetail_product" Association="Self.fk_checkinDetail_product">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblCheckinDetail" EntitySet="tblCheckinDetails" />
+          </AssociationSet>
+          <AssociationSet Name="fk_checkoutDetail_order" Association="Self.fk_checkoutDetail_order">
+            <End Role="tblOrder" EntitySet="tblOrders" />
+            <End Role="tblCheckoutDetail" EntitySet="tblCheckoutDetails" />
+          </AssociationSet>
+          <AssociationSet Name="fk_checkoutDetail_product" Association="Self.fk_checkoutDetail_product">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblCheckoutDetail" EntitySet="tblCheckoutDetails" />
+          </AssociationSet>
+          <AssociationSet Name="fk_img_product" Association="Self.fk_img_product">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblImage" EntitySet="tblImages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblImportMaterial_tblImportOrder" Association="Self.FK_tblImportMaterial_tblImportOrder">
+            <End Role="tblImportOrder" EntitySet="tblImportOrders" />
+            <End Role="tblImportMaterial" EntitySet="tblImportMaterials" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblImportMaterial_tblMaterial" Association="Self.FK_tblImportMaterial_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterials" />
+            <End Role="tblImportMaterial" EntitySet="tblImportMaterials" />
+          </AssociationSet>
+          <AssociationSet Name="fk_importOrder_account" Association="Self.fk_importOrder_account">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblImportOrder" EntitySet="tblImportOrders" />
+          </AssociationSet>
+          <AssociationSet Name="fk_importOrder_supplier" Association="Self.fk_importOrder_supplier">
+            <End Role="tblSupplier" EntitySet="tblSuppliers" />
+            <End Role="tblImportOrder" EntitySet="tblImportOrders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaterColor_tblMaterial" Association="Self.FK_tblMaterColor_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterials" />
+            <End Role="tblMaterColor" EntitySet="tblMaterColors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaterPriceImport_tblMaterial" Association="Self.FK_tblMaterPriceImport_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterials" />
+            <End Role="tblMaterPriceImport" EntitySet="tblMaterPriceImports" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaterSize_tblMaterial" Association="Self.FK_tblMaterSize_tblMaterial">
+            <End Role="tblMaterial" EntitySet="tblMaterials" />
+            <End Role="tblMaterSize" EntitySet="tblMaterSizes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_order_account" Association="Self.fk_order_account">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblOrder" EntitySet="tblOrders" />
+          </AssociationSet>
+          <AssociationSet Name="fk_user_permission" Association="Self.fk_user_permission">
+            <End Role="tblPermission" EntitySet="tblPermissions" />
+            <End Role="tblUser" EntitySet="tblUsers" />
+          </AssociationSet>
+          <AssociationSet Name="fk_product_promote" Association="Self.fk_product_promote">
+            <End Role="tblPromote" EntitySet="tblPromotes" />
+            <End Role="tblProduct" EntitySet="tblProducts" />
+          </AssociationSet>
+          <AssociationSet Name="fk_review_product" Association="Self.fk_review_product">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblReview" EntitySet="tblReviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProductColor_tblProduct" Association="Self.FK_tblProductColor_tblProduct">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblProductColor" EntitySet="tblProductColors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProductPrice_tblProduct" Association="Self.FK_tblProductPrice_tblProduct">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblProductPrice" EntitySet="tblProductPrices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblProductSize_tblProduct" Association="Self.FK_tblProductSize_tblProduct">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblProductSize" EntitySet="tblProductSizes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_review_account" Association="Self.fk_review_account">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblReview" EntitySet="tblReviews" />
+          </AssociationSet>
+          <FunctionImport Name="pro_getCategory" ReturnType="Collection(giadinhthoxinhEntities.pro_getCategory_Result)" />
+          <FunctionImport Name="pro_getProduct" ReturnType="Collection(giadinhthoxinhEntities.pro_getProduct_Result)" />
+          <FunctionImport Name="pro_getPromote" ReturnType="Collection(giadinhthoxinhEntities.pro_getPromote_Result)" />
+          <FunctionImport Name="pro_getReceiver" ReturnType="Collection(giadinhthoxinhEntities.pro_getReceiver_Result)" />
+          <FunctionImport Name="pro_getSupplier" ReturnType="Collection(giadinhthoxinhEntities.pro_getSupplier_Result)" />
+          <FunctionImport Name="proAddCategory">
+            <Parameter Name="sCategoryName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proAddCheckoutDetail">
+            <Parameter Name="FK_iOrderID" Mode="In" Type="Int32" />
+            <Parameter Name="FK_iProductID" Mode="In" Type="Int32" />
+            <Parameter Name="iQuantity" Mode="In" Type="Int32" />
+            <Parameter Name="iTotalMoney" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proAddPermission">
+            <Parameter Name="sPermissionName" Mode="In" Type="String" />
+            <Parameter Name="iState" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proAddPromote">
+            <Parameter Name="sPromoteName" Mode="In" Type="String" />
+            <Parameter Name="sPromoteRate" Mode="In" Type="Double" />
+            <Parameter Name="dtStartDay" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEndDay" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="proAddReview">
+            <Parameter Name="FK_iProductID" Mode="In" Type="Int32" />
+            <Parameter Name="FK_iAccountID" Mode="In" Type="Int32" />
+            <Parameter Name="iStarRating" Mode="In" Type="Int32" />
+            <Parameter Name="dtReviewTime" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="proAddSupplier">
+            <Parameter Name="sSupplierName" Mode="In" Type="String" />
+            <Parameter Name="sPhone" Mode="In" Type="String" />
+            <Parameter Name="sEmail" Mode="In" Type="String" />
+            <Parameter Name="sAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proAddUser">
+            <Parameter Name="FK_iPermissionID" Mode="In" Type="Int32" />
+            <Parameter Name="sEmail" Mode="In" Type="String" />
+            <Parameter Name="sPass" Mode="In" Type="String" />
+            <Parameter Name="sUserName" Mode="In" Type="String" />
+            <Parameter Name="sPhone" Mode="In" Type="String" />
+            <Parameter Name="sAddress" Mode="In" Type="String" />
+            <Parameter Name="iState" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procSelectCheckinDeatailrByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectCheckinDeatailrByID_Result)">
+            <Parameter Name="PK_iCheckinDetailID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procSelectImageByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectImageByID_Result)">
+            <Parameter Name="PK_iImageID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procSelectImportOrderByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectImportOrderByID_Result)">
+            <Parameter Name="PK_iImportOrderID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="procSelectUserByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectUserByID_Result)">
+            <Parameter Name="PK_iAccountID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteCategory">
+            <Parameter Name="sCategoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteCheckinDetail">
+            <Parameter Name="PK_iCheckinDetailID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteCheckoutDetail">
+            <Parameter Name="PK_iCheckoutDetailID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteImage">
+            <Parameter Name="PK_iImageID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteImportOrder">
+            <Parameter Name="PK_iImportOrderID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteOrder">
+            <Parameter Name="PK_iOrderID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeletePermission">
+            <Parameter Name="PK_iPermissionID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteProduct">
+            <Parameter Name="PK_iProductID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeletePromote">
+            <Parameter Name="PK_iPromoteID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteSupplier">
+            <Parameter Name="PK_iSupplierID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proDeleteUser">
+            <Parameter Name="PK_iAccountID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proGetAllImageToDisplay" ReturnType="Collection(giadinhthoxinhEntities.proGetAllImageToDisplay_Result)" />
+          <FunctionImport Name="proGetImageByIDToDisplay" ReturnType="Collection(String)">
+            <Parameter Name="sId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proPermissionNameDisplayUser" ReturnType="Collection(giadinhthoxinhEntities.proPermissionNameDisplayUser_Result)" />
+          <FunctionImport Name="proUpdateCategory">
+            <Parameter Name="sCategoryID" Mode="In" Type="Int32" />
+            <Parameter Name="sCategoryName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proUpdateImportOrder">
+            <Parameter Name="PK_iImportOrderID" Mode="In" Type="Int32" />
+            <Parameter Name="FK_iAccountID" Mode="In" Type="Int32" />
+            <Parameter Name="FK_iSupplierID" Mode="In" Type="Int32" />
+            <Parameter Name="dtDateAdded" Mode="In" Type="DateTime" />
+            <Parameter Name="sDeliver" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proUpdatePermission">
+            <Parameter Name="PK_iPermissionID" Mode="In" Type="Int32" />
+            <Parameter Name="sPermissionName" Mode="In" Type="String" />
+            <Parameter Name="iState" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="proUpdatePromote">
+            <Parameter Name="PK_iPromoteID" Mode="In" Type="Int32" />
+            <Parameter Name="sPromoteName" Mode="In" Type="String" />
+            <Parameter Name="sPromoteRate" Mode="In" Type="Double" />
+            <Parameter Name="dtStartDay" Mode="In" Type="DateTime" />
+            <Parameter Name="dtEndDay" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="proUpdateSupplier">
+            <Parameter Name="PK_iSupplierID" Mode="In" Type="Int32" />
+            <Parameter Name="sSupplierName" Mode="In" Type="String" />
+            <Parameter Name="sPhone" Mode="In" Type="String" />
+            <Parameter Name="sEmail" Mode="In" Type="String" />
+            <Parameter Name="sAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proUpdateUser">
+            <Parameter Name="PK_iAccountID" Mode="In" Type="Int32" />
+            <Parameter Name="FK_iPermissionID" Mode="In" Type="Int32" />
+            <Parameter Name="sEmail" Mode="In" Type="String" />
+            <Parameter Name="sPass" Mode="In" Type="String" />
+            <Parameter Name="sUserName" Mode="In" Type="String" />
+            <Parameter Name="sPhone" Mode="In" Type="String" />
+            <Parameter Name="sAddress" Mode="In" Type="String" />
+            <Parameter Name="iState" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="pro_getCategory_Result">
+          <Property Type="Int32" Name="PK_iCategoryID" Nullable="false" />
+          <Property Type="String" Name="sCategoryName" Nullable="true" MaxLength="60" />
+        </ComplexType>
+        <ComplexType Name="pro_getProduct_Result">
+          <Property Type="Int32" Name="PK_iProductID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iCategoryID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iPromoteID" Nullable="false" />
+          <Property Type="String" Name="sProductName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="sDescribe" Nullable="true" MaxLength="1000" />
+          <Property Type="Double" Name="fPrice" Nullable="true" />
+          <Property Type="String" Name="sColor" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="sSize" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="sImage" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="sUnit" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="pro_getPromote_Result">
+          <Property Type="Int32" Name="PK_iPromoteID" Nullable="false" />
+          <Property Type="String" Name="sPromoteName" Nullable="true" MaxLength="200" />
+          <Property Type="Double" Name="sPromoteRate" Nullable="true" />
+          <Property Type="DateTime" Name="dtStartDay" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="dtEndDay" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="pro_getReceiver_Result">
+          <Property Type="Int32" Name="PK_iAccountID" Nullable="false" />
+          <Property Type="String" Name="sUserName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="pro_getSupplier_Result">
+          <Property Type="Int32" Name="PK_iSupplierID" Nullable="false" />
+          <Property Type="String" Name="sSupplierName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="sPhone" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="sEmail" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="sAddress" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="procSelectCheckinDeatailrByID_Result">
+          <Property Type="Int32" Name="PK_iCheckinDetailID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iImportOrderID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iProductID" Nullable="true" />
+          <Property Type="Int32" Name="iQuatity" Nullable="true" />
+          <Property Type="Double" Name="fPrice" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="procSelectImageByID_Result">
+          <Property Type="Int32" Name="PK_iImageID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iProductID" Nullable="false" />
+          <Property Type="String" Name="sImage" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="procSelectImportOrderByID_Result">
+          <Property Type="Int32" Name="PK_iImportOrderID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iAccountID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iSupplierID" Nullable="false" />
+          <Property Type="DateTime" Name="dtDateAdded" Nullable="true" Precision="23" />
+          <Property Type="String" Name="sDeliver" Nullable="true" MaxLength="80" />
+          <Property Type="Int32" Name="iState" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="procSelectUserByID_Result">
+          <Property Type="Int32" Name="PK_iAccountID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iPermissionID" Nullable="false" />
+          <Property Type="String" Name="sEmail" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="sPass" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="sUserName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="sPhone" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="sAddress" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="iState" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="proGetAllImageToDisplay_Result">
+          <Property Type="Int32" Name="PK_iImageID" Nullable="false" />
+          <Property Type="Int32" Name="FK_iProductID" Nullable="false" />
+          <Property Type="String" Name="sImage" Nullable="true" MaxLength="250" />
+        </ComplexType>
+        <ComplexType Name="proPermissionNameDisplayUser_Result">
+          <Property Type="Int32" Name="PK_iPermissionID" Nullable="false" />
+          <Property Type="String" Name="sPermissionName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="iState" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="giadinhthoxinhEntitiesStoreContainer" CdmEntityContainer="giadinhthoxinhEntities1">
+          <EntitySetMapping Name="tblCategories">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblCategory">
+              <MappingFragment StoreEntitySet="tblCategory">
+                <ScalarProperty Name="PK_iCategoryID" ColumnName="PK_iCategoryID" />
+                <ScalarProperty Name="sCategoryName" ColumnName="sCategoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCheckinDetails">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblCheckinDetail">
+              <MappingFragment StoreEntitySet="tblCheckinDetail">
+                <ScalarProperty Name="PK_iCheckinDetailID" ColumnName="PK_iCheckinDetailID" />
+                <ScalarProperty Name="FK_iImportOrderID" ColumnName="FK_iImportOrderID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="iQuatity" ColumnName="iQuatity" />
+                <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblCheckoutDetails">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblCheckoutDetail">
+              <MappingFragment StoreEntitySet="tblCheckoutDetail">
+                <ScalarProperty Name="PK_iCheckoutDetailID" ColumnName="PK_iCheckoutDetailID" />
+                <ScalarProperty Name="FK_iOrderID" ColumnName="FK_iOrderID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="iQuantity" ColumnName="iQuantity" />
+                <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblImages">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblImage">
+              <MappingFragment StoreEntitySet="tblImage">
+                <ScalarProperty Name="PK_iImageID" ColumnName="PK_iImageID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="sImage" ColumnName="sImage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblImportMaterials">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblImportMaterial">
+              <MappingFragment StoreEntitySet="tblImportMaterial">
+                <ScalarProperty Name="PK_iImportMaterialID" ColumnName="PK_iImportMaterialID" />
+                <ScalarProperty Name="FK_iImportOrderID" ColumnName="FK_iImportOrderID" />
+                <ScalarProperty Name="FK_iMaterialID" ColumnName="FK_iMaterialID" />
+                <ScalarProperty Name="iQuatity" ColumnName="iQuatity" />
+                <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblImportOrders">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblImportOrder">
+              <MappingFragment StoreEntitySet="tblImportOrder">
+                <ScalarProperty Name="PK_iImportOrderID" ColumnName="PK_iImportOrderID" />
+                <ScalarProperty Name="FK_iAccountID" ColumnName="FK_iAccountID" />
+                <ScalarProperty Name="FK_iSupplierID" ColumnName="FK_iSupplierID" />
+                <ScalarProperty Name="dtDateAdded" ColumnName="dtDateAdded" />
+                <ScalarProperty Name="sDeliver" ColumnName="sDeliver" />
+                <ScalarProperty Name="iState" ColumnName="iState" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMaterColors">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblMaterColor">
+              <MappingFragment StoreEntitySet="tblMaterColor">
+                <ScalarProperty Name="PK_iMaterColorID" ColumnName="PK_iMaterColorID" />
+                <ScalarProperty Name="FK_iMaterialID" ColumnName="FK_iMaterialID" />
+                <ScalarProperty Name="sMaterColor" ColumnName="sMaterColor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMaterials">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblMaterial">
+              <MappingFragment StoreEntitySet="tblMaterial">
+                <ScalarProperty Name="PK_iMaterialID" ColumnName="PK_iMaterialID" />
+                <ScalarProperty Name="sMaterialName" ColumnName="sMaterialName" />
+                <ScalarProperty Name="sDescribe" ColumnName="sDescribe" />
+                <ScalarProperty Name="iQuatity" ColumnName="iQuatity" />
+                <ScalarProperty Name="sUnit" ColumnName="sUnit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMaterPriceImports">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblMaterPriceImport">
+              <MappingFragment StoreEntitySet="tblMaterPriceImport">
+                <ScalarProperty Name="PK_iMaterPriceImportID" ColumnName="PK_iMaterPriceImportID" />
+                <ScalarProperty Name="FK_iMaterialID" ColumnName="FK_iMaterialID" />
+                <ScalarProperty Name="fMaterPriceImport" ColumnName="fMaterPriceImport" />
+                <ScalarProperty Name="dtStartDay" ColumnName="dtStartDay" />
+                <ScalarProperty Name="dtEndDay" ColumnName="dtEndDay" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMaterSizes">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblMaterSize">
+              <MappingFragment StoreEntitySet="tblMaterSize">
+                <ScalarProperty Name="PK_iMaterSizeID" ColumnName="PK_iMaterSizeID" />
+                <ScalarProperty Name="FK_iMaterialID" ColumnName="FK_iMaterialID" />
+                <ScalarProperty Name="sMaterSize" ColumnName="sMaterSize" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblOrders">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblOrder">
+              <MappingFragment StoreEntitySet="tblOrder">
+                <ScalarProperty Name="PK_iOrderID" ColumnName="PK_iOrderID" />
+                <ScalarProperty Name="FK_iAccountID" ColumnName="FK_iAccountID" />
+                <ScalarProperty Name="sCustomerName" ColumnName="sCustomerName" />
+                <ScalarProperty Name="sCustomerPhone" ColumnName="sCustomerPhone" />
+                <ScalarProperty Name="sDeliveryAddress" ColumnName="sDeliveryAddress" />
+                <ScalarProperty Name="dInvoidDate" ColumnName="dInvoidDate" />
+                <ScalarProperty Name="sBiller" ColumnName="sBiller" />
+                <ScalarProperty Name="iDeliveryMethod" ColumnName="iDeliveryMethod" />
+                <ScalarProperty Name="fSurcharge" ColumnName="fSurcharge" />
+                <ScalarProperty Name="iPaid" ColumnName="iPaid" />
+                <ScalarProperty Name="sState" ColumnName="sState" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPermissions">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblPermission">
+              <MappingFragment StoreEntitySet="tblPermission">
+                <ScalarProperty Name="PK_iPermissionID" ColumnName="PK_iPermissionID" />
+                <ScalarProperty Name="sPermissionName" ColumnName="sPermissionName" />
+                <ScalarProperty Name="iState" ColumnName="iState" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProducts">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblProduct">
+              <MappingFragment StoreEntitySet="tblProduct">
+                <ScalarProperty Name="PK_iProductID" ColumnName="PK_iProductID" />
+                <ScalarProperty Name="FK_iCategoryID" ColumnName="FK_iCategoryID" />
+                <ScalarProperty Name="FK_iPromoteID" ColumnName="FK_iPromoteID" />
+                <ScalarProperty Name="sProductName" ColumnName="sProductName" />
+                <ScalarProperty Name="sDescribe" ColumnName="sDescribe" />
+                <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+                <ScalarProperty Name="sColor" ColumnName="sColor" />
+                <ScalarProperty Name="sSize" ColumnName="sSize" />
+                <ScalarProperty Name="sImage" ColumnName="sImage" />
+                <ScalarProperty Name="sUnit" ColumnName="sUnit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProductColors">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblProductColor">
+              <MappingFragment StoreEntitySet="tblProductColor">
+                <ScalarProperty Name="PK_iProductColorID" ColumnName="PK_iProductColorID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="sProductColor" ColumnName="sProductColor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProductPrices">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblProductPrice">
+              <MappingFragment StoreEntitySet="tblProductPrice">
+                <ScalarProperty Name="PK_iProductPriceID" ColumnName="PK_iProductPriceID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+                <ScalarProperty Name="dtStartDay" ColumnName="dtStartDay" />
+                <ScalarProperty Name="dtEndDay" ColumnName="dtEndDay" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProductSizes">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblProductSize">
+              <MappingFragment StoreEntitySet="tblProductSize">
+                <ScalarProperty Name="PK_iProductSizeID" ColumnName="PK_iProductSizeID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="sSizeName" ColumnName="sSizeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPromotes">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblPromote">
+              <MappingFragment StoreEntitySet="tblPromote">
+                <ScalarProperty Name="PK_iPromoteID" ColumnName="PK_iPromoteID" />
+                <ScalarProperty Name="sPromoteName" ColumnName="sPromoteName" />
+                <ScalarProperty Name="sPromoteRate" ColumnName="sPromoteRate" />
+                <ScalarProperty Name="dtStartDay" ColumnName="dtStartDay" />
+                <ScalarProperty Name="dtEndDay" ColumnName="dtEndDay" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblReviews">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblReview">
+              <MappingFragment StoreEntitySet="tblReview">
+                <ScalarProperty Name="PK_iReviewID" ColumnName="PK_iReviewID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="FK_iAccountID" ColumnName="FK_iAccountID" />
+                <ScalarProperty Name="iStarRating" ColumnName="iStarRating" />
+                <ScalarProperty Name="dtReviewTime" ColumnName="dtReviewTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblSuppliers">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblSupplier">
+              <MappingFragment StoreEntitySet="tblSupplier">
+                <ScalarProperty Name="PK_iSupplierID" ColumnName="PK_iSupplierID" />
+                <ScalarProperty Name="sSupplierName" ColumnName="sSupplierName" />
+                <ScalarProperty Name="sPhone" ColumnName="sPhone" />
+                <ScalarProperty Name="sEmail" ColumnName="sEmail" />
+                <ScalarProperty Name="sAddress" ColumnName="sAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblUser">
+              <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="PK_iAccountID" ColumnName="PK_iAccountID" />
+                <ScalarProperty Name="FK_iPermissionID" ColumnName="FK_iPermissionID" />
+                <ScalarProperty Name="sEmail" ColumnName="sEmail" />
+                <ScalarProperty Name="sPass" ColumnName="sPass" />
+                <ScalarProperty Name="sUserName" ColumnName="sUserName" />
+                <ScalarProperty Name="sPhone" ColumnName="sPhone" />
+                <ScalarProperty Name="sAddress" ColumnName="sAddress" />
+                <ScalarProperty Name="iState" ColumnName="iState" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="pro_getCategory" FunctionName="giadinhthoxinhEntities.Store.pro_getCategory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.pro_getCategory_Result">
+                <ScalarProperty Name="PK_iCategoryID" ColumnName="PK_iCategoryID" />
+                <ScalarProperty Name="sCategoryName" ColumnName="sCategoryName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pro_getProduct" FunctionName="giadinhthoxinhEntities.Store.pro_getProduct">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.pro_getProduct_Result">
+                <ScalarProperty Name="PK_iProductID" ColumnName="PK_iProductID" />
+                <ScalarProperty Name="FK_iCategoryID" ColumnName="FK_iCategoryID" />
+                <ScalarProperty Name="FK_iPromoteID" ColumnName="FK_iPromoteID" />
+                <ScalarProperty Name="sProductName" ColumnName="sProductName" />
+                <ScalarProperty Name="sDescribe" ColumnName="sDescribe" />
+                <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+                <ScalarProperty Name="sColor" ColumnName="sColor" />
+                <ScalarProperty Name="sSize" ColumnName="sSize" />
+                <ScalarProperty Name="sImage" ColumnName="sImage" />
+                <ScalarProperty Name="sUnit" ColumnName="sUnit" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pro_getPromote" FunctionName="giadinhthoxinhEntities.Store.pro_getPromote">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.pro_getPromote_Result">
+                <ScalarProperty Name="PK_iPromoteID" ColumnName="PK_iPromoteID" />
+                <ScalarProperty Name="sPromoteName" ColumnName="sPromoteName" />
+                <ScalarProperty Name="sPromoteRate" ColumnName="sPromoteRate" />
+                <ScalarProperty Name="dtStartDay" ColumnName="dtStartDay" />
+                <ScalarProperty Name="dtEndDay" ColumnName="dtEndDay" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pro_getReceiver" FunctionName="giadinhthoxinhEntities.Store.pro_getReceiver">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.pro_getReceiver_Result">
+                <ScalarProperty Name="PK_iAccountID" ColumnName="PK_iAccountID" />
+                <ScalarProperty Name="sUserName" ColumnName="sUserName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="pro_getSupplier" FunctionName="giadinhthoxinhEntities.Store.pro_getSupplier">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.pro_getSupplier_Result">
+                <ScalarProperty Name="PK_iSupplierID" ColumnName="PK_iSupplierID" />
+                <ScalarProperty Name="sSupplierName" ColumnName="sSupplierName" />
+                <ScalarProperty Name="sPhone" ColumnName="sPhone" />
+                <ScalarProperty Name="sEmail" ColumnName="sEmail" />
+                <ScalarProperty Name="sAddress" ColumnName="sAddress" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="proAddCategory" FunctionName="giadinhthoxinhEntities.Store.proAddCategory" />
+          <FunctionImportMapping FunctionImportName="proAddCheckoutDetail" FunctionName="giadinhthoxinhEntities.Store.proAddCheckoutDetail" />
+          <FunctionImportMapping FunctionImportName="proAddPermission" FunctionName="giadinhthoxinhEntities.Store.proAddPermission" />
+          <FunctionImportMapping FunctionImportName="proAddPromote" FunctionName="giadinhthoxinhEntities.Store.proAddPromote" />
+          <FunctionImportMapping FunctionImportName="proAddReview" FunctionName="giadinhthoxinhEntities.Store.proAddReview" />
+          <FunctionImportMapping FunctionImportName="proAddSupplier" FunctionName="giadinhthoxinhEntities.Store.proAddSupplier" />
+          <FunctionImportMapping FunctionImportName="proAddUser" FunctionName="giadinhthoxinhEntities.Store.proAddUser" />
+          <FunctionImportMapping FunctionImportName="procSelectCheckinDeatailrByID" FunctionName="giadinhthoxinhEntities.Store.procSelectCheckinDeatailrByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.procSelectCheckinDeatailrByID_Result">
+                <ScalarProperty Name="PK_iCheckinDetailID" ColumnName="PK_iCheckinDetailID" />
+                <ScalarProperty Name="FK_iImportOrderID" ColumnName="FK_iImportOrderID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="iQuatity" ColumnName="iQuatity" />
+                <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procSelectImageByID" FunctionName="giadinhthoxinhEntities.Store.procSelectImageByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.procSelectImageByID_Result">
+                <ScalarProperty Name="PK_iImageID" ColumnName="PK_iImageID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="sImage" ColumnName="sImage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procSelectImportOrderByID" FunctionName="giadinhthoxinhEntities.Store.procSelectImportOrderByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.procSelectImportOrderByID_Result">
+                <ScalarProperty Name="PK_iImportOrderID" ColumnName="PK_iImportOrderID" />
+                <ScalarProperty Name="FK_iAccountID" ColumnName="FK_iAccountID" />
+                <ScalarProperty Name="FK_iSupplierID" ColumnName="FK_iSupplierID" />
+                <ScalarProperty Name="dtDateAdded" ColumnName="dtDateAdded" />
+                <ScalarProperty Name="sDeliver" ColumnName="sDeliver" />
+                <ScalarProperty Name="iState" ColumnName="iState" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="procSelectUserByID" FunctionName="giadinhthoxinhEntities.Store.procSelectUserByID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.procSelectUserByID_Result">
+                <ScalarProperty Name="PK_iAccountID" ColumnName="PK_iAccountID" />
+                <ScalarProperty Name="FK_iPermissionID" ColumnName="FK_iPermissionID" />
+                <ScalarProperty Name="sEmail" ColumnName="sEmail" />
+                <ScalarProperty Name="sPass" ColumnName="sPass" />
+                <ScalarProperty Name="sUserName" ColumnName="sUserName" />
+                <ScalarProperty Name="sPhone" ColumnName="sPhone" />
+                <ScalarProperty Name="sAddress" ColumnName="sAddress" />
+                <ScalarProperty Name="iState" ColumnName="iState" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="proDeleteCategory" FunctionName="giadinhthoxinhEntities.Store.proDeleteCategory" />
+          <FunctionImportMapping FunctionImportName="proDeleteCheckinDetail" FunctionName="giadinhthoxinhEntities.Store.proDeleteCheckinDetail" />
+          <FunctionImportMapping FunctionImportName="proDeleteCheckoutDetail" FunctionName="giadinhthoxinhEntities.Store.proDeleteCheckoutDetail" />
+          <FunctionImportMapping FunctionImportName="proDeleteImage" FunctionName="giadinhthoxinhEntities.Store.proDeleteImage" />
+          <FunctionImportMapping FunctionImportName="proDeleteImportOrder" FunctionName="giadinhthoxinhEntities.Store.proDeleteImportOrder" />
+          <FunctionImportMapping FunctionImportName="proDeleteOrder" FunctionName="giadinhthoxinhEntities.Store.proDeleteOrder" />
+          <FunctionImportMapping FunctionImportName="proDeletePermission" FunctionName="giadinhthoxinhEntities.Store.proDeletePermission" />
+          <FunctionImportMapping FunctionImportName="proDeleteProduct" FunctionName="giadinhthoxinhEntities.Store.proDeleteProduct" />
+          <FunctionImportMapping FunctionImportName="proDeletePromote" FunctionName="giadinhthoxinhEntities.Store.proDeletePromote" />
+          <FunctionImportMapping FunctionImportName="proDeleteSupplier" FunctionName="giadinhthoxinhEntities.Store.proDeleteSupplier" />
+          <FunctionImportMapping FunctionImportName="proDeleteUser" FunctionName="giadinhthoxinhEntities.Store.proDeleteUser" />
+          <FunctionImportMapping FunctionImportName="proGetAllImageToDisplay" FunctionName="giadinhthoxinhEntities.Store.proGetAllImageToDisplay">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.proGetAllImageToDisplay_Result">
+                <ScalarProperty Name="PK_iImageID" ColumnName="PK_iImageID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="sImage" ColumnName="sImage" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="proGetImageByIDToDisplay" FunctionName="giadinhthoxinhEntities.Store.proGetImageByIDToDisplay" />
+          <FunctionImportMapping FunctionImportName="proPermissionNameDisplayUser" FunctionName="giadinhthoxinhEntities.Store.proPermissionNameDisplayUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="giadinhthoxinhEntities.proPermissionNameDisplayUser_Result">
+                <ScalarProperty Name="PK_iPermissionID" ColumnName="PK_iPermissionID" />
+                <ScalarProperty Name="sPermissionName" ColumnName="sPermissionName" />
+                <ScalarProperty Name="iState" ColumnName="iState" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="proUpdateCategory" FunctionName="giadinhthoxinhEntities.Store.proUpdateCategory" />
+          <FunctionImportMapping FunctionImportName="proUpdateImportOrder" FunctionName="giadinhthoxinhEntities.Store.proUpdateImportOrder" />
+          <FunctionImportMapping FunctionImportName="proUpdatePermission" FunctionName="giadinhthoxinhEntities.Store.proUpdatePermission" />
+          <FunctionImportMapping FunctionImportName="proUpdatePromote" FunctionName="giadinhthoxinhEntities.Store.proUpdatePromote" />
+          <FunctionImportMapping FunctionImportName="proUpdateSupplier" FunctionName="giadinhthoxinhEntities.Store.proUpdateSupplier" />
+          <FunctionImportMapping FunctionImportName="proUpdateUser" FunctionName="giadinhthoxinhEntities.Store.proUpdateUser" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

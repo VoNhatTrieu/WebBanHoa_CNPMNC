@@ -1,0 +1,133 @@
+﻿@model giadinhthoxinh.Models.tblOrder
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title text-lg text-danger">Thông tin thêm mới hóa đơn bán</h3>
+        </div>
+
+        <div class="card-body">
+            <div class="bs-stepper-content">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.FK_iAccountID, "Người lập", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("FK_iAccountID", null, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.FK_iAccountID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sCustomerName, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.sCustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sCustomerName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sCustomerPhone, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.sCustomerPhone, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sCustomerPhone, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sDeliveryAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.sDeliveryAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sDeliveryAddress, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Ngày lập</label>
+                            <div class="col-md-10">
+                                <input class="form-control" name="dInvoidDate" value="@Html.Raw(DateTime.Now.ToString("yyyy-MM-dd HH:mm").Replace(' ','T'))" type="datetime-local" />
+                                @Html.ValidationMessageFor(model => model.dInvoidDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sBiller, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.sBiller, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sBiller, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Hình thức thanh toán</label>
+                            <div class="col-md-10">
+                                <input type="radio" name="iDeliveryMethod" value="0"  style="margin-left: 20px"/>Thanh toán online 
+                                <input type="radio" name="iDeliveryMethod" value="1" style="margin-left: 40px" checked/>Thanh toán khi nhận hàng
+                                @Html.ValidationMessageFor(model => model.iDeliveryMethod, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.fSurcharge, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @*@Html.EditorFor(model => model.fSurcharge, new { htmlAttributes = new { @class = "form-control"} })*@
+                                <input type="text" name="fSurcharge" class="form-control" value="0" />
+                                @Html.ValidationMessageFor(model => model.fSurcharge, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-2">Đã thanh toán</label>
+                            <div class="col-md-10">
+                                <input type="radio" name="iPaid" value="0" style="margin-left: 20px"/>Chưa thanh toán
+                                <input type="radio" name="iPaid" value="1" style="margin-left: 40px" checked/>Đã thanh toán
+                                @Html.ValidationMessageFor(model => model.iPaid, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.sState, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.sState, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.sState, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-primary btn-secondary" }) |
+                                <input type="submit" value="thêm" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="card-body">
+
+            </div>
+            <div class="card-footer">
+
+            </div>
+        </div>
+    </div>
+</section>

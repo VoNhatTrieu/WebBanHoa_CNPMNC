@@ -1,0 +1,78 @@
+﻿@model IEnumerable<giadinhthoxinh.Models.tblPromote>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title text-lg text-danger">Danh sách khuyến mãi</h1>
+
+            <div class="card-tools">
+                @Html.ActionLink("thêm mới", "Create", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+
+        <div class="card-body table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sPromoteName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sPromoteRate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.dtStartDay)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.dtEndDay)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sPromoteName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sPromoteRate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtStartDay)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dtEndDay)
+                            </td>
+                            <td>
+                                @Html.ActionLink("sửa", "Edit", new { id = item.PK_iPromoteID }, new { @class = "btn btn-primary btn-warning" }) |
+                                @Html.ActionLink("chi tiết", "Details", new { id = item.PK_iPromoteID }, new { @class = "btn btn-primary btn-info" }) |
+                                @Html.ActionLink("xóa", "Delete", new { id = item.PK_iPromoteID }, new { @class = "btn btn-primary btn-danger" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<giadinhthoxinh.Models.tblImage>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title text-lg text-danger">Danh sách hình ảnh sản phẩm</h1>
+
+            <div class="card-tools">
+                @Html.ActionLink("thêm mới", "Create", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+
+        <div class="card-body table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sImage)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblProduct.sProductName)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Content(item.sImage)" style="width: 70px; height: 70px; object-fit: cover"/>
+                  
+                                @*@Html.DisplayFor(modelItem => item.sImage)*@
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblProduct.sProductName)
+                            </td>
+                            <td>
+                                @Html.ActionLink("sửa", "Edit", new { id = item.PK_iImageID }, new { @class = "btn btn-primary btn-warning" }) |
+                                @Html.ActionLink("chi tiết", "Details", new { id = item.PK_iImageID }, new { @class = "btn btn-primary btn-info" }) |
+                                @Html.ActionLink("xóa", "Delete", new { id = item.PK_iImageID }, new { @class = "btn btn-primary btn-danger" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+</section>
+

@@ -1,0 +1,12 @@
+﻿
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    white-space: nowrap; /* ngăn không cho văn bản xuống dòng */
+    overflow: hidden; /* ẩn văn bản quá dài */
+    text-overflow: ellipsis; /* hiển thị dấu ba chấm (...) */
+}

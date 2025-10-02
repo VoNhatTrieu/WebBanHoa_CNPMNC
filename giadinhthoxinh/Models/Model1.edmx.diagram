@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="0407060aad9649a8985e4dda422c5230" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblCategory" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblCheckinDetail" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblCheckoutDetail" Width="1.5" PointX="8.25" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblImage" Width="1.5" PointX="5.25" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblImportMaterial" Width="1.5" PointX="16" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblImportOrder" Width="1.5" PointX="3" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblMaterColor" Width="1.5" PointX="13" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblMaterial" Width="1.5" PointX="10.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblMaterPriceImport" Width="1.5" PointX="13" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblMaterSize" Width="1.5" PointX="13" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblOrder" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblPermission" Width="1.5" PointX="3.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblProduct" Width="1.5" PointX="3" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblProductColor" Width="1.5" PointX="5.25" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblProductPrice" Width="1.5" PointX="5.25" PointY="18.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblProductSize" Width="1.5" PointX="5.25" PointY="21.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblPromote" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblReview" Width="1.5" PointX="8.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblSupplier" Width="1.5" PointX="0.75" PointY="16.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblUser" Width="1.5" PointX="6" PointY="5.875" IsExpanded="true" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_product_category" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_checkinDetail_importOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_checkinDetail_product" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_checkoutDetail_order" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_checkoutDetail_product" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_img_product" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblImportMaterial_tblImportOrder" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblImportMaterial_tblMaterial" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_importOrder_account" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_importOrder_supplier" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblMaterColor_tblMaterial" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblMaterPriceImport_tblMaterial" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblMaterSize_tblMaterial" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_order_account" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_user_permission" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_product_promote" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_review_product" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblProductColor_tblProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblProductPrice_tblProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_tblProductSize_tblProduct" ManuallyRouted="false" />
+        <AssociationConnector Association="giadinhthoxinhEntities.fk_review_account" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

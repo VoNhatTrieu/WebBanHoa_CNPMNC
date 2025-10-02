@@ -1,0 +1,67 @@
+﻿@model giadinhthoxinh.Models.tblSupplier
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+}
+
+<section class="content-header p-2">
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="text-danger text-lg ">Chi tiết thông tin mã nhà cung cấp : <span class="text-primary text-lg">@Model.PK_iSupplierID</span></h3>
+        </div>
+
+        <div class="card-body">
+            <div>
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sSupplierName)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sSupplierName)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sPhone)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sPhone)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sEmail)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sEmail)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.sAddress)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.sAddress)
+                    </dd>
+                </dl>
+            </div>
+            <p>
+                @Html.ActionLink("quay lại", "Index", null, new { @class = "btn btn-primary btn-secondary" }) |
+                @Html.ActionLink("sửa", "Edit", new { id = Model.PK_iSupplierID }, new { @class = "btn btn-primary" })
+            </p>
+        </div>
+    </div>
+</section>

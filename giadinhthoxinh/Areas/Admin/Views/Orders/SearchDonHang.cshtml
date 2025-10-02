@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewBag.Title = "SearchDonHang";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<giadinhthoxinh.Models.tblOrder>
+<section class="content-header p-2">
+    @using (Html.BeginForm("SearchDonHang", "Orders", FormMethod.Get))
+    {
+
+
+        <div style="width=100px">
+
+            @if (Session["SearchDonHang"] != null)
+            {
+                <input class="form-control" name="searchString" type="text" placeholder="Tìm kiếm đơn hàng" value=" @Session["SearchDonHang"].ToString()"> }
+            else
+            {
+                <input class="form-control" name="searchString" type="text" placeholder="Tìm kiếm sản phẩm">
+            }
+
+
+
+
+        </div>
+    }
+
+</section>
+
+<section class="content ml-2 mr-2">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title text-lg text-danger">Kết quả tìm kiếm</h1>
+
+            <div class="card-tools">
+                @Html.ActionLink("thêm mới", "Create", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+
+        <div class="card-body table-responsive text-nowrap">
+            <table class="table table-hover table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sCustomerName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sCustomerPhone)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sDeliveryAddress)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.dInvoidDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sBiller)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.iDeliveryMethod)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.fSurcharge)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.iPaid)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.sState)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.tblUser.sEmail)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sCustomerName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sCustomerPhone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sDeliveryAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.dInvoidDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sBiller)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.iDeliveryMethod)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.fSurcharge)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.iPaid)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.sState)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.tblUser.sEmail)
+                            </td>
+                            <td>
+
+                                @Html.ActionLink("sửa", "Edit", new { id = item.PK_iOrderID }, new { @class = "btn btn-primary btn-warning" }) |
+                                @Html.ActionLink("chi tiết", "Details", new { id = item.PK_iOrderID }, new { @class = "btn btn-primary btn-info" }) |
+                                @Html.ActionLink("xóa", "Delete", new { id = item.PK_iOrderID }, new { @class = "btn btn-primary btn-danger" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+</section>
+
+

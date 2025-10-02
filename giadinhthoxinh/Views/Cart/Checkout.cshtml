@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/assets/styles/checkout.css" rel="stylesheet" />
+
+<section class="h-100 gradient-custom" style="background-color: #8fc4b7">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center my-4">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header py-3">
+                        <h4 class="mb-0">Thông tin đơn hàng</h4>
+                    </div>
+
+                    @using (Html.BeginForm("DatHang", "Cart", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="card-body">
+                            <div class="form-outline mb-4">
+                                <input type="text" id="sCustomerName" name="sCustomerName" class="form-control mx-auto width-input" placeholder="Họ và tên" required />
+                            </div>
+                            <div class="form-outline mb-4">
+                                <input type="text" id="sCustomerPhone" name="sCustomerPhone" class="form-control mx-auto width-input" placeholder="Số điện thoại" required />
+                            </div>
+                            <div class="form-outline mb-4">
+                                <input type="text" id="sDeliveryAddress" name="sDeliveryAddress" class="form-control mx-auto width-input" placeholder="Địa chỉ" required />
+                            </div>
+                            <div class="form-outline mb-4">
+                                <textarea rows="4" cols="50" id="Note" name="Note" class="form-control mx-auto width-input" placeholder="Ghi chú (tùy chọn)"></textarea>
+                            </div>
+
+                            <div class="align-center mt-5">
+                                <input type="submit" value="Xác nhận đặt hàng" class="btn bg-primary progress-checkout" style="border: none" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
