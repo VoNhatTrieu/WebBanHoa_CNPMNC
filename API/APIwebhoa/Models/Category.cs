@@ -1,0 +1,19 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace APIwebhoa.Models
+{
+    [Table("tblCategory")]
+    public class Category
+    {
+        [Key]
+        [Column("PK_iCategoryID")]
+        public int Id { get; set; }
+
+        [Column("sCategoryName")]
+        public string Name { get; set; }
+
+        // Navigation
+        public ICollection<Product> Products { get; set; }
+    }
+}
