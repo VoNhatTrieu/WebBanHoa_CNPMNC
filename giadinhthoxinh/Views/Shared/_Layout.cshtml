@@ -20,7 +20,7 @@
     @Scripts.Render("~/bundles/modernizr")
 
     <style>
-        /* Existing header styles */
+        /* Header */
         header.header {
             width: 100% !important;
             max-width: 100% !important;
@@ -43,21 +43,20 @@
             text-decoration: none;
         }
 
-        .navbar-brand img {
-            border-radius: 50%;
-            border: 2px solid white;
-            margin-right: 10px;
-            transition: all 0.5s ease;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
-        }
+            .navbar-brand img {
+                border-radius: 50%;
+                border: 2px solid white;
+                margin-right: 10px;
+                transition: all 0.5s ease;
+                filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+            }
 
-        .navbar-brand:hover img {
-            transform: rotate(360deg) scale(1.15);
-            filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));
-            border-color: #fff;
-        }
+            .navbar-brand:hover img {
+                transform: rotate(360deg) scale(1.15);
+                filter: drop-shadow(0 0 15px rgba(255,255,255,0.8));
+                border-color: #fff;
+            }
 
-        /* Hiệu ứng cho chữ Flower KingDom */
             .navbar-brand span {
                 background: linear-gradient(45deg, #fff, #c92e2e, #933bec, #16fa7c);
                 background-size: 300% 300%;
@@ -74,26 +73,33 @@
             }
 
         @@keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
         }
 
-        /* Hiệu ứng glow khi hover */
         .navbar-brand:hover span {
             animation: gradientFlow 1.5s ease infinite, textGlow 1.5s ease infinite;
         }
 
         @@keyframes textGlow {
             0%, 100% {
-                filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+                filter: drop-shadow(0 0 5px rgba(255,255,255,0.5))
             }
+
             50% {
-                filter: drop-shadow(0 0 20px rgba(255,255,255,1));
+                filter: drop-shadow(0 0 20px rgba(255,255,255,1))
             }
         }
 
-        /* Thêm hiệu ứng shine */
         .navbar-brand span::before {
             content: '';
             position: absolute;
@@ -106,19 +112,14 @@
             pointer-events: none;
         }
 
-
         @@keyframes shine {
             0% {
-                left: -100%;
+                left: -100%
             }
 
             100% {
-                left: 100%;
+                left: 100%
             }
-        }
-
-        .navbar-brand:hover {
-            color: white !important;
         }
 
         .main_nav_container, .navbar {
@@ -131,18 +132,18 @@
             gap: 30px;
         }
 
-        .navbar-nav .nav-link {
-            color: #fff !important;
-            font-weight: 500;
-            padding: 8px 16px;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
+            .navbar-nav .nav-link {
+                color: #fff !important;
+                font-weight: 500;
+                padding: 8px 16px;
+                border-radius: 20px;
+                transition: all .3s ease;
+            }
 
-        .navbar-nav .nav-link:hover {
-            background-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
+                .navbar-nav .nav-link:hover {
+                    background-color: rgba(255,255,255,0.2);
+                    transform: translateY(-2px);
+                }
 
         .dropdown-menu {
             border: none;
@@ -177,33 +178,33 @@
             min-width: 250px;
         }
 
-        .search-form .form-control {
-            border: none;
-            background: transparent;
-            padding: 8px 15px;
-            border-radius: 25px;
-        }
+            .search-form .form-control {
+                border: none;
+                background: transparent;
+                padding: 8px 15px;
+                border-radius: 25px;
+            }
 
-        .search-form .form-control:focus {
-            box-shadow: none;
-            outline: none;
-        }
+                .search-form .form-control:focus {
+                    box-shadow: none;
+                    outline: none;
+                }
 
-        .search-form .btn {
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #2c3e50;
-            border: none;
-        }
+            .search-form .btn {
+                border-radius: 50%;
+                width: 35px;
+                height: 35px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #2c3e50;
+                border: none;
+            }
 
-        .search-form .btn:hover {
-            background: #34495e;
-            transform: scale(1.05);
-        }
+                .search-form .btn:hover {
+                    background: #34495e;
+                    transform: scale(1.05);
+                }
 
         .header-icons {
             display: flex;
@@ -211,112 +212,51 @@
             align-items: center;
         }
 
-        .header-icons > * {
-            display: inline-flex;
-            align-items: center;
-        }
+            .header-icons a, .header-icons button, .header-icons .btn {
+                background-color: rgba(255,255,255,0.2) !important;
+                color: white !important;
+                border-radius: 50%;
+                width: 42px;
+                height: 42px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                transition: all .3s ease;
+                position: relative;
+                font-size: 16px;
+                border: 2px solid rgba(255,255,255,0.3);
+                margin: 0 5px;
+            }
 
-        .header-icons a,
-        .header-icons button,
-        .header-icons .btn {
-            background-color: rgba(255,255,255,0.2) !important;
-            color: white !important;
-            border-radius: 50%;
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            font-size: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            margin: 0 5px;
-        }
+                .header-icons a:hover, .header-icons button:hover, .header-icons .btn:hover {
+                    background-color: rgba(255,255,255,0.3) !important;
+                    color: white !important;
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                    border-color: rgba(255,255,255,0.5);
+                }
 
-        .header-icons a:hover,
-        .header-icons button:hover,
-        .header-icons .btn:hover {
-            background-color: rgba(255,255,255,0.3) !important;
-            color: white !important;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            border-color: rgba(255,255,255,0.5);
-        }
-
-        .header-icons .badge,
-        .header-icons [class*="badge"] {
-            position: absolute !important;
-            top: -8px !important;
-            right: -8px !important;
-            background: #ff4757 !important;
-            color: white !important;
-            border-radius: 50% !important;
-            min-width: 20px !important;
-            height: 20px !important;
-            font-size: 12px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            font-weight: bold !important;
-            border: 2px solid white !important;
-            padding: 0 !important;
-        }
-
-        .header-icons .dropdown-menu,
-        .header-icons .dropdown,
-        .header-icons [class*="dropdown"] {
-            background: white !important;
-            border: none !important;
-            border-radius: 10px !important;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
-            padding: 8px 0 !important;
-            min-width: 180px !important;
-            max-width: 200px !important;
-            margin-top: 8px !important;
-            right: 0 !important;
-            left: auto !important;
-            transform: translateX(0) !important;
-            z-index: 1050 !important;
-        }
-
-        .header-icons .dropdown-item,
-        .header-icons .dropdown a,
-        .header-icons [class*="dropdown"] a {
-            padding: 8px 16px !important;
-            color: #333 !important;
-            border: none !important;
-            border-radius: 0 !important;
-            width: 100% !important;
-            height: auto !important;
-            background: transparent !important;
-            font-size: 14px !important;
-            text-align: left !important;
-            white-space: nowrap !important;
-            display: block !important;
-            border-bottom: 1px solid #f0f0f0 !important;
-            text-decoration: none !important;
-        }
-
-        .header-icons .dropdown-item:last-child,
-        .header-icons .dropdown a:last-child,
-        .header-icons [class*="dropdown"] a:last-child {
-            border-bottom: none !important;
-        }
-
-        .header-icons .dropdown-item:hover,
-        .header-icons .dropdown a:hover,
-        .header-icons [class*="dropdown"] a:hover {
-            background-color: #f8f9fa !important;
-            color: #87CEEB !important;
-            transform: none !important;
-        }
+            .header-icons .badge {
+                position: absolute !important;
+                top: -8px !important;
+                right: -8px !important;
+                background: #ff4757 !important;
+                color: white !important;
+                border-radius: 50% !important;
+                min-width: 20px !important;
+                height: 20px !important;
+                font-size: 12px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-weight: bold !important;
+                border: 2px solid white !important;
+                padding: 0 !important;
+            }
 
         @@media (max-width: 768px) {
-            .header-icons .dropdown-menu,
-            .header-icons .dropdown,
-            .header-icons [class*="dropdown"] {
+            .header-icons .dropdown-menu {
                 position: absolute !important;
                 right: 0 !important;
                 left: auto !important;
@@ -333,9 +273,9 @@
                 margin-top: 10px;
             }
 
-            .navbar-nav .nav-link {
-                color: #333 !important;
-            }
+                .navbar-nav .nav-link {
+                    color: #333 !important;
+                }
 
             .search-form {
                 min-width: 200px;
@@ -343,294 +283,367 @@
             }
         }
 
-        /* Chatbox Styles */
-       /* Chatbox Styles - Thay thế từ dòng 220 trong code gốc */
-.chatbox-container {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    z-index: 1050;
-}
+        /* Chatbox */
+        .chatbox-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1050;
+        }
 
-.chatbox-toggle {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    width: 65px;
-    height: 65px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 26px;
-    border: 3px solid rgba(255,255,255,0.3);
-    cursor: pointer;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-    transition: all 0.4s ease;
-    position: relative;
-}
+        .chatbox-toggle {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 26px;
+            border: 3px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102,126,234,.4);
+            transition: all .4s ease;
+            position: relative;
+        }
 
-.chatbox-toggle:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
-}
+            .chatbox-toggle:hover {
+                transform: translateY(-5px) scale(1.05);
+                box-shadow: 0 12px 35px rgba(102,126,234,.5);
+            }
 
-.chatbox {
-    display: none;
-    width: 380px;
-    height: 550px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.25);
-    overflow: hidden;
-    flex-direction: column;
-    position: absolute;
-    bottom: 90px;
-    right: 0;
-    animation: slideUpChat 0.3s ease-out;
-}
+        .chatbox {
+            display: none;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,.25);
+            overflow: hidden;
+            flex-direction: column;
+            position: absolute;
+            bottom: 90px;
+            right: 0;
+            animation: slideUpChat .3s ease-out;
+        }
 
-@@keyframes slideUpChat {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        @@keyframes slideUpChat {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
 
-.chatbox.active {
-    display: flex;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
 
-.chatbox-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 18px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 500;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
+        .chatbox.active {
+            display: flex;
+        }
 
-.chatbox-header .close-chat {
-    cursor: pointer;
-    font-size: 20px;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
+        .chatbox-header {
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+        }
 
-.chatbox-header .close-chat:hover {
-    background: rgba(255,255,255,0.2);
-    transform: rotate(90deg);
-}
+            .chatbox-header .close-chat {
+                cursor: pointer;
+                font-size: 20px;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: all .3s ease;
+            }
 
-.chatbox-body {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
-}
+                .chatbox-header .close-chat:hover {
+                    background: rgba(255,255,255,.2);
+                    transform: rotate(90deg);
+                }
 
-.chatbox-body::-webkit-scrollbar {
-    width: 6px;
-}
+        .chatbox-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: linear-gradient(to bottom,#f8f9fa 0%,#ffffff 100%);
+        }
 
-.chatbox-body::-webkit-scrollbar-track {
-    background: transparent;
-}
+        .chat-message {
+            margin-bottom: 15px;
+            animation: messageSlideIn .3s ease-out;
+            clear: both;
+        }
 
-.chatbox-body::-webkit-scrollbar-thumb {
-    background: #cbd5e0;
-    border-radius: 10px;
-}
+        @@keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px)
+            }
 
-.chatbox-body::-webkit-scrollbar-thumb:hover {
-    background: #a0aec0;
-}
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
 
-.chat-message {
-    margin-bottom: 15px;
-    animation: messageSlideIn 0.3s ease-out;
-    clear: both;
-}
+        .chat-message.bot, .chat-message.admin {
+            background: white;
+            color: #2d3748;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            max-width: 80%;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            float: left;
+        }
 
-@@keyframes messageSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        .chat-message.user {
+            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 18px;
+            border-bottom-right-radius: 4px;
+            max-width: 80%;
+            box-shadow: 0 2px 8px rgba(102,126,234,.3);
+            float: right;
+            text-align: right;
+        }
 
-.chat-message strong {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 12px;
-    opacity: 0.8;
-}
+        .chatbox-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+        }
 
-.chat-message small {
-    font-size: 10px;
-    opacity: 0.6;
-    margin-left: 8px;
-}
+            .chatbox-footer form {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                background: #f7fafc;
+                border-radius: 25px;
+                padding: 6px;
+                border: 2px solid transparent;
+                transition: all .3s ease;
+            }
 
-.chat-message.user {
-    text-align: right;
-}
+                .chatbox-footer form:focus-within {
+                    border-color: #667eea;
+                    background: white;
+                    box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+                }
 
-.chat-message.user strong,
-.chat-message.user small {
-    text-align: right;
-}
+            .chatbox-footer input {
+                flex: 1;
+                border: none;
+                background: transparent;
+                border-radius: 20px;
+                padding: 10px 15px;
+                font-size: 14px;
+                color: #2d3748;
+            }
 
-.chat-message.bot {
-    background: white;
-    color: #2d3748;
-    padding: 12px 16px;
-    border-radius: 18px;
-    border-bottom-left-radius: 4px;
-    max-width: 80%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    float: left;
-}
+            .chatbox-footer button {
+                background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 38px;
+                height: 38px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all .3s ease;
+                cursor: pointer;
+            }
 
-.chat-message.user {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 12px 16px;
-    border-radius: 18px;
-    border-bottom-right-radius: 4px;
-    max-width: 80%;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    float: right;
-}
+                .chatbox-footer button:hover {
+                    background: linear-gradient(135deg,#5a67d8 0%,#6b46a1 100%);
+                    transform: scale(1.08);
+                    box-shadow: 0 4px 12px rgba(102,126,234,.4);
+                }
 
-.chat-message.admin {
-    background: white;
-    color: #2d3748;
-    padding: 12px 16px;
-    border-radius: 18px;
-    border-bottom-left-radius: 4px;
-    max-width: 80%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    float: left;
-}
+        @@media (max-width: 576px) {
+            .chatbox {
+                width: calc(100vw - 50px);
+                height: calc(100vh - 150px);
+                max-width: 380px;
+                max-height: 550px;
+            }
 
-.chatbox-footer {
-    padding: 15px 20px;
-    border-top: 1px solid #e2e8f0;
-    background: white;
-}
+            .chatbox-toggle {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
 
-.chatbox-footer form {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    background: #f7fafc;
-    border-radius: 25px;
-    padding: 6px;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-}
+        /* ===================== FOOTER FX (Buttons + Petals) ===================== */
+        .container-fluid.bg-dark.footer {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
 
-.chatbox-footer form:focus-within {
-    border-color: #667eea;
-    background: white;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
+            /* Buttons: lift + glow + ripple (tất cả .btn trong footer) */
+            .container-fluid.bg-dark.footer .btn {
+                position: relative;
+                overflow: hidden;
+                transform: translateZ(0);
+                transition: transform .2s ease, box-shadow .25s ease, filter .2s ease;
+                will-change: transform, box-shadow, filter;
+            }
 
-.chatbox-footer input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    border-radius: 20px;
-    padding: 10px 15px;
-    font-size: 14px;
-    color: #2d3748;
-}
+                .container-fluid.bg-dark.footer .btn:hover {
+                    transform: translateY(-3px) scale(1.03);
+                    box-shadow: 0 10px 26px rgba(138,180,255,.28);
+                    filter: saturate(1.05);
+                }
 
-.chatbox-footer input:focus {
-    outline: none;
-}
+                .container-fluid.bg-dark.footer .btn:active {
+                    transform: translateY(-1px) scale(0.99);
+                    box-shadow: 0 6px 18px rgba(138,180,255,.22);
+                }
 
-.chatbox-footer input::placeholder {
-    color: #a0aec0;
-}
+                .container-fluid.bg-dark.footer .btn.btn-primary {
+                    background: linear-gradient(135deg, #5a8bff, #8ab4ff);
+                    border: none;
+                }
 
-.chatbox-footer button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
+                    .container-fluid.bg-dark.footer .btn.btn-primary::after {
+                        content: "";
+                        position: absolute;
+                        inset: 0;
+                        background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.55) 45%, transparent 70%);
+                        transform: translateX(-120%);
+                        transition: transform .6s ease;
+                        mix-blend-mode: screen;
+                        opacity: .55;
+                        pointer-events: none;
+                    }
 
-.chatbox-footer button:hover {
-    background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%);
-    transform: scale(1.08);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
+                    .container-fluid.bg-dark.footer .btn.btn-primary:hover::after {
+                        transform: translateX(0);
+                    }
 
-.chatbox-suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 12px;
-    padding: 0 20px 15px;
-    background: white;
-}
+                /* Social buttons: neon glow (magnetic xử lý bằng JS) */
+                .container-fluid.bg-dark.footer .btn.btn-square {
+                    border-color: rgba(255,255,255,.35) !important;
+                    transition: transform .12s ease, box-shadow .25s ease, border-color .12s ease, background-color .2s ease;
+                    box-shadow: 0 0 0 rgba(138,180,255,0);
+                }
 
-.chatbox-suggestions .suggestion {
-    background: #f7fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 20px;
-    padding: 8px 14px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: #4a5568;
-}
+                    .container-fluid.bg-dark.footer .btn.btn-square:hover {
+                        border-color: rgba(138,180,255,.9) !important;
+                        background-color: rgba(255,255,255,.12) !important;
+                        box-shadow: 0 8px 24px rgba(138,180,255,.25), 0 0 16px rgba(138,180,255,.28) inset;
+                    }
 
-.chatbox-suggestions .suggestion:hover {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-color: transparent;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-}
+            /* Ripple phần tử */
+            .container-fluid.bg-dark.footer .fx-ripple {
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.45);
+                transform: scale(0);
+                opacity: .75;
+                pointer-events: none;
+                transition: transform .55s ease, opacity .7s ease;
+            }
 
-@@media (max-width: 576px) {
-    .chatbox {
-        width: calc(100vw - 50px);
-        height: calc(100vh - 150px);
-        max-width: 380px;
-        max-height: 550px;
-    }
+                .container-fluid.bg-dark.footer .fx-ripple.show {
+                    transform: scale(26);
+                    opacity: 0;
+                }
 
-    .chatbox-toggle {
-        width: 60px;
-        height: 60px;
-        font-size: 24px;
-    }
-}
+        /* Petals */
+        .footer-petals {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+            .footer-petals .petal {
+                position: absolute;
+                top: -40px;
+                width: 14px;
+                height: 12px;
+                background: radial-gradient(circle at 40% 40%, #ffd1dc 0%, #ff8fb3 60%, #ff679b 100%);
+                border-radius: 60% 40% 60% 40%/60% 40% 60% 40%;
+                opacity: .85;
+                filter: blur(.2px);
+                will-change: transform, opacity;
+                transform-origin: center;
+                animation: petalFloat linear forwards;
+            }
+
+                .footer-petals .petal::after {
+                    content: "";
+                    position: absolute;
+                    inset: 2px;
+                    border-radius: inherit;
+                    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.45), transparent 55%);
+                    mix-blend-mode: screen;
+                }
+
+        @@keyframes petalFloat {
+            0% {
+                transform: translate3d(0, -10px, 0) rotate(0deg);
+                opacity: 0;
+            }
+
+            6% {
+                opacity: .9;
+            }
+
+            50% {
+                transform: translate3d(var(--sx, 40px), 55vh, 0) rotate(140deg);
+            }
+
+            100% {
+                transform: translate3d(calc(var(--sx, 40px) * 2.2), 96vh, 0) rotate(300deg);
+                opacity: 0;
+            }
+        }
+
+        /* Link nhanh underline */
+        .container-fluid.bg-dark.footer a.btn-link {
+            position: relative;
+            color: #cfe3ff !important;
+            transition: color .2s ease;
+            z-index: 2;
+        }
+
+            .container-fluid.bg-dark.footer a.btn-link::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: -2px;
+                height: 2px;
+                width: 0%;
+                background: currentColor;
+                transition: width .25s ease;
+            }
+
+            .container-fluid.bg-dark.footer a.btn-link:hover {
+                color: #ffffff !important;
+            }
+
+                .container-fluid.bg-dark.footer a.btn-link:hover::after {
+                    width: 100%;
+                }
     </style>
 </head>
 <body>
@@ -686,11 +699,10 @@
         <div class="body-content">
             @RenderBody()
         </div>
+
         <!-- Chatbox -->
         <div class="chatbox-container">
-            <div class="chatbox-toggle">
-                <i class="fa fa-comment"></i>
-            </div>
+            <div class="chatbox-toggle"><i class="fa fa-comment"></i></div>
             <div class="chatbox">
                 <div class="chatbox-header">
                     <span>Flower KingDom Support</span>
@@ -715,9 +727,11 @@
             </div>
         </div>
 
-
         <!-- Footer -->
         <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+            <!-- Petals layer -->
+            <div class="footer-petals" aria-hidden="true"></div>
+
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-lg-3 col-md-6">
@@ -752,6 +766,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="container-fluid copyright">
                 <div class="container">
                     <div class="row">
@@ -774,117 +789,121 @@
         <script src="~/Content/assets/plugins/easing/easing.js"></script>
         <script src="~/Content/assets/js/custom.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- thêm SignalR -->
         <script src="~/Scripts/jquery-3.6.0.min.js"></script>
         <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
         <script src="/signalr/hubs"></script>
 
         <script>
-    $(function () {
-        console.log("=== FRONTEND CHAT DEBUG ===");
+        $(function () {
+            $('.chatbox-toggle').on('click', function () { $('.chatbox').toggleClass('active'); });
+            $('.close-chat').on('click', function () { $('.chatbox').removeClass('active'); });
 
-        // Toggle chatbox
-        $('.chatbox-toggle').click(function () {
-            $('.chatbox').toggleClass('active');
-        });
+            var chat = $.connection.chatHub;
+            var currentUser = '@(User.Identity.IsAuthenticated ? User.Identity.Name : "Guest")';
 
-        $('.close-chat').click(function () {
-            $('.chatbox').removeClass('active');
-        });
+            chat.client.broadcastMessage = function (user, message) {
+                var t = new Date().toLocaleTimeString();
+                var css = user === "Admin" ? "bot" : "user";
+                var name = user === "Admin" ? "Hỗ trợ" : user;
+                $('#chatbox-body').append('<div class="chat-message ' + css + '"><strong>' + name + ':</strong> ' + message + ' <small>(' + t + ')</small></div>')
+                                  .scrollTop($('#chatbox-body')[0].scrollHeight);
+            };
 
-        var chat = $.connection.chatHub;
-        var isConnected = false;
+            $(document).on('click', '.chatbox-suggestions .suggestion', function () {
+                var q = $(this).text(), a = $(this).data("reply"), t = new Date().toLocaleTimeString();
+                $('#chatbox-body')
+                    .append('<div class="chat-message user"><strong>Bạn:</strong> ' + q + ' <small>(' + t + ')</small></div>')
+                    .append('<div class="chat-message bot"><strong>Hỗ trợ:</strong> ' + a + ' <small>(' + t + ')</small></div>')
+                    .scrollTop($('#chatbox-body')[0].scrollHeight);
+            });
 
-        // Lấy tên user (nếu chưa login thì dùng Guest)
-        var currentUser = '@(User.Identity.IsAuthenticated ? User.Identity.Name : "Guest")';
-
-        // Nhận tin nhắn từ server
-        chat.client.broadcastMessage = function (user, message) {
-            var timestamp = new Date().toLocaleTimeString();
-            var cssClass = user === "Admin" ? "bot" : "user";
-            var displayName = user === "Admin" ? "Hỗ trợ" : user;
-
-            var messageHtml = '<div class="chat-message ' + cssClass + '">' +
-                '<strong>' + displayName + ':</strong> ' + message +
-                ' <small style="font-size:11px; opacity:0.7;">(' + timestamp + ')</small>' +
-                '</div>';
-
-            $('#chatbox-body').append(messageHtml);
-            $('#chatbox-body').scrollTop($('#chatbox-body')[0].scrollHeight);
-        };
-        $(document).on('click', '.chatbox-suggestions .suggestion', function () {
-            var question = $(this).text();
-            var answer = $(this).data("reply");
-            var timestamp = new Date().toLocaleTimeString();
-
-            var userMsg = '<div class="chat-message user"><strong>Bạn:</strong> ' + question +
-                ' <small>(' + timestamp + ')</small></div>';
-            $('#chatbox-body').append(userMsg);
-
-            var botMsg = '<div class="chat-message bot"><strong>Hỗ trợ:</strong> ' + answer +
-                ' <small>(' + timestamp + ')</small></div>';
-            $('#chatbox-body').append(botMsg);
-
-            $('#chatbox-body').scrollTop($('#chatbox-body')[0].scrollHeight);
-        });
-        // Kết nối SignalR
-        $.connection.hub.start()
-            .done(function () {
-                console.log("SignalR connected successfully");
-                isConnected = true;
-                $('.chatbox-header span:first').text('Flower KingDom Support (Online)');
-
-                // Gửi tin nhắn
-                $('#chatbox-form').submit(function (e) {
+            $.connection.hub.start().done(function () {
+                $('#chatbox-form').on('submit', function (e) {
                     e.preventDefault();
-                    var message = $('#chatbox-input').val().trim();
-                    if (!message) return;
+                    var msg = $('#chatbox-input').val().trim(); if (!msg) return;
                     $('#chatbox-input').val('');
+                    var t = new Date().toLocaleTimeString();
+                    $('#chatbox-body').append('<div class="chat-message user"><strong>' + currentUser + ':</strong> ' + msg + ' <small>(' + t + ')</small></div>');
 
-                    // Append local (tin của user)
-                    var timestamp = new Date().toLocaleTimeString();
-                    var userMessageHtml = '<div class="chat-message user">' +
-                        '<strong>' + currentUser + ':</strong> ' + message +
-                        ' <small>(' + timestamp + ')</small>' +
-                        '</div>';
-                    $('#chatbox-body').append(userMessageHtml);
-
-                    // Gọi AI Controller để lấy câu trả lời
                     $.ajax({
-                        url: '/AI/Reply',
-                        type: 'POST',
-                        data: { message: message },
+                        url: '/AI/Reply', type: 'POST', data: { message: msg },
                         success: function (reply) {
-                            var aiMsg = '<div class="chat-message admin">' +
-                                '<strong>AI:</strong> ' + reply +
-                                ' <small>(' + new Date().toLocaleTimeString() + ')</small>' +
-                                '</div>';
-                            $('#chatbox-body').append(aiMsg);
-                            $('#chatbox-body').scrollTop($('#chatbox-body')[0].scrollHeight);
-                        },
-                        error: function (xhr) {
-                            console.error("AI call failed:", xhr);
+                            $('#chatbox-body').append('<div class="chat-message admin"><strong>AI:</strong> ' + reply + ' <small>(' + new Date().toLocaleTimeString() + ')</small></div>')
+                                              .scrollTop($('#chatbox-body')[0].scrollHeight);
                         }
                     });
                 });
-
-
-                // Enter để gửi
-                $('#chatbox-input').keypress(function (e) {
-                    if (e.which === 13) {
-                        $('#chatbox-form').submit();
-                    }
-                });
-            })
-            .fail(function (err) {
-                console.error("SignalR connection failed:", err);
-                isConnected = false;
-                $('.chatbox-header span:first').text('Flower KingDom Support (Offline)');
+                $('#chatbox-input').on('keypress', function (e) { if (e.which === 13) $('#chatbox-form').submit(); });
             });
-    });
+        });
+
+        // FOOTER FX: Ripple + Magnetic + Petals
+        (function(){
+            var footer = document.querySelector('.container-fluid.bg-dark.footer');
+            if (!footer) return;
+
+            // Ripple effect
+            footer.addEventListener('click', function(e){
+                var btn = e.target.closest('.btn');
+                if(!btn) return;
+                var r = document.createElement('span');
+                r.className = 'fx-ripple';
+                var rect = btn.getBoundingClientRect();
+                r.style.left = (e.clientX - rect.left) + 'px';
+                r.style.top  = (e.clientY - rect.top)  + 'px';
+                btn.appendChild(r);
+                void r.offsetWidth; // force reflow
+                r.classList.add('show');
+                setTimeout(function(){ r.remove(); }, 700);
+            }, false);
+
+            // Magnetic hover for social buttons
+            var socials = footer.querySelectorAll('.btn.btn-square');
+            socials.forEach(function(b){
+                b.addEventListener('mousemove', function(ev){
+                    var r = b.getBoundingClientRect();
+                    var dx = (ev.clientX - (r.left + r.width/2)) / (r.width/2);
+                    var dy = (ev.clientY - (r.top  + r.height/2)) / (r.height/2);
+                    b.style.transform = 'translate(' + (dx*5) + 'px,' + (dy*5) + 'px) scale(1.08)';
+                });
+                b.addEventListener('mouseleave', function(){ b.style.transform = ''; });
+            });
+        })();
+
+        // Petals floating
+        (function(){
+            var wrap = document.querySelector('.footer-petals');
+            if (!wrap) return;
+
+            var PETALS = 14, MIN_DUR = 7, MAX_DUR = 14, SPAWN_EVERY = 900;
+
+            for (var i = 0; i < PETALS; i++) spawn();
+
+            var timer = setInterval(function(){
+                if (!document.body.contains(wrap)) { clearInterval(timer); return; }
+                spawn();
+            }, SPAWN_EVERY);
+
+            function spawn(){
+                var p = document.createElement('span');
+                p.className = 'petal';
+                var vw = wrap.clientWidth || window.innerWidth;
+                p.style.left = (Math.random() * vw) + 'px';
+                var s = 0.7 + Math.random()*0.9;
+                p.style.width  = (12*s) + 'px';
+                p.style.height = (10*s) + 'px';
+                var delay = Math.random() * 2.0;
+                var dur   = MIN_DUR + Math.random()*(MAX_DUR - MIN_DUR);
+                p.style.animationDuration = dur + 's';
+                p.style.animationDelay    = delay + 's';
+                var sway = (Math.random()*60 + 20) * (Math.random()<.5 ? -1 : 1);
+                p.style.setProperty('--sx', sway + 'px');
+                p.style.transform = 'rotate(' + (Math.random()*60 - 30) + 'deg)';
+                p.addEventListener('animationend', function(){ p.remove(); });
+                wrap.appendChild(p);
+            }
+        })();
         </script>
-
-
 
     </div>
 </body>
