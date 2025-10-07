@@ -9,12 +9,14 @@ namespace APIwebhoa.Data
         {
         }
         public DbSet<Models.Category> Categories { get; set; }
-        public DbSet<Models.Product> Products { get; set; }
+        public DbSet<Models.SanPham> Products { get; set; }
+        public DbSet<Models.TaiKhoan> TaiKhoans { get; set; }
+        public DbSet<Models.PhanQuyen> PhanQuyens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Product>()
+            modelBuilder.Entity<SanPham>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);

@@ -35,7 +35,7 @@ namespace APIwebhoa.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Product product)
+        public IActionResult Create(SanPham product)
         {
             _context.Products.Add(product);
             _context.SaveChanges();
@@ -43,7 +43,7 @@ namespace APIwebhoa.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Product product)
+        public IActionResult Update(int id, SanPham product)
         {
             if (id != product.Id) return BadRequest();
             _context.Products.Update(product);

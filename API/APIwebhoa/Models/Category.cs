@@ -14,6 +14,6 @@ namespace APIwebhoa.Models
         public string Name { get; set; }
 
         // Navigation
-        public ICollection<Product> Products { get; set; }
+        public ICollection<SanPham> Products { get; set; }
     }
 }
