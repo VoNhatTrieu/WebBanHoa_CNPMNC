@@ -19,7 +19,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
-    <style>
+<style>
         /* Header */
         header.header {
             width: 100% !important;
@@ -283,13 +283,14 @@
             }
         }
 
-        /* Chatbox */
+ 
         .chatbox-container {
             position: fixed;
             bottom: 25px;
             right: 25px;
             z-index: 1050;
         }
+
 
         .chatbox-toggle {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -306,17 +307,47 @@
             box-shadow: 0 8px 25px rgba(102,126,234,.4);
             transition: all .4s ease;
             position: relative;
+            animation: pulse 2s infinite;
         }
 
-            .chatbox-toggle:hover {
-                transform: translateY(-5px) scale(1.05);
-                box-shadow: 0 12px 35px rgba(102,126,234,.5);
-            }
+        .chatbox-toggle:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(102,126,234,.6);
+        }
+
+        .chatbox-toggle .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            border: 2px solid white;
+            animation: bounce 0.5s ease;
+        }
+
+        @@keyframes pulse {
+            0%, 100% { box-shadow: 0 8px 25px rgba(102,126,234,.4); }
+            50% { box-shadow: 0 8px 35px rgba(102,126,234,.6); }
+        }
+
+        @@keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
 
         .chatbox {
             display: none;
-            width: 380px;
-            height: 550px;
+            width: 400px;
+            max-height: 600px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 15px 50px rgba(0,0,0,.25);
@@ -331,12 +362,11 @@
         @@keyframes slideUpChat {
             from {
                 opacity: 0;
-                transform: translateY(20px)
+                transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
-                transform: translateY(0)
+                transform: translateY(0);
             }
         }
 
@@ -345,140 +375,336 @@
         }
 
         .chatbox-header {
-            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 18px 20px;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 500;
             box-shadow: 0 2px 10px rgba(0,0,0,.1);
         }
 
-            .chatbox-header .close-chat {
-                cursor: pointer;
-                font-size: 20px;
-                width: 32px;
-                height: 32px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 50%;
-                transition: all .3s ease;
-            }
+        .chatbox-header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-                .chatbox-header .close-chat:hover {
-                    background: rgba(255,255,255,.2);
-                    transform: rotate(90deg);
-                }
+        .chatbox-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: #667eea;
+            position: relative;
+        }
+
+        .chatbox-avatar::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #2ecc71;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .chatbox-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbox-title h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chatbox-title span {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .chatbox-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chatbox-controls button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+        }
+
+        .chatbox-controls button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
 
         .chatbox-body {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background: linear-gradient(to bottom,#f8f9fa 0%,#ffffff 100%);
+            background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+            max-height: 400px;
         }
+
+        .chatbox-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chatbox-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chatbox-body::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
 
         .chat-message {
             margin-bottom: 15px;
             animation: messageSlideIn .3s ease-out;
-            clear: both;
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
         }
 
         @@keyframes messageSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px)
+                transform: translateY(10px);
             }
-
             to {
                 opacity: 1;
-                transform: translateY(0)
+                transform: translateY(0);
             }
         }
 
-        .chat-message.bot, .chat-message.admin {
-            background: white;
-            color: #2d3748;
-            padding: 12px 16px;
-            border-radius: 18px;
-            border-bottom-left-radius: 4px;
-            max-width: 80%;
-            box-shadow: 0 2px 8px rgba(0,0,0,.08);
-            float: left;
+        .chat-message.bot {
+            justify-content: flex-start;
         }
 
         .chat-message.user {
-            background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+            justify-content: flex-end;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-bubble {
             padding: 12px 16px;
             border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .chat-message.bot .message-bubble {
+            background: white;
+            color: #2d3748;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        }
+
+        .chat-message.user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border-bottom-right-radius: 4px;
-            max-width: 80%;
             box-shadow: 0 2px 8px rgba(102,126,234,.3);
-            float: right;
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 4px;
+            padding: 0 8px;
+        }
+
+        .chat-message.bot .message-time {
+            text-align: left;
+        }
+
+        .chat-message.user .message-time {
             text-align: right;
         }
 
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.08);
+            width: fit-content;
+            margin-bottom: 15px;
+        }
+
+        .typing-indicator.show {
+            display: flex;
+            gap: 4px;
+            animation: messageSlideIn .3s ease-out;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @@keyframes typingDot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .chatbox-suggestions {
+            padding: 10px 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .suggestion {
+            padding: 8px 14px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #667eea;
+            cursor: pointer;
+            transition: all .3s ease;
+            white-space: nowrap;
+        }
+
+        .suggestion:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102,126,234,.3);
+        }
+
+  
         .chatbox-footer {
             padding: 15px 20px;
             border-top: 1px solid #e2e8f0;
             background: white;
         }
 
-            .chatbox-footer form {
-                display: flex;
-                gap: 10px;
-                align-items: center;
-                background: #f7fafc;
-                border-radius: 25px;
-                padding: 6px;
-                border: 2px solid transparent;
-                transition: all .3s ease;
-            }
+        .chatbox-footer form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #f7fafc;
+            border-radius: 25px;
+            padding: 6px;
+            border: 2px solid transparent;
+            transition: all .3s ease;
+        }
 
-                .chatbox-footer form:focus-within {
-                    border-color: #667eea;
-                    background: white;
-                    box-shadow: 0 0 0 3px rgba(102,126,234,.1);
-                }
+        .chatbox-footer form:focus-within {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+        }
 
-            .chatbox-footer input {
-                flex: 1;
-                border: none;
-                background: transparent;
-                border-radius: 20px;
-                padding: 10px 15px;
-                font-size: 14px;
-                color: #2d3748;
-            }
+        .chatbox-footer input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 15px;
+            font-size: 14px;
+            color: #2d3748;
+            outline: none;
+        }
 
-            .chatbox-footer button {
-                background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-                color: white;
-                border: none;
-                border-radius: 50%;
-                width: 38px;
-                height: 38px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all .3s ease;
-                cursor: pointer;
-            }
+        .chatbox-footer input::placeholder {
+            color: #a0aec0;
+        }
 
-                .chatbox-footer button:hover {
-                    background: linear-gradient(135deg,#5a67d8 0%,#6b46a1 100%);
-                    transform: scale(1.08);
-                    box-shadow: 0 4px 12px rgba(102,126,234,.4);
-                }
+        .chatbox-actions {
+            display: flex;
+            gap: 8px;
+        }
 
+        .chatbox-actions button {
+            background: transparent;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px 8px;
+            transition: all .3s ease;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbox-actions button:hover {
+            background: rgba(102,126,234,.1);
+            transform: scale(1.1);
+        }
+
+        .chatbox-actions button.send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .chatbox-actions button.send-btn:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%);
+            box-shadow: 0 4px 12px rgba(102,126,234,.4);
+        }
+
+ 
         @@media (max-width: 576px) {
             .chatbox {
-                width: calc(100vw - 50px);
+                width: calc(100vw - 40px);
                 height: calc(100vh - 150px);
-                max-width: 380px;
-                max-height: 550px;
+                max-width: 400px;
+                max-height: 600px;
             }
 
             .chatbox-toggle {
@@ -486,6 +712,30 @@
                 height: 60px;
                 font-size: 24px;
             }
+        }
+
+        /* Demo Info */
+        .demo-info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.1);
+            text-align: center;
+        }
+
+        .demo-info h3 {
+            margin: 0 0 5px 0;
+            color: #667eea;
+        }
+
+        .demo-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
         }
 
         /* ===================== FOOTER FX (Buttons + Petals) ===================== */
@@ -644,7 +894,7 @@
                 .container-fluid.bg-dark.footer a.btn-link:hover::after {
                     width: 100%;
                 }
-    </style>
+</style>
 </head>
 <body>
     <div class="super_container">
@@ -700,29 +950,86 @@
             @RenderBody()
         </div>
 
+     
+
         <!-- Chatbox -->
         <div class="chatbox-container">
-            <div class="chatbox-toggle"><i class="fa fa-comment"></i></div>
+            <div class="chatbox-toggle">
+                <i class="fa fa-comment"></i>
+                <span class="notification-badge">3</span>
+            </div>
+
             <div class="chatbox">
                 <div class="chatbox-header">
-                    <span>Flower KingDom Support</span>
-                    <span class="close-chat"><i class="fa fa-times"></i></span>
+                    <div class="chatbox-header-info">
+                        <div class="chatbox-avatar">
+                            <i class="fa fa-headphones"></i>
+                        </div>
+                        <div class="chatbox-title">
+                            <h4>Hỗ Trợ Khách Hàng</h4>
+                            <span>Trực tuyến</span>
+                        </div>
+                    </div>
+                    <div class="chatbox-controls">
+                        <button class="minimize-chat" title="Thu nhỏ">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                        <button class="close-chat" title="Đóng">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
                 </div>
+
                 <div class="chatbox-body" id="chatbox-body">
-                    <div class="chat-message bot">Xin chào! Chào mừng bạn đến với Flower KingDom. Hôm nay tôi có thể giúp gì cho bạn?</div>
+                    <div class="chat-message bot">
+                        <div class="message-avatar">
+                            <i class="fa fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-bubble">
+                                Xin chào! 👋 Chào mừng bạn đến với Flower KingDom. Tôi có thể giúp gì cho bạn hôm nay?
+                            </div>
+                            <div class="message-time">Bây giờ</div>
+                        </div>
+                    </div>
+
+                    <div class="typing-indicator" id="typing-indicator">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </div>
                 </div>
+
+                <div class="chatbox-suggestions">
+                    <button class="suggestion" data-reply="Dạ, shop có giao hàng toàn quốc với phí ship ưu đãi. Đơn hàng trên 500k được miễn phí ship nội thành ạ! 🚚">
+                        <i class="fa fa-truck"></i> Giao hàng
+                    </button>
+                    <button class="suggestion" data-reply="Giá hoa tươi hôm nay dao động từ 200.000đ đến 2.000.000đ tùy loại và mẫu. Bạn có thể xem catalog của shop để chọn mẫu ưng ý nhé! 🌹">
+                        <i class="fa fa-tag"></i> Bảng giá
+                    </button>
+                    <button class="suggestion" data-reply="Bạn có thể liên hệ hotline 0123 456 789 hoặc inbox Fanpage để được tư vấn chi tiết hơn ạ! 📞">
+                        <i class="fa fa-phone"></i> Tư vấn
+                    </button>
+                    <button class="suggestion" data-reply="Shop mở cửa từ 8:00 sáng đến 21:00 tối hàng ngày, kể cả cuối tuần và lễ! 🕐">
+                        <i class="fa fa-clock"></i> Giờ mở cửa
+                    </button>
+                </div>
+
                 <div class="chatbox-footer">
                     <form id="chatbox-form">
                         <input type="text" id="chatbox-input" placeholder="Nhập tin nhắn..." autocomplete="off" />
-                        <button type="submit"><i class="fa fa-paper-plane"></i></button>
+                        <div class="chatbox-actions">
+                            <button type="button" class="emoji-btn" title="Emoji">
+                                <i class="fa fa-smile"></i>
+                            </button>
+                            <button type="button" class="attach-btn" title="Đính kèm">
+                                <i class="fa fa-paperclip"></i>
+                            </button>
+                            <button type="submit" class="send-btn" title="Gửi">
+                                <i class="fa fa-paper-plane"></i>
+                            </button>
+                        </div>
                     </form>
-                    <div class="chatbox-suggestions">
-                        <button type="button" class="suggestion" data-reply="Dạ shop có giao hàng toàn quốc ạ.">Shop có giao hàng không?</button>
-                        <button type="button" class="suggestion" data-reply="Giá hoa hôm nay từ 200.000đ tuỳ loại và mẫu bạn nhé.">Giá hoa hôm nay?</button>
-                        <button type="button" class="suggestion" data-reply="Bạn có thể gọi hotline 0123 456 789 để gặp nhân viên tư vấn.">Liên hệ nhân viên tư vấn</button>
-                        <button type="button" class="suggestion" data-reply="Chúng tôi mở cửa từ 8h sáng đến 9h tối mỗi ngày.">Thời gian mở cửa?</button>
-                        <button type="button" class="suggestion" data-reply="Shop thường có khuyến mãi vào cuối tuần, bạn có thể theo dõi Fanpage.">Có khuyến mãi gì không?</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -794,48 +1101,187 @@
         <script src="/signalr/hubs"></script>
 
         <script>
-        $(function () {
-            $('.chatbox-toggle').on('click', function () { $('.chatbox').toggleClass('active'); });
-            $('.close-chat').on('click', function () { $('.chatbox').removeClass('active'); });
+       let messageCount = 0;
+        const state = {
+            isOpen: false,
+            messages: [],
+            currentUser: 'Khách'
+        };
 
-            var chat = $.connection.chatHub;
-            var currentUser = '@(User.Identity.IsAuthenticated ? User.Identity.Name : "Guest")';
+        // DOM Elements
+        const chatboxToggle = document.querySelector('.chatbox-toggle');
+        const chatbox = document.querySelector('.chatbox');
+        const closeChat = document.querySelector('.close-chat');
+        const minimizeChat = document.querySelector('.minimize-chat');
+        const chatboxBody = document.getElementById('chatbox-body');
+        const chatboxForm = document.getElementById('chatbox-form');
+        const chatboxInput = document.getElementById('chatbox-input');
+        const typingIndicator = document.getElementById('typing-indicator');
+        const suggestions = document.querySelectorAll('.suggestion');
+        const notificationBadge = document.querySelector('.notification-badge');
 
-            chat.client.broadcastMessage = function (user, message) {
-                var t = new Date().toLocaleTimeString();
-                var css = user === "Admin" ? "bot" : "user";
-                var name = user === "Admin" ? "Hỗ trợ" : user;
-                $('#chatbox-body').append('<div class="chat-message ' + css + '"><strong>' + name + ':</strong> ' + message + ' <small>(' + t + ')</small></div>')
-                                  .scrollTop($('#chatbox-body')[0].scrollHeight);
-            };
+        // Toggle chatbox
+        chatboxToggle.addEventListener('click', () => {
+            chatbox.classList.toggle('active');
+            state.isOpen = !state.isOpen;
+            if (state.isOpen) {
+                chatboxInput.focus();
+                notificationBadge.style.display = 'none';
+            }
+        });
 
-            $(document).on('click', '.chatbox-suggestions .suggestion', function () {
-                var q = $(this).text(), a = $(this).data("reply"), t = new Date().toLocaleTimeString();
-                $('#chatbox-body')
-                    .append('<div class="chat-message user"><strong>Bạn:</strong> ' + q + ' <small>(' + t + ')</small></div>')
-                    .append('<div class="chat-message bot"><strong>Hỗ trợ:</strong> ' + a + ' <small>(' + t + ')</small></div>')
-                    .scrollTop($('#chatbox-body')[0].scrollHeight);
-            });
+        // Close chat
+        closeChat.addEventListener('click', () => {
+            chatbox.classList.remove('active');
+            state.isOpen = false;
+        });
 
-            $.connection.hub.start().done(function () {
-                $('#chatbox-form').on('submit', function (e) {
-                    e.preventDefault();
-                    var msg = $('#chatbox-input').val().trim(); if (!msg) return;
-                    $('#chatbox-input').val('');
-                    var t = new Date().toLocaleTimeString();
-                    $('#chatbox-body').append('<div class="chat-message user"><strong>' + currentUser + ':</strong> ' + msg + ' <small>(' + t + ')</small></div>');
+        // Minimize chat
+        minimizeChat.addEventListener('click', () => {
+            chatbox.classList.remove('active');
+            state.isOpen = false;
+        });
 
-                    $.ajax({
-                        url: '/AI/Reply', type: 'POST', data: { message: msg },
-                        success: function (reply) {
-                            $('#chatbox-body').append('<div class="chat-message admin"><strong>AI:</strong> ' + reply + ' <small>(' + new Date().toLocaleTimeString() + ')</small></div>')
-                                              .scrollTop($('#chatbox-body')[0].scrollHeight);
-                        }
-                    });
-                });
-                $('#chatbox-input').on('keypress', function (e) { if (e.which === 13) $('#chatbox-form').submit(); });
+        // Send message
+        chatboxForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = chatboxInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, 'user');
+            chatboxInput.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate bot response
+            setTimeout(() => {
+                hideTypingIndicator();
+                const botResponse = generateBotResponse(message);
+                addMessage(botResponse, 'bot');
+            }, 1500);
+        });
+
+        // Suggestion buttons
+        suggestions.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const question = btn.textContent.trim();
+                const answer = btn.dataset.reply;
+
+                addMessage(question, 'user');
+
+                showTypingIndicator();
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addMessage(answer, 'bot');
+                }, 1000);
             });
         });
+
+        // Add message function
+        function addMessage(text, type) {
+            const time = new Date().toLocaleTimeString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}`;
+
+            if (type === 'bot') {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">${text}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-bubble">${text}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                    <div class="message-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                `;
+            }
+
+            // Insert before typing indicator
+            chatboxBody.insertBefore(messageDiv, typingIndicator);
+
+            // Scroll to bottom
+            chatboxBody.scrollTop = chatboxBody.scrollHeight;
+
+            // Add to state
+            state.messages.push({ text, type, time });
+
+            // Show notification if chat is closed
+            if (!state.isOpen && type === 'bot') {
+                messageCount++;
+                notificationBadge.textContent = messageCount;
+                notificationBadge.style.display = 'flex';
+            }
+        }
+
+        // Typing indicator
+        function showTypingIndicator() {
+            typingIndicator.classList.add('show');
+            chatboxBody.scrollTop = chatboxBody.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.classList.remove('show');
+        }
+
+        // Generate bot response (simple AI simulation)
+        function generateBotResponse(message) {
+            const lowerMessage = message.toLowerCase();
+
+            if (lowerMessage.includes('giá') || lowerMessage.includes('tiền')) {
+                return 'Giá hoa của shop rất đa dạng, từ 200.000đ đến 2.000.000đ tùy loại và mẫu. Bạn muốn xem mẫu nào cụ thể không ạ? 🌸';
+            } else if (lowerMessage.includes('giao') || lowerMessage.includes('ship')) {
+                return 'Shop có giao hàng toàn quốc! Miễn phí ship nội thành cho đơn từ 500k. Bạn ở khu vực nào ạ? 🚚';
+            } else if (lowerMessage.includes('giờ') || lowerMessage.includes('mở')) {
+                return 'Shop mở cửa từ 8:00 sáng đến 21:00 tối hàng ngày ạ! Kể cả cuối tuần và lễ 🕐';
+            } else if (lowerMessage.includes('cảm ơn') || lowerMessage.includes('thanks')) {
+                return 'Rất vui được hỗ trợ bạn! Nếu cần thêm thông tin gì, đừng ngại liên hệ nhé 😊';
+            } else if (lowerMessage.includes('tư vấn') || lowerMessage.includes('hỏi')) {
+                return 'Bạn có thể gọi hotline 0123 456 789 hoặc nhắn tin qua Fanpage để được tư vấn chi tiết hơn ạ! 📞';
+            } else {
+                return 'Cảm ơn bạn đã liên hệ! Để được hỗ trợ tốt nhất, bạn có thể chọn các gợi ý phía trên hoặc liên hệ hotline 0123 456 789 nhé! 💐';
+            }
+        }
+
+        // Emoji button (placeholder)
+        document.querySelector('.emoji-btn').addEventListener('click', () => {
+            alert('Tính năng emoji đang được phát triển! 😊');
+        });
+
+        // Attach button (placeholder)
+        document.querySelector('.attach-btn').addEventListener('click', () => {
+            alert('Tính năng đính kèm file đang được phát triển! 📎');
+        });
+
+        // Enter key to send
+        chatboxInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                chatboxForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Initialize - send welcome message after 2 seconds
+        setTimeout(() => {
+            if (!state.isOpen) {
+                messageCount = 1;
+                notificationBadge.textContent = messageCount;
+                notificationBadge.style.display = 'flex';
+            }
+        }, 2000);
 
         // FOOTER FX: Ripple + Magnetic + Petals
         (function(){
