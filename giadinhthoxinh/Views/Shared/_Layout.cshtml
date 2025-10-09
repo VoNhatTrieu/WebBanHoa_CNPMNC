@@ -162,21 +162,23 @@
             color: white;
         }
 
-        .search-section {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 15px;
-        }
+    .search-section {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 90px; /* khoảng cách đều giữa search, account, cart */
+    }
 
-        .search-form {
-            display: flex;
-            align-items: center;
-            background-color: rgba(255,255,255,0.9);
-            border-radius: 25px;
-            padding: 2px;
-            min-width: 250px;
-        }
+    .search-form {
+        display: flex;
+        align-items: center;
+        background-color: rgba(255,255,255,0.9);
+        border-radius: 25px;
+        padding: 2px;
+        min-width: 250px;
+        /* xóa dòng này đi */
+        /* margin-right: 160px; */
+    }
 
             .search-form .form-control {
                 border: none;
@@ -205,13 +207,15 @@
                     background: #34495e;
                     transform: scale(1.05);
                 }
-
+        /*tài khoản*/
         .header-icons {
             display: flex;
-            gap: 10px;
             align-items: center;
+            gap: 90px; /* tăng khoảng cách */
         }
-
+            .header-icons .dropdown {
+                margin-right: auto; /* thử 20px, có thể tăng/giảm */
+            }
             .header-icons a, .header-icons button, .header-icons .btn {
                 background-color: rgba(255,255,255,0.2) !important;
                 color: white !important;
@@ -237,6 +241,11 @@
                     border-color: rgba(255,255,255,0.5);
                 }
 
+            /* Cho dropdown xổ xuống khi hover */
+            .header-icons .dropdown:hover .dropdown-menu {
+                display: block;
+            }
+
             .header-icons .badge {
                 position: absolute !important;
                 top: -8px !important;
@@ -254,6 +263,56 @@
                 border: 2px solid white !important;
                 padding: 0 !important;
             }
+            /* Bỏ oval cho dropdown tài khoản */
+            .header-icons .dropdown-toggle {
+                all: unset; /* xóa toàn bộ style oval */
+                color: white !important;
+                font-weight: 500;
+                cursor: pointer;
+                padding: 6px 10px;
+            }
+
+            /* Dropdown menu */
+            .header-icons .dropdown-menu {
+                background: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 15px rgba(0,0,0,.15);
+                padding: 5px 0; /* để item gọn hơn */
+            }  
+
+                .header-icons .dropdown-item:focus,
+                .header-icons .dropdown-item:active {
+                    background-color: #f1f1f1 !important; /* nền xám nhạt hoặc chọn màu khác */
+                    color: #000 !important; /* chữ đen */
+                }
+
+            /* Chỉ áp dụng cho item bên trong menu tài khoản */
+            .header-icons .dropdown-menu .dropdown-item {
+                background: transparent !important;
+                color: #000 !important; /* chữ đen */
+                display: flex !important;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 16px !important;
+                margin: 0 !important;
+                /* reset các thuộc tính gây ra hình tròn */
+                width: auto !important;
+                height: auto !important;
+                border: 0 !important;
+                border-radius: 6px !important;
+                box-shadow: none !important;
+                text-decoration: none !important;
+            }
+
+                .header-icons .dropdown-menu .dropdown-item:hover {
+                    background: #f1f1f1 !important;
+                    color: #000 !important;
+                }
+
+                .header-icons .dropdown-menu .dropdown-item i {
+                    color: inherit !important; /* icon theo màu chữ */
+                    margin-right: 6px;
+                }
 
         @@media (max-width: 768px) {
             .header-icons .dropdown-menu {
@@ -894,6 +953,45 @@
                 .container-fluid.bg-dark.footer a.btn-link:hover::after {
                     width: 100%;
                 }
+    /* ==================== FIX ACCOUNT DROPDOWN ==================== */
+
+    /* Chữ Tài Khoản ngang */
+    .header-icons .dropdown-toggle {
+        all: unset; /* bỏ oval, bỏ border mặc định */
+        color: #fff !important;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 6px 10px;
+        white-space: nowrap; /* giữ text nằm ngang */
+    }
+
+    /* Hiển thị dropdown khi hover */
+    .header-icons .dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    /* Style menu xổ xuống */
+    .header-icons .dropdown-menu {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0,0,0,.15);
+        margin-top: 8px;
+        min-width: 160px;
+        padding: 0;
+    }
+
+    .header-icons .dropdown-item {
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+    }
+
+        .header-icons .dropdown-item:hover {
+            background-color: #87CEEB;
+            color: #fff;
+        }
+
 </style>
 </head>
 <body>
@@ -934,6 +1032,7 @@
                                            placeholder="Tìm kiếm sản phẩm" value="@searchVal" />
                                     <button class="btn" type="submit"><i class="fa fa-search"></i></button>
                                 }
+                                <!--để sửa giao diện mục tài khoản-->
                                 <div class="header-icons">
                                     @Html.Action("AccountPartial", "User")
                                     @Html.Action("CartPartial", "Cart")

@@ -1,59 +1,38 @@
 ﻿@if (Session["User"] == null)
 {
-    <li class="account" style="background-color: transparent; width: 130px">
-        <a href="#" style="width:80px">
-
-            <span> Tài Khoản <i class="fa fa-angle-down"></i></span>
+    <li class="nav-item dropdown account-dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown">
+            Tài Khoản
         </a>
-        <ul class="account_selection">
-            <li style="padding: 0; display:block">
-                <a href="/user/login" style=" display: flex; width: 100%; align-items: flex-start; padding: 5px;">
-                    <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng nhập</span></p>
-                </a>
-            </li>
-            <li style="padding: 0; display: block">
-                <a href="/user/register" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
-                    <p><span><i class="fa fa-user-plus" aria-hidden="true"></i>Đăng ký</span> </p>
-                </a>
-            </li>
-            @*<li style="padding: 0; display: block">
-                <a href="/admin/home" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
-                    <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Admin</span> </p>
-                </a>
-            </li>
-            <li style="padding: 0; display: block">
-                <a href="/user/login" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
-                    <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng xuất</span> </p>
-                </a>
-            </li>*@
+        <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+            <li><a class="dropdown-item" href="/user/login"><i class="fa fa-sign-in"></i> Đăng nhập</a></li>
+            <li><a class="dropdown-item" href="/user/register"><i class="fa fa-user-plus"></i> Đăng ký</a></li>
         </ul>
-    </li> 
+    </li>
+
 }
 else
 {
-<li class="account" style="background-color: transparent; width: 130px">
-    
-    <a href="#" style="width:120px">
-        <span> @ViewBag.TenKH<i class="fa fa-angle-down"></i></span>
-
-    </a>
-    <ul class="account_selection">
-        <li style="padding: 0; display: block">
-            <a href="/user/edit" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
-                <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Sửa thông tin</span> </p>
-            </a>
-        </li>
-        <li style="padding: 0; display: block">
-            <a href="/user/EditPassword" style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
-                <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đổi mật khẩu</span> </p>
-            </a>
-        </li>
-        <li style="padding: 0; display: block">
-            <a href=@Url.Action("Logout","User") style="display: flex; width: 100%; align-items: flex-start; padding: 5px;">
-                <p><span><i class="fa fa-sign-in" aria-hidden="true"></i>Đăng xuất</span> </p>
-            </a>
-        </li>
-    </ul>
-</li>
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button">
+            @ViewBag.TenKH
+        </a>
+        <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+            <li>
+                <a class="dropdown-item" href="/user/edit">
+                    <i class="fa fa-user"></i> Sửa thông tin
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="/user/EditPassword">
+                    <i class="fa fa-key"></i> Đổi mật khẩu
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" href="@Url.Action("Logout","User")">
+                    <i class="fa fa-sign-out"></i> Đăng xuất
+                </a>
+            </li>
+        </ul>
+    </li>
 }
-
