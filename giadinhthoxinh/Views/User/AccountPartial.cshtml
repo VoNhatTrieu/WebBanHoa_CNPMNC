@@ -1,10 +1,10 @@
 ﻿@if (Session["User"] == null)
 {
-    <li class="nav-item dropdown account-dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown">
-            Tài Khoản
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" aria-expanded="false" >
+            <i class="fa fa-user-circle"></i> Tài Khoản
         </a>
-        <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+        <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="/user/login"><i class="fa fa-sign-in"></i> Đăng nhập</a></li>
             <li><a class="dropdown-item" href="/user/register"><i class="fa fa-user-plus"></i> Đăng ký</a></li>
         </ul>
