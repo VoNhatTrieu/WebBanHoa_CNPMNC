@@ -185,8 +185,163 @@
     .product_slider_nav i {
         font-size: 1.2rem;
     }
-</style>
+    .hero-section {
+        position: relative;
+        margin: 40px 0 80px 0;
+        border-radius: 24px;
+        overflow: hidden;
+        height: 500px;
+        background: var(--primary-gradient);
+        box-shadow: var(--shadow-soft);
+    }
 
+    .hero-carousel {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .carousel-slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        transform: scale(1.1);
+    }
+
+        .carousel-slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent 50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    .hero-content {
+        text-align: center;
+        color: white;
+        max-width: 600px;
+        padding: 0 20px;
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #fff, #f093fb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        font-weight: 300;
+    }
+
+    .hero-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255,255,255,0.15);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+    }
+
+        .hero-cta:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+</style>
+<section class="hero-section" aria-label="Bannières promotionnelles">
+    <div class="hero-carousel"
+         onmouseover="carouselController.pause()"
+         onmouseout="carouselController.resume()">
+
+        <div class="carousel-wrapper" id="carousel-wrapper">
+            <div class="carousel-slide active">
+                <img src="https://tramhoa.com/wp-content/uploads/2025/08/Danh-Muc-Hoa-Cau-Hon-Tram-Hoa.webp" loading="lazy" />
+            </div>
+            <div class="carousel-slide">
+                <img src="https://treobangron.com.vn/wp-content/uploads/2024/10/Banner-83-voi-hinh-anh-hoa-hong-tuoi-sang.png" loading="lazy" />
+            </div>
+            <div class="carousel-slide">
+                <img src="https://tranhdecors.com/wp-content/uploads/2025/09/Mau-banner-chuc-mung-Ngay-phu-nu-Viet-Nam-20-10.jpg"  loading="lazy" />
+            </div>
+        </div>
+
+        <div class="hero-overlay">
+            @*<div class="hero-content">
+          
+                <p class="hero-subtitle"></p>
+                <a href="#" class="hero-cta">
+                    <i class="fa fa-shopping-bag"></i>
+                    Khám phá ngay
+                </a>
+            </div>*@
+        </div>
+
+        <!-- Navigation Controls -->
+        <button class="carousel-nav carousel-prev"
+                onclick="carouselController.moveSlide(-1)"
+                aria-label="Image précédente">
+            <i class="fa fa-chevron-left"></i>
+        </button>
+        <button class="carousel-nav carousel-next"
+                onclick="carouselController.moveSlide(1)"
+                aria-label="Image suivante">
+            <i class="fa fa-chevron-right"></i>
+        </button>
+
+        <!-- Indicators -->
+        <div class="carousel-indicators" role="tablist" aria-label="Sélection de slide">
+            <button class="indicator active"
+                    onclick="carouselController.goToSlide(0)"
+                    aria-label="Aller au slide 1"></button>
+            <button class="indicator"
+                    onclick="carouselController.goToSlide(1)"
+                    aria-label="Aller au slide 2"></button>
+            <button class="indicator"
+                    onclick="carouselController.goToSlide(2)"
+                    aria-label="Aller au slide 3"></button>
+        </div>
+    </div>
+</section>
 <div class="new_arrivals">
     <div class="container">
         <div class="row">
@@ -287,6 +442,170 @@
 </div>
 
 <script>
+   const carouselController = {
+    currentSlide: 0,
+    slides: null,
+    indicators: null,
+    intervalId: null,
+    autoPlayDelay: 4000, // 4 giây
+
+    init() {
+        this.slides = document.querySelectorAll('.carousel-slide');
+        this.indicators = document.querySelectorAll('.indicator');
+        this.start();
+    },
+
+    moveSlide(direction) {
+        this.currentSlide += direction;
+
+        // Xử lý vòng lặp
+        if (this.currentSlide >= this.slides.length) {
+            this.currentSlide = 0;
+        } else if (this.currentSlide < 0) {
+            this.currentSlide = this.slides.length - 1;
+        }
+
+        this.updateSlide();
+    },
+
+    goToSlide(index) {
+        this.currentSlide = index;
+        this.updateSlide();
+        this.restart(); // Restart autoplay khi click indicator
+    },
+
+    updateSlide() {
+        // Xóa active class khỏi tất cả slides và indicators
+        this.slides.forEach(slide => slide.classList.remove('active'));
+        this.indicators.forEach(indicator => indicator.classList.remove('active'));
+
+        // Thêm active class cho slide và indicator hiện tại
+        this.slides[this.currentSlide].classList.add('active');
+        this.indicators[this.currentSlide].classList.add('active');
+    },
+
+    start() {
+        this.intervalId = setInterval(() => {
+            this.moveSlide(1);
+        }, this.autoPlayDelay);
+    },
+
+    pause() {
+        if (this.intervalId) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+        }
+    },
+
+    resume() {
+        if (!this.intervalId) {
+            this.start();
+        }
+    },
+
+    restart() {
+        this.pause();
+        this.start();
+    }
+};
+
+// Khởi động carousel khi trang load
+document.addEventListener('DOMContentLoaded', function() {
+    carouselController.init();
+});
+
+// Thêm CSS cho navigation buttons và indicators
+const style = document.createElement('style');
+style.textContent = `
+    .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .carousel-nav:hover {
+        background: rgba(255, 75, 43, 0.95);
+        color: white;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .carousel-prev {
+        left: 20px;
+    }
+
+    .carousel-next {
+        right: 20px;
+    }
+
+    .carousel-nav i {
+        font-size: 1.2rem;
+    }
+
+    .carousel-indicators {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        display: flex;
+        gap: 15px;
+        z-index: 10;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+    }
+
+    .indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0;
+    }
+
+    .indicator:hover {
+        background: rgba(255, 255, 255, 0.8);
+        transform: scale(1.2);
+    }
+
+    .indicator.active {
+        background: rgba(255, 75, 43, 0.95);
+        border-color: white;
+        width: 40px;
+        border-radius: 6px;
+    }
+
+    @@media (max-width: 768px) {
+        .carousel-nav {
+            width: 40px;
+            height: 40px;
+        }
+
+        .carousel-prev {
+            left: 10px;
+        }
+
+        .carousel-next {
+            right: 10px;
+        }
+    }
+`;
+document.head.appendChild(style);
     $(document).ready(function () {
         $('.product_slider').owlCarousel({
             loop: true,
