@@ -189,9 +189,48 @@ namespace giadinhthoxinh.Controllers
             }
             db.SaveChanges();
             Session["GioHang"] = null;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("OrderDetail", new { id = ddh.PK_iOrderID });
         
         }
+
+        // Chi tiết đơn hàng
+        public ActionResult OrderDetail(int id)
+        {
+            // Lấy thông tin đơn hàng theo ID
+            var order = db.tblOrders.FirstOrDefault(o => o.PK_iOrderID == id);
+            
+            if (order == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            // Lấy chi tiết đơn hàng
+            var orderDetails = db.tblCheckoutDetails
+                .Where(od => od.FK_iOrderID == id)
+                .ToList();
+
+            // Truyền dữ liệu sang View
+            ViewBag.Order = order;
+            ViewBag.OrderDetails = orderDetails;
+            ViewBag.Customer = order.tblUser;
+            
+            // Tính tổng tiền
+            double totalAmount = 0;
+            if (orderDetails != null && orderDetails.Count > 0)
+            {
+                foreach (var item in orderDetails)
+                {
+                    if (item.fPrice.HasValue && item.iQuantity.HasValue)
+                    {
+                        totalAmount += item.fPrice.Value * item.iQuantity.Value;
+                    }
+                }
+            }
+            ViewBag.TotalAmount = totalAmount;
+
+            return View();
+        }
+
         private double getProductPrice(int productid)
         {
             double price = 0;
