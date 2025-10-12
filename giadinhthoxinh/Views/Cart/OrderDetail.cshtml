@@ -1,0 +1,459 @@
+﻿@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    .order-detail-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+
+    .order-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .order-header h2 {
+        margin: 0 0 10px 0;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .order-id {
+        font-size: 18px;
+        opacity: 0.9;
+    }
+
+    .success-icon {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .success-icon i {
+        font-size: 80px;
+        color: #28a745;
+        animation: scaleIn 0.5s ease-in-out;
+    }
+
+    @@keyframes scaleIn {
+        0% {
+            transform: scale(0);
+        }
+        50% {
+            transform: scale(1.2);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .info-card h4 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-weight: bold;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 10px;
+    }
+
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-confirmed {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-shipping {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+
+    .status-completed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .product-table {
+        width: 100%;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .product-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .product-table thead {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .product-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    .product-table td {
+        padding: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .product-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .product-name {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .total-section {
+        background: white;
+        border-radius: 10px;
+        padding: 25px;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 16px;
+    }
+
+    .total-final {
+        border-top: 2px solid #667eea;
+        margin-top: 15px;
+        padding-top: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        justify-content: center;
+    }
+
+    .btn-custom {
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-primary-custom {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-secondary-custom {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .btn-secondary-custom:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    @@media (max-width: 768px) {
+        .order-detail-container {
+            padding: 10px;
+        }
+
+        .product-table {
+            overflow-x: auto;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn-custom {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="order-detail-container">
+    <!-- Success Icon -->
+    <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+    </div>
+
+    <!-- Order Header -->
+    <div class="order-header text-center">
+        <h2>🎉 Đặt hàng thành công!</h2>
+        <p class="order-id">Mã đơn hàng: <strong>#@ViewBag.Order.PK_iOrderID</strong></p>
+        <p style="margin: 10px 0 0 0; opacity: 0.9;">Cảm ơn bạn đã tin tưởng và đặt hàng tại cửa hàng chúng tôi!</p>
+    </div>
+
+    <div class="row">
+        <!-- Thông tin khách hàng -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h4><i class="fas fa-user"></i> Thông tin người nhận</h4>
+                <div class="info-row">
+                    <span class="info-label">Họ và tên:</span>
+                    <span class="info-value">@ViewBag.Order.sCustomerName</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Số điện thoại:</span>
+                    <span class="info-value">@ViewBag.Order.sCustomerPhone</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Địa chỉ giao hàng:</span>
+                    <span class="info-value">@ViewBag.Order.sDeliveryAddress</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thông tin đơn hàng -->
+        <div class="col-md-6">
+            <div class="info-card">
+                <h4><i class="fas fa-shopping-cart"></i> Thông tin đơn hàng</h4>
+                <div class="info-row">
+                    <span class="info-label">Ngày đặt:</span>
+                    <span class="info-value">@ViewBag.Order.dInvoidDate.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phương thức giao hàng:</span>
+                    <span class="info-value">
+                        @if (ViewBag.Order.iDeliveryMethod == 1)
+                        {
+                            <span>Giao tận nơi</span>
+                        }
+                        else if (ViewBag.Order.iDeliveryMethod == 2)
+                        {
+                            <span>Nhận tại cửa hàng</span>
+                        }
+                        else
+                        {
+                            <span>Chưa xác định</span>
+                        }
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Trạng thái:</span>
+                    <span class="info-value">
+                        @{
+                            var statusClass = "status-pending";
+                            var status = ViewBag.Order.sState ?? "Chờ xác nhận";
+                            
+                            if (status.Contains("xác nhận") || status.Contains("Chờ"))
+                            {
+                                statusClass = "status-pending";
+                            }
+                            else if (status.Contains("Đã xác nhận"))
+                            {
+                                statusClass = "status-confirmed";
+                            }
+                            else if (status.Contains("Đang giao"))
+                            {
+                                statusClass = "status-shipping";
+                            }
+                            else if (status.Contains("Hoàn thành"))
+                            {
+                                statusClass = "status-completed";
+                            }
+                        }
+                        <span class="status-badge @statusClass">@status</span>
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Thanh toán:</span>
+                    <span class="info-value">
+                        @if (ViewBag.Order.iPaid == 1)
+                        {
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Đã thanh toán</span>
+                        }
+                        else
+                        {
+                            <span class="text-warning"><i class="fas fa-clock"></i> Chưa thanh toán</span>
+                        }
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chi tiết sản phẩm -->
+    <div class="product-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th style="text-align: center;">Số lượng</th>
+                    <th style="text-align: right;">Đơn giá</th>
+                    <th style="text-align: right;">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.OrderDetails)
+                {
+                    var product = item.tblProduct;
+                    var quantity = item.iQuantity ?? 0;
+                    var price = item.fPrice ?? 0;
+                    var subtotal = quantity * price;
+
+                    <tr>
+                        <td>
+                            @if (product != null && !string.IsNullOrEmpty(product.sImage))
+                            {
+                                <img src="@Url.Content("~/Content/assets/img/" + product.sImage)" alt="@product.sProductName" class="product-image" />
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~/Content/assets/img/no-image.jpg")" alt="No image" class="product-image" />
+                            }
+                        </td>
+                        <td>
+                            <div class="product-name">@(product != null ? product.sProductName : "Sản phẩm không tồn tại")</div>
+                            @if (product != null && !string.IsNullOrEmpty(product.sColor))
+                            {
+                                <small class="text-muted">Màu sắc: @product.sColor</small>
+                            }
+                        </td>
+                        <td style="text-align: center;">@quantity</td>
+                        <td style="text-align: right;">@string.Format("{0:N0}", price) ₫</td>
+                        <td style="text-align: right;"><strong>@string.Format("{0:N0}", subtotal) ₫</strong></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tổng tiền -->
+    <div class="total-section">
+        <div class="total-row">
+            <span>Tạm tính:</span>
+            <span>@string.Format("{0:N0}", ViewBag.TotalAmount) ₫</span>
+        </div>
+        <div class="total-row">
+            <span>Phí vận chuyển:</span>
+            <span>
+                @if (ViewBag.Order.iDeliveryMethod == 2)
+                {
+                    <span>0 ₫</span>
+                }
+                else
+                {
+                    <span>30,000 ₫</span>
+                }
+            </span>
+        </div>
+        <div class="total-row total-final">
+            <span>Tổng cộng:</span>
+            <span>
+                @{
+                    var shippingFee = ViewBag.Order.iDeliveryMethod == 2 ? 0 : 30000;
+                    var finalTotal = ViewBag.TotalAmount + shippingFee;
+                }
+                @string.Format("{0:N0}", finalTotal) ₫
+            </span>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-custom btn-primary-custom">
+            <i class="fas fa-home"></i> Tiếp tục mua hàng
+        </a>
+        <a href="#" onclick="window.print(); return false;" class="btn btn-custom btn-secondary-custom">
+            <i class="fas fa-print"></i> In đơn hàng
+        </a>
+    </div>
+</div>
+
+<script>
+    // Animation when page loads
+    window.addEventListener('load', function() {
+        document.querySelector('.order-detail-container').style.opacity = '0';
+        document.querySelector('.order-detail-container').style.transform = 'translateY(20px)';
+        document.querySelector('.order-detail-container').style.transition = 'all 0.5s ease';
+        
+        setTimeout(function() {
+            document.querySelector('.order-detail-container').style.opacity = '1';
+            document.querySelector('.order-detail-container').style.transform = 'translateY(0)';
+        }, 100);
+    });
+</script>
