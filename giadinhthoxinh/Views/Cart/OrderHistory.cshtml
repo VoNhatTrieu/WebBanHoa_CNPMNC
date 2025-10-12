@@ -1,0 +1,327 @@
+﻿@model IEnumerable<giadinhthoxinh.Models.tblOrder>
+
+@{
+    ViewBag.Title = "Lịch sử đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .order-history-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f8f9fa;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    .page-header h2 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .order-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+    }
+
+    .order-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .order-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .order-id {
+        font-size: 18px;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .order-date {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .order-info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .info-value {
+        color: #333;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .status-confirmed {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .status-shipping {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+
+    .status-completed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .order-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .btn-detail {
+        flex: 1;
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-detail:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .empty-state i {
+        font-size: 80px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    .btn-shop {
+        display: inline-block;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        margin-top: 20px;
+        transition: all 0.3s;
+    }
+
+    .btn-shop:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+
+    @@media (max-width: 768px) {
+        .order-header-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .order-info-row {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .order-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="order-history-container">
+    <div class="page-header">
+        <h2><i class="fas fa-history"></i> Lịch sử đơn hàng</h2>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var order in Model)
+        {
+            var statusClass = "status-pending";
+            var status = order.sState ?? "Chờ xác nhận";
+            
+            if (status.Contains("xác nhận") || status.Contains("Chờ"))
+            {
+                statusClass = "status-pending";
+            }
+            else if (status.Contains("Đã xác nhận"))
+            {
+                statusClass = "status-confirmed";
+            }
+            else if (status.Contains("Đang giao"))
+            {
+                statusClass = "status-shipping";
+            }
+            else if (status.Contains("Hoàn thành"))
+            {
+                statusClass = "status-completed";
+            }
+
+            <div class="order-card">
+                <div class="order-header-row">
+                    <div>
+                        <div class="order-id">
+                            <i class="fas fa-shopping-bag"></i> Đơn hàng #@order.PK_iOrderID
+                        </div>
+                        <div class="order-date">
+                            <i class="far fa-calendar-alt"></i> @order.dInvoidDate.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                    <div>
+                        <span class="status-badge @statusClass">@status</span>
+                    </div>
+                </div>
+
+                <div class="order-info-row">
+                    <span class="info-label">Người nhận:</span>
+                    <span class="info-value">@order.sCustomerName</span>
+                </div>
+
+                <div class="order-info-row">
+                    <span class="info-label">Số điện thoại:</span>
+                    <span class="info-value">@order.sCustomerPhone</span>
+                </div>
+
+                <div class="order-info-row">
+                    <span class="info-label">Địa chỉ:</span>
+                    <span class="info-value">@order.sDeliveryAddress</span>
+                </div>
+
+                <div class="order-info-row">
+                    <span class="info-label">Phương thức giao hàng:</span>
+                    <span class="info-value">
+                        @if (order.iDeliveryMethod == 1)
+                        {
+                            <span>Giao hàng tận nơi</span>
+                        }
+                        else if (order.iDeliveryMethod == 2)
+                        {
+                            <span>Nhận tại cửa hàng</span>
+                        }
+                        else
+                        {
+                            <span>Chưa xác định</span>
+                        }
+                    </span>
+                </div>
+
+                <div class="order-info-row">
+                    <span class="info-label">Tổng tiền:</span>
+                    <span class="info-value" style="color: #667eea; font-weight: bold; font-size: 18px;">
+                        @string.Format("{0:N0}", order.fSurcharge ?? 0) 
+                    </span>
+                </div>
+
+                <div class="order-info-row">
+                    <span class="info-label">Thanh toán:</span>
+                    <span class="info-value">
+                        @if (order.iPaid == 1)
+                        {
+                            <span class="text-success"><i class="fas fa-check-circle"></i> Đã thanh toán</span>
+                        }
+                        else
+                        {
+                            <span class="text-warning"><i class="fas fa-clock"></i> Chưa thanh toán</span>
+                        }
+                    </span>
+                </div>
+
+                <div class="order-actions">
+                    <a href="@Url.Action("OrderDetail", "Cart", new { id = order.PK_iOrderID })" class="btn-detail">
+                        <i class="fas fa-eye"></i> Xem chi tiết
+                    </a>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h3>Chưa có đơn hàng nào</h3>
+            <p>Bạn chưa có đơn hàng nào. Hãy bắt đầu mua sắm ngay!</p>
+            <a href="@Url.Action("Index", "Home")" class="btn-shop">
+                <i class="fas fa-shopping-cart"></i> Mua sắm ngay
+            </a>
+        </div>
+    }
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        var cards = document.querySelectorAll('.order-card');
+        cards.forEach(function(card, index) {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+            
+            setTimeout(function() {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100 * index);
+        });
+    });
+</script>

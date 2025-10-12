@@ -7,10 +7,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
+    @@media print {
+        .no-print {
+            display: none !important;
+        }
+        
+        .order-detail-container {
+            box-shadow: none !important;
+            padding: 20px !important;
+        }
+        
+        .info-card, .product-table, .total-section {
+            box-shadow: none !important;
+            border: 1px solid #ddd;
+            page-break-inside: avoid;
+        }
+        
+        .order-header {
+            background: #667eea !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        body {
+            background: white !important;
+        }
+    }
+
     .order-detail-container {
         max-width: 1200px;
         margin: 50px auto;
         padding: 20px;
+        background: #f8f9fa;
     }
 
     .order-header {
@@ -90,6 +118,7 @@
 
     .info-value {
         color: #333;
+        text-align: right;
     }
 
     .status-badge {
@@ -126,6 +155,7 @@
         border-radius: 10px;
         overflow: hidden;
         box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
     }
 
     .product-table table {
@@ -247,27 +277,32 @@
         .btn-custom {
             width: 100%;
         }
+        
+        .info-row {
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .info-value {
+            text-align: left;
+        }
     }
 </style>
 
-<!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <div class="order-detail-container">
-    <!-- Success Icon -->
-    <div class="success-icon">
+    <div class="success-icon no-print">
         <i class="fas fa-check-circle"></i>
     </div>
 
-    <!-- Order Header -->
     <div class="order-header text-center">
-        <h2>🎉 Đặt hàng thành công!</h2>
+        <h2> Đặt hàng thành công!</h2>
         <p class="order-id">Mã đơn hàng: <strong>#@ViewBag.Order.PK_iOrderID</strong></p>
         <p style="margin: 10px 0 0 0; opacity: 0.9;">Cảm ơn bạn đã tin tưởng và đặt hàng tại cửa hàng chúng tôi!</p>
     </div>
 
     <div class="row">
-        <!-- Thông tin khách hàng -->
         <div class="col-md-6">
             <div class="info-card">
                 <h4><i class="fas fa-user"></i> Thông tin người nhận</h4>
@@ -286,7 +321,6 @@
             </div>
         </div>
 
-        <!-- Thông tin đơn hàng -->
         <div class="col-md-6">
             <div class="info-card">
                 <h4><i class="fas fa-shopping-cart"></i> Thông tin đơn hàng</h4>
@@ -299,7 +333,7 @@
                     <span class="info-value">
                         @if (ViewBag.Order.iDeliveryMethod == 1)
                         {
-                            <span>Giao tận nơi</span>
+                            <span>Giao hàng tận nơi</span>
                         }
                         else if (ViewBag.Order.iDeliveryMethod == 2)
                         {
@@ -355,7 +389,6 @@
         </div>
     </div>
 
-    <!-- Chi tiết sản phẩm -->
     <div class="product-table">
         <table>
             <thead>
@@ -394,66 +427,51 @@
                             }
                         </td>
                         <td style="text-align: center;">@quantity</td>
-                        <td style="text-align: right;">@string.Format("{0:N0}", price) ₫</td>
-                        <td style="text-align: right;"><strong>@string.Format("{0:N0}", subtotal) ₫</strong></td>
+                        <td style="text-align: right;">@string.Format("{0:N0}", price) </td>
+                        <td style="text-align: right;"><strong>@string.Format("{0:N0}", subtotal) </strong></td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 
-    <!-- Tổng tiền -->
     <div class="total-section">
         <div class="total-row">
             <span>Tạm tính:</span>
-            <span>@string.Format("{0:N0}", ViewBag.TotalAmount) ₫</span>
+            <span>@string.Format("{0:N0}", ViewBag.TotalAmount) </span>
         </div>
         <div class="total-row">
             <span>Phí vận chuyển:</span>
-            <span>
-                @if (ViewBag.Order.iDeliveryMethod == 2)
-                {
-                    <span>0 ₫</span>
-                }
-                else
-                {
-                    <span>30,000 ₫</span>
-                }
-            </span>
+            <span>@string.Format("{0:N0}", ViewBag.ShippingFee) </span>
         </div>
         <div class="total-row total-final">
             <span>Tổng cộng:</span>
-            <span>
-                @{
-                    var shippingFee = ViewBag.Order.iDeliveryMethod == 2 ? 0 : 30000;
-                    var finalTotal = ViewBag.TotalAmount + shippingFee;
-                }
-                @string.Format("{0:N0}", finalTotal) ₫
-            </span>
+            <span>@string.Format("{0:N0}", ViewBag.FinalTotal) </span>
         </div>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="action-buttons">
+    <div class="action-buttons no-print">
         <a href="@Url.Action("Index", "Home")" class="btn btn-custom btn-primary-custom">
             <i class="fas fa-home"></i> Tiếp tục mua hàng
         </a>
-        <a href="#" onclick="window.print(); return false;" class="btn btn-custom btn-secondary-custom">
+        <button onclick="window.print();" class="btn btn-custom btn-secondary-custom">
             <i class="fas fa-print"></i> In đơn hàng
-        </a>
+        </button>
     </div>
 </div>
 
 <script>
-    // Animation when page loads
     window.addEventListener('load', function() {
-        document.querySelector('.order-detail-container').style.opacity = '0';
-        document.querySelector('.order-detail-container').style.transform = 'translateY(20px)';
-        document.querySelector('.order-detail-container').style.transition = 'all 0.5s ease';
-        
-        setTimeout(function() {
-            document.querySelector('.order-detail-container').style.opacity = '1';
-            document.querySelector('.order-detail-container').style.transform = 'translateY(0)';
-        }, 100);
+        var container = document.querySelector('.order-detail-container');
+        if (container) {
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            container.style.transition = 'all 0.5s ease';
+            
+            setTimeout(function() {
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        }
     });
 </script>

@@ -193,6 +193,26 @@ namespace giadinhthoxinh.Controllers
         
         }
 
+        // Lịch sử đơn hàng
+        public ActionResult OrderHistory()
+        {
+            // Kiểm tra đăng nhập
+            if (Session["User"] == null || Session["User"].ToString() == "")
+            {
+                return RedirectToAction("Login", "User");
+            }
+
+            tblUser user = (tblUser)Session["User"];
+            
+            // Lấy danh sách đơn hàng của user, sắp xếp theo ngày mới nhất
+            var orders = db.tblOrders
+                .Where(o => o.FK_iAccountID == user.PK_iAccountID)
+                .OrderByDescending(o => o.dInvoidDate)
+                .ToList();
+
+            return View(orders);
+        }
+
         // Chi tiết đơn hàng
         public ActionResult OrderDetail(int id)
         {
@@ -204,7 +224,7 @@ namespace giadinhthoxinh.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            // Lấy chi tiết đơn hàng
+            // Lấy chi tiết đơn hàng với thông tin sản phẩm
             var orderDetails = db.tblCheckoutDetails
                 .Where(od => od.FK_iOrderID == id)
                 .ToList();
@@ -214,7 +234,7 @@ namespace giadinhthoxinh.Controllers
             ViewBag.OrderDetails = orderDetails;
             ViewBag.Customer = order.tblUser;
             
-            // Tính tổng tiền
+            // Tính tổng tiền sản phẩm
             double totalAmount = 0;
             if (orderDetails != null && orderDetails.Count > 0)
             {
@@ -227,6 +247,13 @@ namespace giadinhthoxinh.Controllers
                 }
             }
             ViewBag.TotalAmount = totalAmount;
+            
+            // Tính phí vận chuyển
+            double shippingFee = order.iDeliveryMethod == 2 ? 0 : 30000;
+            ViewBag.ShippingFee = shippingFee;
+            
+            // Tổng thanh toán
+            ViewBag.FinalTotal = totalAmount + shippingFee;
 
             return View();
         }
