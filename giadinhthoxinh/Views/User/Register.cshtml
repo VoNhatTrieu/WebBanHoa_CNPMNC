@@ -525,7 +525,7 @@
             @using (Html.BeginForm("Register", "User", FormMethod.Post, new { id = "registerForm" }))
             {
                 @Html.AntiForgeryToken()
-                @Html.HiddenFor(model => model.FK_iPermissionID, new { @value = "1" })
+                @Html.Hidden("FK_iPermissionID", "1")
 
                 <!-- Step 1: Login Information -->
                 <div class="form-step active" data-step="1">
@@ -1271,5 +1271,28 @@
     // Initialize progress line on page load
     window.addEventListener('DOMContentLoaded', function() {
         updateProgressLine();
+    });
+
+    // Show server-side messages (TempData) if any
+    window.addEventListener('DOMContentLoaded', function() {
+        @if (TempData["Error"] != null)
+        {
+            <text>
+            showAlert('@Html.Raw(TempData["Error"])', 'error');
+            </text>
+        }
+
+        @if (TempData["Success"] != null)
+        {
+            <text>
+            showAlert('@Html.Raw(TempData["Success"])', 'success');
+            // Optionally, move to the confirmation/completed step
+            document.querySelectorAll('.progress-step').forEach(step => step.classList.remove('active','completed'));
+            document.querySelector('.progress-step[data-step="3"]').classList.add('active','completed');
+            document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
+            // Show a simple success state (keep form blank because ModelState was cleared)
+            // You can choose to redirect to Login instead if desired.
+            </text>
+        }
     });
 </script>

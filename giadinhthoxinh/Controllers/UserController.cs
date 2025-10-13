@@ -241,7 +241,7 @@ namespace giadinhthoxinh.Controllers
                 }
 
                 // Check if email already exists
-                var check = db.tblUsers.FirstOrDefault(s => s.sEmail == _user.sEmail);
+                    var check = db.tblUsers.FirstOrDefault(s => s.sEmail == _user.sEmail);
                 if (check == null)
                 {
                     _user.sPass = GetMD5(_user.sPass);
@@ -249,9 +249,13 @@ namespace giadinhthoxinh.Controllers
                     db.Configuration.ValidateOnSaveEnabled = false;
                     db.tblUsers.Add(_user);
                     db.SaveChanges();
-                    
+
+                    // Set success message and show it on the same Register page
                     TempData["Success"] = "✅ Đăng ký thành công! Vui lòng đăng nhập.";
-                    return RedirectToAction("Login");
+                    // Clear ModelState so the form is empty after successful registration
+                    ModelState.Clear();
+                    // Return the Register view so the user sees the success message immediately
+                    return View();
                 }
                 else
                 {
@@ -259,7 +263,27 @@ namespace giadinhthoxinh.Controllers
                     return View(_user);
                 }
             }
-            
+            // If we get here ModelState was invalid or other errors occurred.
+            if (!ModelState.IsValid)
+            {
+                // Collect ModelState errors for debugging and show to user in a single message
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                             .Select(e => string.IsNullOrWhiteSpace(e.ErrorMessage) ? e.Exception?.Message : e.ErrorMessage)
+                                             .Where(m => !string.IsNullOrWhiteSpace(m))
+                                             .ToList();
+
+                if (errors.Any())
+                {
+                    TempData["Error"] = "❌ Vui lòng điền đầy đủ thông tin hợp lệ! Lỗi: " + string.Join(" | ", errors);
+                }
+                else
+                {
+                    TempData["Error"] = "❌ Vui lòng điền đầy đủ thông tin hợp lệ!";
+                }
+
+                return View(_user);
+            }
+
             TempData["Error"] = "❌ Vui lòng điền đầy đủ thông tin hợp lệ!";
             return View(_user);
         }
