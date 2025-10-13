@@ -1,4 +1,4 @@
-﻿
+
 
 @{
     ViewBag.Title = "Index";
@@ -41,3 +41,27 @@
         </div>
     </div>
 </section>
+
+@section Scripts {
+    <script src="~/Scripts/admin-order-autorefresh.js"></script>
+    <script>
+        $(document).ready(function() {
+            var ajaxUrl = '@Url.Action("GetAllOrderStatusesForAdmin", "Orders", new { area = "Admin" })';
+            startAutoRefreshForAdmin(ajaxUrl);
+            
+            // Tắt auto-refresh khi rời khỏi trang
+            $(window).on('beforeunload', function() {
+                stopAutoRefreshForAdmin();
+            });
+
+            // Refresh khi user quay lại tab
+            $(document).on('visibilitychange', function() {
+                if (document.hidden) {
+                    stopAutoRefreshForAdmin();
+                } else {
+                    startAutoRefreshForAdmin(ajaxUrl);
+                }
+            });
+        });
+    </script>
+}

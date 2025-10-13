@@ -157,6 +157,125 @@ namespace giadinhthoxinh.Areas.Admin.Controllers
             return PartialView(it);
         }
 
+        // API mới: Lấy trạng thái tất cả đơn hàng (cho admin auto-refresh)
+        [HttpGet]
+        public JsonResult GetAllOrderStatusesForAdmin()
+        {
+            try
+            {
+                // Kiểm tra quyền (Admin hoặc Nhân viên)
+                if (Session["Admin"] == null && Session["NhanVien"] == null)
+                {
+                    return Json(new { success = false, message = "Bạn không có quyền truy cập!" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var orderStatuses = db.tblOrders
+                    .OrderByDescending(o => o.dInvoidDate)
+                    .Select(o => new
+                    {
+                        orderId = o.PK_iOrderID,
+                        status = o.sState ?? "Chờ xác nhận",
+                        biller = o.sBiller,
+                        invoiceDate = o.dInvoidDate,
+                        paid = o.iPaid
+                    })
+                    .ToList();
+
+                return Json(new { success = true, orders = orderStatuses }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // API mới: Lấy đơn hàng chưa xử lý
+        [HttpGet]
+        public JsonResult GetPendingOrders()
+        {
+            try
+            {
+                if (Session["Admin"] == null && Session["NhanVien"] == null)
+                {
+                    return Json(new { success = false, message = "Bạn không có quyền truy cập!" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var pendingOrders = db.tblOrders
+                    .Where(n => n.sState == "Chờ xác nhận")
+                    .OrderByDescending(x => x.dInvoidDate)
+                    .Select(o => new
+                    {
+                        orderId = o.PK_iOrderID,
+                        status = o.sState ?? "Chờ xác nhận"
+                    })
+                    .ToList();
+
+                return Json(new { success = true, orders = pendingOrders }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // API mới: Lấy đơn hàng đang giao
+        [HttpGet]
+        public JsonResult GetShippingOrders()
+        {
+            try
+            {
+                if (Session["Admin"] == null && Session["NhanVien"] == null)
+                {
+                    return Json(new { success = false, message = "Bạn không có quyền truy cập!" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var shippingOrders = db.tblOrders
+                    .Where(n => n.sState == "Đang giao hàng")
+                    .OrderByDescending(x => x.dInvoidDate)
+                    .Select(o => new
+                    {
+                        orderId = o.PK_iOrderID,
+                        status = o.sState ?? "Đang giao hàng"
+                    })
+                    .ToList();
+
+                return Json(new { success = true, orders = shippingOrders }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // API mới: Lấy đơn hàng đã xử lý
+        [HttpGet]
+        public JsonResult GetProcessedOrders()
+        {
+            try
+            {
+                if (Session["Admin"] == null && Session["NhanVien"] == null)
+                {
+                    return Json(new { success = false, message = "Bạn không có quyền truy cập!" }, JsonRequestBehavior.AllowGet);
+                }
+
+                var processedOrders = db.tblOrders
+                    .Where(n => n.sState == "Hoàn thành" || n.sState == "Đã hủy")
+                    .OrderByDescending(x => x.dInvoidDate)
+                    .Select(o => new
+                    {
+                        orderId = o.PK_iOrderID,
+                        status = o.sState ?? "Hoàn thành"
+                    })
+                    .ToList();
+
+                return Json(new { success = true, orders = processedOrders }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: Admin/Orders/Details/5
         public ActionResult Details(int? id)
         {

@@ -282,6 +282,65 @@ namespace giadinhthoxinh.Controllers
             }
         }
 
+        // API mới: Lấy trạng thái đơn hàng để cập nhật realtime trên trang OrderHistory
+        [HttpGet]
+        public JsonResult GetOrderStatus(int id)
+        {
+            try
+            {
+                var order = db.tblOrders.Find(id);
+                if (order == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy đơn hàng!" }, JsonRequestBehavior.AllowGet);
+                }
+
+                return Json(new 
+                { 
+                    success = true, 
+                    orderId = order.PK_iOrderID,
+                    status = order.sState ?? "Chờ xác nhận",
+                    biller = order.sBiller,
+                    invoiceDate = order.dInvoidDate.ToString("dd/MM/yyyy HH:mm")
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // API mới: Lấy tất cả trạng thái đơn hàng của user hiện tại
+        [HttpGet]
+        public JsonResult GetAllOrderStatuses()
+        {
+            try
+            {
+                if (Session["User"] == null)
+                {
+                    return Json(new { success = false, message = "Chưa đăng nhập!" }, JsonRequestBehavior.AllowGet);
+                }
+
+                tblUser user = (tblUser)Session["User"];
+                
+                var orderStatuses = db.tblOrders
+                    .Where(o => o.FK_iAccountID == user.PK_iAccountID)
+                    .Select(o => new
+                    {
+                        orderId = o.PK_iOrderID,
+                        status = o.sState ?? "Chờ xác nhận",
+                        biller = o.sBiller,
+                        invoiceDate = o.dInvoidDate
+                    })
+                    .ToList();
+
+                return Json(new { success = true, orders = orderStatuses }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         private double getProductPrice(int productid)
         {
             double price = 0;

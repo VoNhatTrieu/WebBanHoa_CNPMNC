@@ -498,7 +498,7 @@
         }
     });
 
-    // Auto-refresh trạng thái sản phẩm mỗi 5 giây
+    // Auto-refresh trạng thái sản phẩm và đơn hàng mỗi 5 giây
     var orderId = @Model.PK_iOrderID;
     var lastCheckTime = new Date().getTime();
 
@@ -550,6 +550,68 @@
         });
     }
 
+    // Hàm mới: Kiểm tra trạng thái đơn hàng
+    function checkOrderStatus() {
+        $.ajax({
+            url: '@Url.Action("GetOrderStatus", "Cart")',
+            type: 'GET',
+            data: { id: orderId },
+            success: function(response) {
+                if (response && response.success) {
+                    // Tìm status badge trong phần thông tin đơn hàng
+                    var statusBadge = $('.info-card .status-badge');
+                    if (statusBadge.length > 0) {
+                        var currentStatus = statusBadge.text().trim();
+                        var newStatus = response.status;
+                        
+                        // Chỉ cập nhật nếu trạng thái thay đổi
+                        if (currentStatus.indexOf(newStatus) === -1) {
+                            // Xác định icon và class mới
+                            var statusClass = 'status-pending';
+                            var statusIcon = 'fa-clock';
+                            
+                            if (newStatus.includes('xác nhận') || newStatus.includes('Chờ')) {
+                                statusClass = 'status-pending';
+                                statusIcon = 'fa-clock';
+                            } else if (newStatus.includes('Đã xác nhận')) {
+                                statusClass = 'status-confirmed';
+                                statusIcon = 'fa-check-circle';
+                            } else if (newStatus.includes('Đang giao')) {
+                                statusClass = 'status-shipping';
+                                statusIcon = 'fa-shipping-fast';
+                            } else if (newStatus.includes('Hoàn thành')) {
+                                statusClass = 'status-completed';
+                                statusIcon = 'fa-check-double';
+                            }
+                            
+                            // Cập nhật UI
+                            statusBadge.removeClass('status-pending status-confirmed status-shipping status-completed');
+                            statusBadge.addClass(statusClass);
+                            statusBadge.html('<i class="fas ' + statusIcon + '"></i> ' + newStatus);
+                            
+                            // Hiệu ứng highlight cho info-card
+                            var infoCard = statusBadge.closest('.info-card');
+                            infoCard.css({
+                                'transition': 'background-color 0.5s ease',
+                                'background-color': '#fffbcc'
+                            });
+                            
+                            setTimeout(function() {
+                                infoCard.css('background-color', 'white');
+                            }, 1500);
+                            
+                            showMiniNotification('Trạng thái đơn hàng đã được cập nhật: ' + newStatus);
+                            console.log('✅ Đã cập nhật trạng thái đơn hàng #' + orderId + ' thành: ' + newStatus);
+                        }
+                    }
+                }
+            },
+            error: function() {
+                // Không làm gì nếu lỗi, sẽ thử lại sau 5 giây
+            }
+        });
+    }
+
     // Hàm hiển thị thông báo nhỏ
     function showMiniNotification(message) {
         var notification = $('<div>')
@@ -582,7 +644,10 @@
         }, 3000);
     }
 
-    // Polling mỗi 5 giây để kiểm tra cập nhật
-    setInterval(checkProductStatus, 5000);
+    // Polling mỗi 5 giây để kiểm tra cập nhật sản phẩm và đơn hàng
+    setInterval(function() {
+        checkProductStatus();
+        checkOrderStatus();
+    }, 5000);
 </script>
 

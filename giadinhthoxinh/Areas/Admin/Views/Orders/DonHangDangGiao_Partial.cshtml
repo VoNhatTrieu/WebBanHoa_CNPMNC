@@ -38,7 +38,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-<tr>
+<tr data-order-id="@item.PK_iOrderID">
     <td>
         @Html.DisplayFor(modelItem => item.sCustomerName)
     </td>
@@ -63,7 +63,7 @@
     <td>
         @Html.DisplayFor(modelItem => item.iPaid)
     </td>
-    <td>
+    <td class="order-status-cell">
         @Html.DisplayFor(modelItem => item.sState)
     </td>
     <td>

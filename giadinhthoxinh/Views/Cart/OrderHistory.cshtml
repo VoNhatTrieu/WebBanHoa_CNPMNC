@@ -220,7 +220,7 @@
                 statusClass = "status-completed";
             }
 
-            <div class="order-card">
+            <div class="order-card" data-order-id="@order.PK_iOrderID">
                 <div class="order-header-row">
                     <div>
                         <div class="order-id">
@@ -323,5 +323,112 @@
                 card.style.transform = 'translateY(0)';
             }, 100 * index);
         });
+    });
+
+    // ==========================================
+    // AUTO-REFRESH: Tự động cập nhật trạng thái đơn hàng
+    // ==========================================
+    
+    function updateOrderStatus(orderId, newStatus) {
+        // Tìm card của đơn hàng
+        var orderCard = document.querySelector('.order-card[data-order-id="' + orderId + '"]');
+        if (!orderCard) return;
+
+        // Tìm status badge
+        var statusBadge = orderCard.querySelector('.status-badge');
+        if (!statusBadge) return;
+
+        // Xác định class CSS mới dựa trên trạng thái
+        var statusClass = 'status-pending';
+        if (newStatus.includes('Đã xác nhận')) {
+            statusClass = 'status-confirmed';
+        } else if (newStatus.includes('Đang giao')) {
+            statusClass = 'status-shipping';
+        } else if (newStatus.includes('Hoàn thành')) {
+            statusClass = 'status-completed';
+        } else if (newStatus.includes('xác nhận') || newStatus.includes('Chờ')) {
+            statusClass = 'status-pending';
+        }
+
+        // Cập nhật UI với hiệu ứng
+        if (statusBadge.textContent.trim() !== newStatus) {
+            statusBadge.classList.remove('status-pending', 'status-confirmed', 'status-shipping', 'status-completed');
+            statusBadge.classList.add(statusClass);
+            statusBadge.textContent = newStatus;
+
+            // Thêm hiệu ứng highlight
+            orderCard.style.transition = 'background-color 0.5s ease';
+            orderCard.style.backgroundColor = '#fffbcc';
+            
+            setTimeout(function() {
+                orderCard.style.backgroundColor = 'white';
+            }, 1500);
+
+            console.log('✅ Đã cập nhật trạng thái đơn hàng #' + orderId + ' thành: ' + newStatus);
+        }
+    }
+
+    // Hàm lấy tất cả trạng thái đơn hàng từ server
+    function refreshAllOrderStatuses() {
+        fetch('@Url.Action("GetAllOrderStatuses", "Cart")', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.orders) {
+                data.orders.forEach(function(order) {
+                    updateOrderStatus(order.orderId, order.status);
+                });
+                console.log('🔄 Đã refresh trạng thái tất cả đơn hàng lúc: ' + new Date().toLocaleTimeString());
+            }
+        })
+        .catch(error => {
+            console.error('❌ Lỗi khi refresh trạng thái:', error);
+        });
+    }
+
+    // Tự động refresh mỗi 5 giây (5000ms)
+    // Bạn có thể thay đổi thời gian này tùy ý
+    var refreshInterval;
+    
+    function startAutoRefresh() {
+        // Refresh ngay lập tức
+        refreshAllOrderStatuses();
+        
+        // Sau đó refresh mỗi 5 giây
+        refreshInterval = setInterval(function() {
+            refreshAllOrderStatuses();
+        }, 5000); // 5000ms = 5 giây
+        
+        console.log('✅ Đã bật auto-refresh trạng thái đơn hàng (mỗi 5 giây)');
+    }
+
+    function stopAutoRefresh() {
+        if (refreshInterval) {
+            clearInterval(refreshInterval);
+            console.log('⏸️ Đã tắt auto-refresh');
+        }
+    }
+
+    // Bật auto-refresh khi trang load xong
+    window.addEventListener('load', function() {
+        startAutoRefresh();
+    });
+
+    // Tắt auto-refresh khi rời khỏi trang
+    window.addEventListener('beforeunload', function() {
+        stopAutoRefresh();
+    });
+
+    // Refresh khi user quay lại tab
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            stopAutoRefresh();
+        } else {
+            startAutoRefresh();
+        }
     });
 </script>
