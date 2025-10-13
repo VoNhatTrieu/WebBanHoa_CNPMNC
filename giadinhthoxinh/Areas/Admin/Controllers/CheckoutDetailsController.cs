@@ -124,6 +124,71 @@ namespace giadinhthoxinh.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        // Xác nhận sản phẩm trong hóa đơn - AJAX
+        [HttpPost]
+        public JsonResult XacNhanSanPham(int id)
+        {
+            try
+            {
+                // Kiểm tra quyền (Admin hoặc Nhân viên)
+                if (Session["Admin"] == null && Session["NhanVien"] == null)
+                {
+                    return Json(new { success = false, message = "Bạn không có quyền thực hiện thao tác này!" });
+                }
+
+                var checkoutDetail = db.tblCheckoutDetails.Find(id);
+                if (checkoutDetail == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy chi tiết hóa đơn!" });
+                }
+
+                // Kiểm tra trạng thái hiện tại (linh hoạt với encoding)
+                if (checkoutDetail.sStatus != null && checkoutDetail.sStatus.Contains("Đã"))
+                {
+                    return Json(new { success = false, message = "Sản phẩm này đã được xác nhận trước đó!" });
+                }
+
+                // Cập nhật trạng thái
+                checkoutDetail.sStatus = "Đã xác nhận";
+                db.Entry(checkoutDetail).State = EntityState.Modified;
+                db.SaveChanges();
+
+                // Kiểm tra xem tất cả sản phẩm trong đơn hàng đã được xác nhận chưa
+                var orderId = checkoutDetail.FK_iOrderID;
+                var allDetailsConfirmed = db.tblCheckoutDetails
+                    .Where(cd => cd.FK_iOrderID == orderId)
+                    .All(cd => cd.sStatus != null && cd.sStatus.Contains("Đã"));
+
+                // Nếu tất cả sản phẩm đã được xác nhận, cập nhật trạng thái đơn hàng
+                if (allDetailsConfirmed)
+                {
+                    var order = db.tblOrders.Find(orderId);
+                    if (order != null)
+                    {
+                        order.sState = "Đã xác nhận";
+                        db.Entry(order).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+
+                // Lấy thông tin người thực hiện
+                tblUser user = Session["Admin"] != null ? (tblUser)Session["Admin"] : (tblUser)Session["NhanVien"];
+
+                return Json(new
+                {
+                    success = true,
+                    message = "✅ Xác nhận sản phẩm thành công!",
+                    newStatus = "Đã xác nhận",
+                    confirmedBy = user.sUserName,
+                    confirmedTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
+            }
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

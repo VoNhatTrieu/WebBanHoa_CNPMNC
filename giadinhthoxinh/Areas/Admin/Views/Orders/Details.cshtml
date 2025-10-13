@@ -13,6 +13,175 @@
     </ul>
 }
 
+<style>
+    /* Nút xác nhận đơn hàng - Thiết kế nổi bật */
+    .btn-confirm-order {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+        border: none;
+        padding: 12px 40px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        min-width: 200px;
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .btn-confirm-order:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+        color: white;
+    }
+
+    .btn-confirm-order:active {
+        transform: translateY(0);
+    }
+
+    .btn-confirm-order:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: 0.6;
+    }
+
+    .btn-confirm-order i {
+        font-size: 18px;
+    }
+
+    /* Loading spinner */
+    .spinner {
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top: 3px solid #fff;
+        width: 20px;
+        height: 20px;
+        animation: spin 0.8s linear infinite;
+        display: inline-block;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Toast notification */
+    .toast-notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        min-width: 300px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        padding: 16px 20px;
+        z-index: 9999;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .toast-notification.show {
+        transform: translateX(0);
+    }
+
+    .toast-notification.success {
+        border-left: 4px solid #28a745;
+    }
+
+    .toast-notification.error {
+        border-left: 4px solid #dc3545;
+    }
+
+    .toast-notification .toast-icon {
+        font-size: 24px;
+    }
+
+    .toast-notification.success .toast-icon {
+        color: #28a745;
+    }
+
+    .toast-notification.error .toast-icon {
+        color: #dc3545;
+    }
+
+    .toast-notification .toast-content {
+        flex: 1;
+    }
+
+    .toast-notification .toast-title {
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .toast-notification .toast-message {
+        font-size: 14px;
+        color: #666;
+    }
+
+    /* SweetAlert2 custom styling */
+    .swal2-popup {
+        border-radius: 12px;
+    }
+
+    .swal2-title {
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .swal2-icon.swal2-question {
+        border-color: #667eea;
+        color: #667eea;
+    }
+
+    /* Status badge styling */
+    .badge-status {
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .badge-pending {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+
+    .badge-confirmed {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .badge-shipping {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+
+    .badge-completed {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+    }
+</style>
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 <section class="content-header p-2">
 </section>
 
@@ -53,7 +222,7 @@
                         @Html.DisplayNameFor(model => model.dInvoidDate)
                     </dt>
 
-                    <dd>
+                    <dd id="invoiceDate">
                         @Html.DisplayFor(model => model.dInvoidDate)
                     </dd>
 
@@ -61,7 +230,7 @@
                         @Html.DisplayNameFor(model => model.sBiller)
                     </dt>
 
-                    <dd>
+                    <dd id="billerName">
                         @Html.DisplayFor(model => model.sBiller)
                     </dd>
 
@@ -93,8 +262,29 @@
                         @Html.DisplayNameFor(model => model.sState)
                     </dt>
 
-                    <dd>
-                        @Html.DisplayFor(model => model.sState)
+                    <dd id="orderState">
+                        @{
+                            var statusClass = "badge-pending";
+                            var status = Model.sState ?? "Chờ xác nhận";
+                            
+                            if (status.Contains("xác nhận") || status.Contains("Chờ"))
+                            {
+                                statusClass = "badge-pending";
+                            }
+                            else if (status.Contains("Đã xác nhận"))
+                            {
+                                statusClass = "badge-confirmed";
+                            }
+                            else if (status.Contains("Đang giao"))
+                            {
+                                statusClass = "badge-shipping";
+                            }
+                            else if (status.Contains("Hoàn thành"))
+                            {
+                                statusClass = "badge-completed";
+                            }
+                        }
+                        <span class="badge-status @statusClass">@status</span>
                     </dd>
 
                     <dt>
@@ -107,10 +297,202 @@
 
                 </dl>
             </div>
-            <p>
-                @Html.ActionLink("quay lại", "Index", null, new { @class = "btn btn-primary btn-secondary" }) |
-                @Html.ActionLink("sửa", "Edit", new { id = Model.PK_iOrderID }, new { @class = "btn btn-primary" })
-            </p>
+
+            <div class="action-buttons">
+                <!-- Nút Xác nhận đơn hàng - Chỉ hiển thị khi trạng thái là "Chờ xác nhận" -->
+                @if (Model.sState == "Chờ xác nhận")
+                {
+                    <button type="button" class="btn-confirm-order" id="btnConfirmOrder" onclick="confirmOrder(@Model.PK_iOrderID)">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Xác nhận đơn hàng</span>
+                    </button>
+                }
+
+                @Html.ActionLink("Quay lại", "Index", null, new { @class = "btn btn-secondary" })
+                @Html.ActionLink("Sửa", "Edit", new { id = Model.PK_iOrderID }, new { @class = "btn btn-primary" })
+            </div>
         </div>
     </div>
 </section>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    // Hàm hiển thị toast notification
+    function showToast(type, title, message) {
+        const toast = document.createElement('div');
+        toast.className = `toast-notification ${type}`;
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+            </div>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Hiển thị toast
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+        
+        // Tự động ẩn sau 5 giây
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 5000);
+    }
+
+    // Hàm xác nhận đơn hàng
+    function confirmOrder(orderId) {
+        // Hiển thị popup xác nhận
+        Swal.fire({
+            title: 'Xác nhận đơn hàng?',
+            html: `
+                <p style="font-size: 16px; color: #666; margin: 15px 0;">
+                    Bạn có chắc chắn muốn xác nhận đơn hàng <strong>#${orderId}</strong> không?
+                </p>
+                <p style="font-size: 14px; color: #999;">
+                    Sau khi xác nhận, trạng thái đơn hàng sẽ chuyển sang "Đã xác nhận" 
+                    và khách hàng sẽ được thông báo.
+                </p>
+            `,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fas fa-check"></i> Xác nhận',
+            cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+            customClass: {
+                confirmButton: 'btn-confirm-order',
+                cancelButton: 'btn btn-secondary'
+            },
+            buttonsStyling: false,
+            focusConfirm: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Hiển thị loading
+                const btnConfirm = document.getElementById('btnConfirmOrder');
+                const originalText = btnConfirm.innerHTML;
+                btnConfirm.disabled = true;
+                btnConfirm.innerHTML = '<span class="spinner"></span> Đang xử lý...';
+
+                // Gọi AJAX để xác nhận đơn hàng
+                $.ajax({
+                    url: '@Url.Action("XacNhanDonHang", "Orders")',
+                    type: 'POST',
+                    data: { id: orderId },
+                    success: function(response) {
+                        if (response.success) {
+                            // Hiển thị thông báo thành công
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thành công!',
+                                html: `
+                                    <p style="font-size: 16px; margin: 15px 0;">
+                                        ${response.message}
+                                    </p>
+                                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                                        <p style="margin: 5px 0;"><strong>Trạng thái mới:</strong> ${response.newState}</p>
+                                        <p style="margin: 5px 0;"><strong>Người xác nhận:</strong> ${response.confirmedBy}</p>
+                                        <p style="margin: 5px 0;"><strong>Thời gian:</strong> ${response.confirmedTime}</p>
+                                    </div>
+                                `,
+                                confirmButtonColor: '#28a745',
+                                confirmButtonText: '<i class="fas fa-check"></i> Đồng ý',
+                                timer: 3000,
+                                timerProgressBar: true
+                            }).then(() => {
+                                // Cập nhật giao diện
+                                updateOrderStatus(response.newState, response.confirmedBy, response.confirmedTime);
+                                
+                                // Ẩn nút xác nhận
+                                btnConfirm.style.display = 'none';
+                                
+                                // Hiển thị toast
+                                showToast('success', 'Xác nhận thành công!', 'Đơn hàng đã được xác nhận và cập nhật.');
+                            });
+                        } else {
+                            // Hiển thị lỗi
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi!',
+                                text: response.message,
+                                confirmButtonColor: '#dc3545',
+                                confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                            });
+                            
+                            // Khôi phục nút
+                            btnConfirm.disabled = false;
+                            btnConfirm.innerHTML = originalText;
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Hiển thị lỗi
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi kết nối!',
+                            text: 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau.',
+                            confirmButtonColor: '#dc3545',
+                            confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                        });
+                        
+                        // Khôi phục nút
+                        btnConfirm.disabled = false;
+                        btnConfirm.innerHTML = originalText;
+                        
+                        showToast('error', 'Lỗi!', 'Không thể kết nối đến máy chủ.');
+                    }
+                });
+            }
+        });
+    }
+
+    // Hàm cập nhật trạng thái trên giao diện
+    function updateOrderStatus(newState, confirmedBy, confirmedTime) {
+        // Cập nhật trạng thái
+        const stateElement = document.getElementById('orderState');
+        stateElement.innerHTML = `<span class="badge-status badge-confirmed">${newState}</span>`;
+        
+        // Cập nhật người xác nhận
+        const billerElement = document.getElementById('billerName');
+        billerElement.textContent = confirmedBy;
+        
+        // Cập nhật thời gian
+        const dateElement = document.getElementById('invoiceDate');
+        dateElement.textContent = confirmedTime;
+        
+        // Thêm hiệu ứng highlight
+        [stateElement, billerElement, dateElement].forEach(el => {
+            el.style.transition = 'all 0.3s ease';
+            el.style.backgroundColor = '#d4edda';
+            el.style.padding = '5px';
+            el.style.borderRadius = '4px';
+            
+            setTimeout(() => {
+                el.style.backgroundColor = 'transparent';
+            }, 2000);
+        });
+    }
+
+    // Animation khi tải trang
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnConfirm = document.getElementById('btnConfirmOrder');
+        if (btnConfirm) {
+            btnConfirm.style.opacity = '0';
+            btnConfirm.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                btnConfirm.style.transition = 'all 0.5s ease';
+                btnConfirm.style.opacity = '1';
+                btnConfirm.style.transform = 'translateY(0)';
+            }, 300);
+        }
+    });
+</script>

@@ -184,6 +184,7 @@ namespace giadinhthoxinh.Controllers
                 ctDH.FK_iProductID = item.ProductID;
                 ctDH.iQuantity = item.Quatity;
                 ctDH.fPrice = item.Price;
+                ctDH.sStatus = "Chờ xác nhận"; // Trạng thái mặc định
                 db.tblCheckoutDetails.Add(ctDH);
                 // db.Chitietdonhangs.Add(ctDH);
             }
@@ -230,7 +231,6 @@ namespace giadinhthoxinh.Controllers
                 .ToList();
 
             // Truyền dữ liệu sang View
-            ViewBag.Order = order;
             ViewBag.OrderDetails = orderDetails;
             ViewBag.Customer = order.tblUser;
             
@@ -255,7 +255,31 @@ namespace giadinhthoxinh.Controllers
             // Tổng thanh toán
             ViewBag.FinalTotal = totalAmount + shippingFee;
 
-            return View();
+            return View(order); // Truyền order làm Model
+        }
+
+        // API để lấy trạng thái chi tiết đơn hàng (cho auto-refresh)
+        [HttpGet]
+        public JsonResult GetOrderDetails(int id)
+        {
+            try
+            {
+                var orderDetails = db.tblCheckoutDetails
+                    .Where(od => od.FK_iOrderID == id)
+                    .Select(od => new
+                    {
+                        detailId = od.PK_iCheckoutDetailID,
+                        productId = od.FK_iProductID,
+                        status = od.sStatus ?? "Chờ xác nhận"
+                    })
+                    .ToList();
+
+                return Json(new { success = true, orderDetails = orderDetails }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         private double getProductPrice(int productid)

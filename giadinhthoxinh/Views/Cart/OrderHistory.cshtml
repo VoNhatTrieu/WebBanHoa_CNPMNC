@@ -278,9 +278,9 @@
                 <div class="order-info-row">
                     <span class="info-label">Thanh toán:</span>
                     <span class="info-value">
-                        @if (order.iPaid == 1)
+                        @if (order.iPaid == 0)
                         {
-                            <span class="text-success"><i class="fas fa-check-circle"></i> Đã thanh toán</span>
+                            <span class="text-info"><i class="fas fa-hand-holding-usd"></i> Thanh toán khi nhận hàng</span>
                         }
                         else
                         {

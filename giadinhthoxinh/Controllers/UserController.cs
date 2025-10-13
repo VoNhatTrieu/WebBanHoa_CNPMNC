@@ -28,6 +28,41 @@ namespace giadinhthoxinh.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(string sEmail, string sPass)
         {
+            // Validate input - comprehensive checks
+            if (string.IsNullOrWhiteSpace(sEmail) || string.IsNullOrWhiteSpace(sPass))
+            {
+                TempData["Error"] = "❌ Vui lòng nhập đầy đủ email và mật khẩu!";
+                return View();
+            }
+
+            // Check for dangerous characters in email
+            if (ContainsDangerousCharacters(sEmail))
+            {
+                TempData["Error"] = "❌ Email chứa ký tự không hợp lệ!";
+                return View();
+            }
+
+            // Check email format
+            if (!IsValidEmail(sEmail))
+            {
+                TempData["Error"] = "❌ Email không đúng định dạng!";
+                return View();
+            }
+
+            // Check password length
+            if (sPass.Length < 6 || sPass.Length > 100)
+            {
+                TempData["Error"] = "❌ Mật khẩu phải có độ dài từ 6-100 ký tự!";
+                return View();
+            }
+
+            // Check for dangerous characters in password
+            if (ContainsDangerousPasswordCharacters(sPass))
+            {
+                TempData["Error"] = "❌ Mật khẩu chứa ký tự nguy hiểm!";
+                return View();
+            }
+
             var f_password = GetMD5(sPass);
             var ktraadmin = db.tblUsers.Where(s => s.sEmail.Equals(sEmail) && s.sPass.Equals(f_password)).ToList();
             if (ktraadmin.Count>0 && ktraadmin[0].FK_iPermissionID>1)
@@ -43,6 +78,7 @@ namespace giadinhthoxinh.Controllers
                     Session["Nhanvien"] = Session["Admin"];
                     Session["QuanLy"] = Session["Admin"];
                 }
+                TempData["Success"] = "✅ Đăng nhập thành công! Chào mừng quản trị viên.";
                 return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
             else if (ModelState.IsValid)
@@ -56,15 +92,17 @@ namespace giadinhthoxinh.Controllers
                     Session["userName"] = data.FirstOrDefault().sUserName;
                     Session["Email"] = data.FirstOrDefault().sEmail;
                     Session["User"] = data[0];
+                    TempData["Success"] = "✅ Đăng nhập thành công! Chào mừng bạn trở lại.";
                     return RedirectToAction("index", "home");
                 }
                 else
                 {
-                    ViewBag.error = "Login failed";
-                    return RedirectToAction("login");
+                    TempData["Error"] = "❌ Email hoặc mật khẩu không chính xác!";
+                    return View();
                 }
             }
 
+            TempData["Error"] = "❌ Có lỗi xảy ra. Vui lòng thử lại!";
             return View();
         }
         public ActionResult AccountPartial()
@@ -100,25 +138,130 @@ namespace giadinhthoxinh.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Comprehensive validation for email
+                if (string.IsNullOrWhiteSpace(_user.sEmail))
+                {
+                    TempData["Error"] = "❌ Vui lòng nhập email!";
+                    return View(_user);
+                }
+
+                if (_user.sEmail.Length < 5 || _user.sEmail.Length > 100)
+                {
+                    TempData["Error"] = "❌ Email phải có độ dài từ 5-100 ký tự!";
+                    return View(_user);
+                }
+
+                if (ContainsDangerousCharacters(_user.sEmail))
+                {
+                    TempData["Error"] = "❌ Email chứa ký tự không hợp lệ!";
+                    return View(_user);
+                }
+
+                if (!IsValidEmail(_user.sEmail))
+                {
+                    TempData["Error"] = "❌ Email không đúng định dạng!";
+                    return View(_user);
+                }
+
+                // Validate password
+                if (string.IsNullOrWhiteSpace(_user.sPass))
+                {
+                    TempData["Error"] = "❌ Vui lòng nhập mật khẩu!";
+                    return View(_user);
+                }
+
+                if (_user.sPass.Length < 6 || _user.sPass.Length > 100)
+                {
+                    TempData["Error"] = "❌ Mật khẩu phải có độ dài từ 6-100 ký tự!";
+                    return View(_user);
+                }
+
+                if (ContainsDangerousPasswordCharacters(_user.sPass))
+                {
+                    TempData["Error"] = "❌ Mật khẩu chứa ký tự nguy hiểm!";
+                    return View(_user);
+                }
+
+                // Validate username
+                if (string.IsNullOrWhiteSpace(_user.sUserName))
+                {
+                    TempData["Error"] = "❌ Vui lòng nhập họ và tên!";
+                    return View(_user);
+                }
+
+                if (_user.sUserName.Length < 2 || _user.sUserName.Length > 50)
+                {
+                    TempData["Error"] = "❌ Họ tên phải có độ dài từ 2-50 ký tự!";
+                    return View(_user);
+                }
+
+                if (ContainsDangerousCharacters(_user.sUserName))
+                {
+                    TempData["Error"] = "❌ Họ tên chứa ký tự không hợp lệ!";
+                    return View(_user);
+                }
+
+                // Validate phone
+                if (string.IsNullOrWhiteSpace(_user.sPhone))
+                {
+                    TempData["Error"] = "❌ Vui lòng nhập số điện thoại!";
+                    return View(_user);
+                }
+
+                string phoneDigitsOnly = _user.sPhone.Replace("+", "");
+                if (!System.Text.RegularExpressions.Regex.IsMatch(phoneDigitsOnly, @"^\d+$"))
+                {
+                    TempData["Error"] = "❌ Số điện thoại chỉ được chứa số!";
+                    return View(_user);
+                }
+
+                if (phoneDigitsOnly.Length < 10 || phoneDigitsOnly.Length > 15)
+                {
+                    TempData["Error"] = "❌ Số điện thoại phải có từ 10-15 chữ số!";
+                    return View(_user);
+                }
+
+                // Validate address
+                if (string.IsNullOrWhiteSpace(_user.sAddress))
+                {
+                    TempData["Error"] = "❌ Vui lòng nhập địa chỉ!";
+                    return View(_user);
+                }
+
+                if (_user.sAddress.Length < 10 || _user.sAddress.Length > 200)
+                {
+                    TempData["Error"] = "❌ Địa chỉ phải có độ dài từ 10-200 ký tự!";
+                    return View(_user);
+                }
+
+                if (ContainsDangerousCharacters(_user.sAddress))
+                {
+                    TempData["Error"] = "❌ Địa chỉ chứa ký tự không hợp lệ!";
+                    return View(_user);
+                }
+
+                // Check if email already exists
                 var check = db.tblUsers.FirstOrDefault(s => s.sEmail == _user.sEmail);
                 if (check == null)
                 {
                     _user.sPass = GetMD5(_user.sPass);
+                    _user.FK_iPermissionID = 1; // Set default permission to customer
                     db.Configuration.ValidateOnSaveEnabled = false;
                     db.tblUsers.Add(_user);
                     db.SaveChanges();
-                    return RedirectToAction("index", "home");
+                    
+                    TempData["Success"] = "✅ Đăng ký thành công! Vui lòng đăng nhập.";
+                    return RedirectToAction("Login");
                 }
                 else
                 {
-                    ViewBag.error = "Email này đã tồn tại";
-                    return View();
+                    TempData["Error"] = "❌ Email này đã được đăng ký. Vui lòng sử dụng email khác!";
+                    return View(_user);
                 }
-
-
             }
-            //ViewBag.FK_iPermissionID = new SelectList(db.tblPermissions, "PK_iPermissionID", "sPermissionName", tblUser.FK_iPermissionID);
-            return View();
+            
+            TempData["Error"] = "❌ Vui lòng điền đầy đủ thông tin hợp lệ!";
+            return View(_user);
         }
 
         //create a string MD5
@@ -135,6 +278,57 @@ namespace giadinhthoxinh.Controllers
 
             }
             return byte2String;
+        }
+
+        // Helper method to check for dangerous characters
+        private bool ContainsDangerousCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return false;
+
+            // Check for common XSS and SQL injection characters
+            char[] dangerousChars = { '<', '>', ';', '"', '\'', '`', '\\' };
+            return input.IndexOfAny(dangerousChars) >= 0;
+        }
+
+        // Helper method to check for dangerous password characters
+        private bool ContainsDangerousPasswordCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return false;
+
+            // More restrictive for passwords
+            char[] dangerousChars = { '<', '>', ';', '"', '\'', '`' };
+            return input.IndexOfAny(dangerousChars) >= 0;
+        }
+
+        // Helper method to validate email format
+        private bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                // Check for basic email pattern
+                var regex = new System.Text.RegularExpressions.Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+                if (!regex.IsMatch(email))
+                    return false;
+
+                // Check for spaces
+                if (email.Contains(" "))
+                    return false;
+
+                // Check length
+                if (email.Length < 5 || email.Length > 100)
+                    return false;
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public ActionResult Permission()

@@ -31,6 +31,7 @@
           <Property Name="FK_iProductID" Type="int" />
           <Property Name="iQuantity" Type="int" />
           <Property Name="fPrice" Type="float" />
+          <Property Name="sStatus" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblImage">
           <Key>
@@ -732,6 +733,7 @@
           <Property Name="FK_iProductID" Type="Int32" />
           <Property Name="iQuantity" Type="Int32" />
           <Property Name="fPrice" Type="Double" />
+          <Property Name="sStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblOrder" Relationship="Self.fk_checkoutDetail_order" FromRole="tblCheckoutDetail" ToRole="tblOrder" />
           <NavigationProperty Name="tblProduct" Relationship="Self.fk_checkoutDetail_product" FromRole="tblCheckoutDetail" ToRole="tblProduct" />
         </EntityType>
@@ -1545,6 +1547,7 @@
                 <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
                 <ScalarProperty Name="iQuantity" ColumnName="iQuantity" />
                 <ScalarProperty Name="fPrice" ColumnName="fPrice" />
+                <ScalarProperty Name="sStatus" ColumnName="sStatus" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

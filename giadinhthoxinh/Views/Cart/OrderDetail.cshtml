@@ -1,4 +1,6 @@
-﻿@{
+﻿@model giadinhthoxinh.Models.tblOrder
+
+@{
     ViewBag.Title = "Chi tiết đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -298,7 +300,7 @@
 
     <div class="order-header text-center">
         <h2> Đặt hàng thành công!</h2>
-        <p class="order-id">Mã đơn hàng: <strong>#@ViewBag.Order.PK_iOrderID</strong></p>
+        <p class="order-id">Mã đơn hàng: <strong>#@Model.PK_iOrderID</strong></p>
         <p style="margin: 10px 0 0 0; opacity: 0.9;">Cảm ơn bạn đã tin tưởng và đặt hàng tại cửa hàng chúng tôi!</p>
     </div>
 
@@ -308,15 +310,15 @@
                 <h4><i class="fas fa-user"></i> Thông tin người nhận</h4>
                 <div class="info-row">
                     <span class="info-label">Họ và tên:</span>
-                    <span class="info-value">@ViewBag.Order.sCustomerName</span>
+                    <span class="info-value">@Model.sCustomerName</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Số điện thoại:</span>
-                    <span class="info-value">@ViewBag.Order.sCustomerPhone</span>
+                    <span class="info-value">@Model.sCustomerPhone</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Địa chỉ giao hàng:</span>
-                    <span class="info-value">@ViewBag.Order.sDeliveryAddress</span>
+                    <span class="info-value">@Model.sDeliveryAddress</span>
                 </div>
             </div>
         </div>
@@ -326,16 +328,16 @@
                 <h4><i class="fas fa-shopping-cart"></i> Thông tin đơn hàng</h4>
                 <div class="info-row">
                     <span class="info-label">Ngày đặt:</span>
-                    <span class="info-value">@ViewBag.Order.dInvoidDate.ToString("dd/MM/yyyy HH:mm")</span>
+                    <span class="info-value">@Model.dInvoidDate.ToString("dd/MM/yyyy HH:mm")</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Phương thức giao hàng:</span>
                     <span class="info-value">
-                        @if (ViewBag.Order.iDeliveryMethod == 1)
+                        @if (Model.iDeliveryMethod == 1)
                         {
                             <span>Giao hàng tận nơi</span>
                         }
-                        else if (ViewBag.Order.iDeliveryMethod == 2)
+                        else if (Model.iDeliveryMethod == 2)
                         {
                             <span>Nhận tại cửa hàng</span>
                         }
@@ -350,38 +352,45 @@
                     <span class="info-value">
                         @{
                             var statusClass = "status-pending";
-                            var status = ViewBag.Order.sState ?? "Chờ xác nhận";
+                            var statusIcon = "fa-clock";
+                            var status = Model.sState ?? "Chờ xác nhận";
                             
                             if (status.Contains("xác nhận") || status.Contains("Chờ"))
                             {
                                 statusClass = "status-pending";
+                                statusIcon = "fa-clock";
                             }
                             else if (status.Contains("Đã xác nhận"))
                             {
                                 statusClass = "status-confirmed";
+                                statusIcon = "fa-check-circle";
                             }
                             else if (status.Contains("Đang giao"))
                             {
                                 statusClass = "status-shipping";
+                                statusIcon = "fa-shipping-fast";
                             }
                             else if (status.Contains("Hoàn thành"))
                             {
                                 statusClass = "status-completed";
+                                statusIcon = "fa-check-double";
                             }
                         }
-                        <span class="status-badge @statusClass">@status</span>
+                        <span class="status-badge @statusClass">
+                            <i class="fas @statusIcon"></i> @status
+                        </span>
                     </span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Thanh toán:</span>
                     <span class="info-value">
-                        @if (ViewBag.Order.iPaid == 1)
+                        @if (Model.iPaid == 1)
                         {
                             <span class="text-success"><i class="fas fa-check-circle"></i> Đã thanh toán</span>
                         }
                         else
                         {
-                            <span class="text-warning"><i class="fas fa-clock"></i> Chưa thanh toán</span>
+                            <span class="text-info"><i class="fas fa-hand-holding-usd"></i> Thanh toán khi nhận hàng</span>
                         }
                     </span>
                 </div>
@@ -398,6 +407,7 @@
                     <th style="text-align: center;">Số lượng</th>
                     <th style="text-align: right;">Đơn giá</th>
                     <th style="text-align: right;">Thành tiền</th>
+                    <th style="text-align: center;">Trạng thái</th>
                 </tr>
             </thead>
             <tbody>
@@ -407,8 +417,14 @@
                     var quantity = item.iQuantity ?? 0;
                     var price = item.fPrice ?? 0;
                     var subtotal = quantity * price;
+                    var productStatus = string.IsNullOrEmpty(item.sStatus) ? "Chờ xác nhận" : item.sStatus.Trim();
+                    // Kiểm tra xác nhận linh hoạt
+                    var isConfirmed = productStatus.Contains("Đã");
+                    var displayStatus = isConfirmed ? "Đã xác nhận" : "Chờ xác nhận";
+                    var productStatusClass = isConfirmed ? "status-confirmed" : "status-pending";
+                    var productStatusIcon = isConfirmed ? "fa-check-circle" : "fa-clock";
 
-                    <tr>
+                    <tr data-detail-id="@item.PK_iCheckoutDetailID" data-product-id="@item.FK_iProductID">
                         <td>
                             @if (product != null && !string.IsNullOrEmpty(product.sImage))
                             {
@@ -429,6 +445,11 @@
                         <td style="text-align: center;">@quantity</td>
                         <td style="text-align: right;">@string.Format("{0:N0}", price) </td>
                         <td style="text-align: right;"><strong>@string.Format("{0:N0}", subtotal) </strong></td>
+                        <td style="text-align: center;">
+                            <span class="status-badge @productStatusClass">
+                                <i class="fas @productStatusIcon"></i> @displayStatus
+                            </span>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -450,6 +471,7 @@
         </div>
     </div>
 
+
     <div class="action-buttons no-print">
         <a href="@Url.Action("Index", "Home")" class="btn btn-custom btn-primary-custom">
             <i class="fas fa-home"></i> Tiếp tục mua hàng
@@ -460,6 +482,7 @@
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     window.addEventListener('load', function() {
         var container = document.querySelector('.order-detail-container');
@@ -474,4 +497,92 @@
             }, 100);
         }
     });
+
+    // Auto-refresh trạng thái sản phẩm mỗi 5 giây
+    var orderId = @Model.PK_iOrderID;
+    var lastCheckTime = new Date().getTime();
+
+    function checkProductStatus() {
+        // Lấy lại trang để cập nhật trạng thái
+        $.ajax({
+            url: '@Url.Action("GetOrderDetails", "Cart")',
+            type: 'GET',
+            data: { id: orderId },
+            success: function(response) {
+                if (response && response.orderDetails) {
+                    // Cập nhật trạng thái từng sản phẩm
+                    response.orderDetails.forEach(function(detail) {
+                        var productRow = $('tr[data-detail-id="' + detail.detailId + '"]');
+                        if (productRow.length > 0) {
+                            var statusBadge = productRow.find('.status-badge');
+                            var newStatus = detail.status || 'Chờ xác nhận';
+                            var currentStatus = statusBadge.text().trim();
+                            
+                            // Nếu trạng thái thay đổi, cập nhật
+                            if (currentStatus.indexOf(newStatus) === -1) {
+                                var newClass = newStatus === 'Đã xác nhận' ? 'status-confirmed' : 'status-pending';
+                                var newIcon = newStatus === 'Đã xác nhận' ? 'fa-check-circle' : 'fa-clock';
+                                
+                                statusBadge.removeClass('status-pending status-confirmed');
+                                statusBadge.addClass(newClass);
+                                statusBadge.html('<i class="fas ' + newIcon + '"></i> ' + newStatus);
+                                
+                                // Hiệu ứng highlight
+                                productRow.css({
+                                    'transition': 'background-color 0.3s ease',
+                                    'background-color': '#d4edda'
+                                });
+                                
+                                setTimeout(function() {
+                                    productRow.css('background-color', '');
+                                }, 2000);
+                                
+                                // Hiển thị thông báo nhỏ
+                                showMiniNotification('Trạng thái sản phẩm đã được cập nhật!');
+                            }
+                        }
+                    });
+                }
+            },
+            error: function() {
+                // Không làm gì nếu lỗi, sẽ thử lại sau 5 giây
+            }
+        });
+    }
+
+    // Hàm hiển thị thông báo nhỏ
+    function showMiniNotification(message) {
+        var notification = $('<div>')
+            .css({
+                'position': 'fixed',
+                'top': '20px',
+                'right': '20px',
+                'background': '#28a745',
+                'color': 'white',
+                'padding': '12px 20px',
+                'border-radius': '8px',
+                'box-shadow': '0 4px 12px rgba(0,0,0,0.15)',
+                'z-index': '9999',
+                'opacity': '0',
+                'transition': 'opacity 0.3s ease'
+            })
+            .html('<i class="fas fa-check-circle"></i> ' + message);
+        
+        $('body').append(notification);
+        
+        setTimeout(function() {
+            notification.css('opacity', '1');
+        }, 100);
+        
+        setTimeout(function() {
+            notification.css('opacity', '0');
+            setTimeout(function() {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+
+    // Polling mỗi 5 giây để kiểm tra cập nhật
+    setInterval(checkProductStatus, 5000);
 </script>
+

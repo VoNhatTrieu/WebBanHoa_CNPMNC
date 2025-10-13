@@ -1,44 +1,696 @@
 ﻿@model giadinhthoxinh.Models.tblUser
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "Đăng nhập";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="bg-content-main" style="width: 100vw; height: 100vh;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col col-xl-10">
-                <div class="card " style="border-radius: 1rem;">
-                    <div class="row g-0">
-                        <div class="col-md-6 col-lg-5 d-none d-md-block">
-                            <img src="~/Content/assets/images/logo/logo-login.jpg"
-                                 alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+<style>
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-container::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.3) 0%, transparent 50%);
+        animation: gradientShift 15s ease infinite;
+    }
+
+    @@keyframes gradientShift {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.25),
+                    0 0 0 1px rgba(255, 255, 255, 0.5);
+        overflow: hidden;
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .login-image {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-image::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(240, 147, 251, 0.3) 0%, rgba(102, 126, 234, 0.3) 100%);
+        z-index: 1;
+    }
+
+    .login-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 16px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 2;
+        filter: brightness(1.05) saturate(1.1);
+    }
+
+    .login-image::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: floatingLight 8s ease-in-out infinite;
+        z-index: 0;
+    }
+
+    @@keyframes floatingLight {
+        0%, 100% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(30px, -30px) scale(1.2); }
+    }
+
+    .login-form-container {
+        padding: 60px 50px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 247, 255, 0.9) 100%);
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .login-header h2 {
+        color: #4a5568;
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .login-header p {
+        color: #718096;
+        font-size: 16px;
+    }
+
+    .form-group-modern {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .form-group-modern label {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        font-size: 14px;
+        transition: all 0.3s;
+        pointer-events: none;
+        background: linear-gradient(to bottom, transparent 0%, transparent 40%, rgba(255,255,255,0.9) 40%, rgba(255,255,255,0.9) 100%);
+        padding: 0 5px;
+    }
+
+    .form-group-modern input:focus + label,
+    .form-group-modern input:not(:placeholder-shown) + label {
+        top: -10px;
+        font-size: 12px;
+        color: #667eea;
+        background: rgba(255,255,255,0.95);
+    }
+
+    .form-control-modern {
+        width: 100%;
+        padding: 15px 45px 15px 15px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-control-modern:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        outline: none;
+        background: white;
+    }
+
+    .input-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #cbd5e0;
+        font-size: 18px;
+    }
+
+    .password-toggle {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        cursor: pointer;
+        font-size: 18px;
+        transition: color 0.3s;
+        z-index: 10;
+    }
+
+    .password-toggle:hover {
+        color: #667eea;
+    }
+
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .remember-me {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .remember-me input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
+        cursor: pointer;
+        accent-color: #667eea;
+    }
+
+    .remember-me label {
+        color: #718096;
+        font-size: 14px;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .forgot-password {
+        color: #667eea;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.3s;
+        font-weight: 500;
+    }
+
+    .forgot-password:hover {
+        color: #764ba2;
+        text-decoration: none;
+        transform: translateX(3px);
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background-size: 200% 100%;
+        background-position: 0% 0%;
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-login::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn-login:hover {
+        background-position: 100% 0%;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-login:hover::before {
+        left: 100%;
+    }
+
+    .btn-login span {
+        position: relative;
+        z-index: 1;
+    }
+
+    .btn-login:active {
+        transform: translateY(-1px);
+    }
+
+    .btn-login:disabled {
+        background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .loading-spinner {
+        display: none;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255,255,255,0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-left: 10px;
+    }
+
+    @@keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .btn-login.loading .loading-spinner {
+        display: inline-block;
+    }
+
+    .divider {
+        text-align: center;
+        margin: 30px 0;
+        position: relative;
+    }
+
+    .divider::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+    }
+
+    .divider span {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 247, 255, 0.9) 100%);
+        padding: 0 15px;
+        color: #a0aec0;
+        font-size: 14px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 20px;
+        color: #718096;
+        font-size: 14px;
+    }
+
+    .register-link a {
+        color: #667eea;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s;
+        background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .register-link a:hover {
+        transform: translateX(3px);
+        display: inline-block;
+    }
+
+    .error-message {
+        background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+        border: 1px solid #fc8181;
+        color: #c53030;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+        animation: slideDown 0.3s ease;
+    }
+
+    .error-message i {
+        margin-right: 8px;
+    }
+
+    .success-message {
+        background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+        border: 1px solid #68d391;
+        color: #2f855a;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+        animation: slideDown 0.3s ease;
+    }
+
+    @@keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .login-form-container {
+            padding: 40px 30px;
+        }
+
+        .login-header h2 {
+            font-size: 26px;
+        }
+
+        .form-options {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+    }
+</style>
+
+<section class="login-container">
+    <div class="login-card">
+        <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+                <div class="login-image">
+                    <img src="~/Content/assets/images/logo/logo-login.jpg" alt="Đăng nhập">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-7">
+                <div class="login-form-container">
+                    <div class="login-header">
+                        <h2>Chào mừng trở lại! 👋</h2>
+                        <p>Đăng nhập để tiếp tục mua sắm</p>
+                    </div>
+
+                    <div id="errorMessage" class="error-message">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="errorText"></span>
+                    </div>
+
+                    <div id="successMessage" class="success-message">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="successText"></span>
+                    </div>
+
+                    @using (Html.BeginForm("login", "user", FormMethod.Post, new { id = "loginForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        
+                        <div class="form-group-modern">
+                            @Html.TextBoxFor(m => m.sEmail, new { 
+                                @class = "form-control-modern", 
+                                @placeholder = " ",
+                                @id = "emailInput",
+                                @required = "required"
+                            })
+                            <label for="emailInput">Email của bạn</label>
+                            <i class="fas fa-envelope input-icon"></i>
                         </div>
-                        <div class="col-md-6 col-lg-7 d-flex align-items-center">
-                            <div class="card-body p-4 p-lg-5 text-black">
 
-                                
-                                @using (Html.BeginForm("login", "user", FormMethod.Post))
-                                {
-                                    @Html.AntiForgeryToken()//Bảo vệ form khỏi các cuộc tấn công CSRF(Cross-Site Request Forgery)
-                                    <div class="form-group">
-                                        Account
-                                        @Html.TextBoxFor(m => m.sEmail, "", new { @class = "form-control", @placeholder = "Email"})
+                        <div class="form-group-modern">
+                            @Html.PasswordFor(m => m.sPass, new { 
+                                @class = "form-control-modern", 
+                                @placeholder = " ",
+                                @id = "passwordInput",
+                                @required = "required"
+                            })
+                            <label for="passwordInput">Mật khẩu</label>
+                            <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                        </div>
 
-                                    </div>
-                                    <div class="form-group">
-                                        Password
-                                        @Html.PasswordFor(m => m.sPass, new { @class = "form-control", @placeholder = "Password"})
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="submit" name="submit" class="btn btn-primary" value="Đăng nhập" />
-                                    </div>
-                                }
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="rememberMe" name="rememberMe">
+                                <label for="rememberMe">Ghi nhớ đăng nhập</label>
                             </div>
+                            <a href="#" class="forgot-password">Quên mật khẩu?</a>
                         </div>
+
+                        <button type="submit" class="btn-login" id="loginBtn">
+                            <span>Đăng nhập</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    }
+
+                    <div class="divider">
+                        <span>Hoặc</span>
+                    </div>
+
+                    <div class="register-link">
+                        Chưa có tài khoản? <a href="@Url.Action("Register", "User")">Đăng ký ngay</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const passwordInput = document.getElementById('passwordInput');
+        const icon = this;
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+
+    // Real-time email validation
+    document.getElementById('emailInput').addEventListener('input', function() {
+        validateEmailRealtime(this);
+    });
+
+    function validateEmailRealtime(input) {
+        const email = input.value;
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        
+        // Remove previous error styling
+        input.style.borderColor = '';
+        
+        if (email.length === 0) {
+            return;
+        }
+
+        // Check for invalid characters
+        const invalidChars = /[<>;"'`\\]/g;
+        if (invalidChars.test(email)) {
+            input.style.borderColor = '#f56565';
+            errorText.textContent = '❌ Email chứa ký tự không hợp lệ: < > ; " \' ` \\';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Check for spaces
+        if (/\s/.test(email)) {
+            input.style.borderColor = '#f56565';
+            errorText.textContent = '❌ Email không được chứa khoảng trắng';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Check for multiple at symbols
+        const atCount = (email.match(/@@/g) || []).length;
+        if (atCount > 1) {
+            input.style.borderColor = '#f56565';
+            errorText.textContent = '❌ Email chỉ được có một ký tự @@';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Check for valid email pattern
+        if (email.length >= 3 && !isValidEmail(email)) {
+            input.style.borderColor = '#f56565';
+            errorText.textContent = '❌ Định dạng email không hợp lệ (ví dụ: user@example.com)';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Valid email
+        if (isValidEmail(email)) {
+            input.style.borderColor = '#48bb78';
+            errorMessage.style.display = 'none';
+        }
+    }
+
+    // Real-time password validation
+    document.getElementById('passwordInput').addEventListener('input', function() {
+        validatePasswordRealtime(this);
+    });
+
+    function validatePasswordRealtime(input) {
+        const password = input.value;
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        
+        input.style.borderColor = '';
+        
+        if (password.length === 0) {
+            errorMessage.style.display = 'none';
+            return;
+        }
+
+        // Check for dangerous characters
+        const dangerousChars = /[<>;"'`]/g;
+        if (dangerousChars.test(password)) {
+            input.style.borderColor = '#f56565';
+            errorText.textContent = '❌ Mật khẩu chứa ký tự nguy hiểm: < > ; " \' `';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Check minimum length
+        if (password.length < 6) {
+            input.style.borderColor = '#ed8936';
+            errorText.textContent = '⚠️ Mật khẩu phải có ít nhất 6 ký tự';
+            errorMessage.style.display = 'block';
+            return;
+        }
+
+        // Valid password
+        input.style.borderColor = '#48bb78';
+        errorMessage.style.display = 'none';
+    }
+
+    // Form validation and loading state
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const email = document.getElementById('emailInput').value.trim();
+        const password = document.getElementById('passwordInput').value.trim();
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const loginBtn = document.getElementById('loginBtn');
+
+        // Hide previous errors
+        errorMessage.style.display = 'none';
+
+        // Comprehensive validation
+        const validationResult = validateLoginForm(email, password);
+        if (!validationResult.isValid) {
+            e.preventDefault();
+            errorText.textContent = validationResult.message;
+            errorMessage.style.display = 'block';
+            
+            // Highlight invalid field
+            if (validationResult.field === 'email') {
+                document.getElementById('emailInput').style.borderColor = '#f56565';
+                document.getElementById('emailInput').focus();
+            } else if (validationResult.field === 'password') {
+                document.getElementById('passwordInput').style.borderColor = '#f56565';
+                document.getElementById('passwordInput').focus();
+            }
+            return;
+        }
+
+        // Show loading state
+        loginBtn.classList.add('loading');
+        loginBtn.disabled = true;
+    });
+
+    function validateLoginForm(email, password) {
+        // Empty field check
+        if (!email) {
+            return { isValid: false, field: 'email', message: '❌ Vui lòng nhập email!' };
+        }
+
+        if (!password) {
+            return { isValid: false, field: 'password', message: '❌ Vui lòng nhập mật khẩu!' };
+        }
+
+        // Email validation
+        if (/[<>;"'`\\]/.test(email)) {
+            return { isValid: false, field: 'email', message: '❌ Email chứa ký tự không hợp lệ!' };
+        }
+
+        if (/\s/.test(email)) {
+            return { isValid: false, field: 'email', message: '❌ Email không được chứa khoảng trắng!' };
+        }
+
+        if (!isValidEmail(email)) {
+            return { isValid: false, field: 'email', message: '❌ Email không đúng định dạng!' };
+        }
+
+        // Password validation
+        if (/[<>;"'`]/.test(password)) {
+            return { isValid: false, field: 'password', message: '❌ Mật khẩu chứa ký tự nguy hiểm!' };
+        }
+
+        if (password.length < 6) {
+            return { isValid: false, field: 'password', message: '❌ Mật khẩu phải có ít nhất 6 ký tự!' };
+        }
+
+        if (password.length > 100) {
+            return { isValid: false, field: 'password', message: '❌ Mật khẩu quá dài (tối đa 100 ký tự)!' };
+        }
+
+        return { isValid: true };
+    }
+
+    // Email validation
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Check for error/success messages from server
+    window.addEventListener('DOMContentLoaded', function() {
+        @if (TempData["Error"] != null)
+        {
+            <text>
+            document.getElementById('errorText').textContent = '@Html.Raw(TempData["Error"])';
+            document.getElementById('errorMessage').style.display = 'block';
+            </text>
+        }
+
+        @if (TempData["Success"] != null)
+        {
+            <text>
+            document.getElementById('successText').textContent = '@Html.Raw(TempData["Success"])';
+            document.getElementById('successMessage').style.display = 'block';
+            </text>
+        }
+    });
+</script>
