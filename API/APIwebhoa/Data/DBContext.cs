@@ -14,6 +14,7 @@ namespace APIwebhoa.Data
         public DbSet<Models.PhanQuyen> PhanQuyens { get; set; }
         public DbSet<Models.NhaCungCap> NhaCungCaps { get; set; }
         public DbSet<Models.NguyenLieu>NguyenLieus  { get; set; }
+        public DbSet<Models.KhuyenMai> KhuyenMais { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
