@@ -18,7 +18,157 @@
 <link href="~/Content/assets/styles/single_styles.css" rel="stylesheet" />
 <link href="~/Content/assets/styles/single_responsive.css" rel="stylesheet" />
 
+<style> 
+    /* Hiệu ứng nút cộng trừ */
+    .quantity_selector button {
+        transition: transform 0.15s ease, background-color 0.2s ease;
+    }
 
+        .quantity_selector button.clicked {
+            transform: scale(0.9);
+            background-color: #f3f3f3;
+        }
+
+    /* Nút thêm vào giỏ hàng */
+    .add_to_cart_button {
+        position: relative;
+        background: linear-gradient(135deg, #d32f2f, #b71c1c);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        padding: 12px 24px;
+        transition: all 0.3s ease;
+    }
+
+        .add_to_cart_button:hover {
+            background: linear-gradient(135deg, #b71c1c, #880e4f);
+            transform: scale(1.07);
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+        }
+
+        .add_to_cart_button.pulse {
+            animation: pulseAnim 0.6s ease;
+        }
+
+    @@keyframes pulseAnim {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(231, 76, 60, 0.4);
+        }
+
+        50% {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(231, 76, 60, 0);
+        }
+    }
+
+    /* Hiệu ứng ảnh */
+    .single_product_image_background {
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+        .single_product_image_background:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+    /* Hiệu ứng miễn phí vận chuyển */
+    .free_delivery {
+        background: rgba(76, 175, 80, 0.1);
+        color: #2e7d32;
+        border-radius: 6px;
+        padding: 10px 15px;
+        font-weight: 600;
+        animation: bounceDelivery 2s infinite;
+        box-shadow: 0 0 5px rgba(46, 125, 50, 0.3);
+        transition: all 0.3s ease;
+    }
+
+        .free_delivery:hover {
+            background: rgba(76, 175, 80, 0.2);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(46, 125, 50, 0.5);
+        }
+
+    @@keyframes bounceDelivery {
+        0%, 100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+
+    .add_to_cart_button {
+        position: relative;
+        background: linear-gradient(135deg, #d32f2f, #b71c1c);
+        color: #fff;
+        font-weight: bold;
+        border: none;
+        border-radius: 4px;
+        padding: 12px 24px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+        .add_to_cart_button:hover {
+            background: linear-gradient(135deg, #b71c1c, #880e4f);
+            transform: scale(1.07);
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+        }
+
+        .add_to_cart_button.pulse {
+            animation: pulseAnim 0.6s ease;
+        }
+
+    @@keyframes pulseAnim {
+        0% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(231, 76, 60, 0.4);
+        }
+
+        50% {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 rgba(231, 76, 60, 0);
+        }
+    }
+
+    /* Thông báo thêm vào giỏ */
+    .cart-alert {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #4caf50;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        font-weight: 600;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        transform: translateY(-20px);
+        z-index: 9999;
+    }
+
+        .cart-alert.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+</style>
 @if (Model != null)
 {
     <div class="container single_product_container">
@@ -31,7 +181,7 @@
                     <ul>
                         <li><a href="index.html">Trang chủ</a></li>
                         <li><a href="categories.html"><i class="fa fa-angle-right" aria-hidden="true"></i>Chi tiết sản phẩm</a></li>
-                        
+
                     </ul>
                 </div>
 
@@ -47,7 +197,7 @@
                             <div class="col-lg-3 thumbnails_col order-lg-1 order-2">
                                 <div class="single_product_thumbnails">
                                     <ul>
-                                        
+
                                         @for (int i = 0; i < 3; i++)
                                         {
                                             <li><img class="img-secondary" src="@Url.Content(Model.sImage)" alt="" data-image="Model.sImage"></li>
@@ -102,16 +252,7 @@
 
                             </ul>
                         </div>
-                        @*<div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
-                <span>Số lượng:</span>
-                <div class="quantity_selector mb-3">
-                    <span class="minus"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                    <input type="text" style="width:50px;" name="quantity_value" id="quantity_value" value="1" />
-                    <span class="plus"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                </div>
 
-                <input class="red_button add_to_cart_button show-add-cart" type="submit" name="submit" value="Thêm vào giỏ" />
-            </div>*@
                         <div class="quantity d-flex flex-column flex-sm-row align-items-sm-center">
                             <span>Số lượng:</span>
                             <div class="quantity_selector mb-3">
@@ -128,41 +269,95 @@
                                    type="submit"
                                    name="submit"
                                    value="Thêm vào giỏ" />
+
                         </div>
-                    }
+                    }  
                 </div>
             </div>
         </div>
 
     </div>
-
+    <div id="cartAlert" class="cart-alert">🛒 Thêm vào giỏ hàng thành công!</div>
 }
 
 
 @section scripts{
     <script src="js/single_custom.js"></script>
 }
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const minusButton = document.querySelector('.minus');
         const plusButton = document.querySelector('.plus');
         const quantityInput = document.getElementById('quantity_value');
+        const addToCartButton = document.querySelector('.show-add-cart');
+        const cartAlert = document.getElementById('cartAlert');
+
+        // Hiệu ứng cộng trừ
+        function animateButton(btn) {
+            btn.classList.add('clicked');
+            setTimeout(() => btn.classList.remove('clicked'), 200);
+        }
 
         minusButton.addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value, 10);
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
+            let val = parseInt(quantityInput.value, 10);
+            if (val > 1) {
+                quantityInput.value = val - 1;
+                animateButton(minusButton);
             }
         });
 
         plusButton.addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value, 10);
-            quantityInput.value = currentValue + 1;
+            let val = parseInt(quantityInput.value, 10);
+            quantityInput.value = val + 1;
+            animateButton(plusButton);
         });
+
+        // Gửi form thật bằng AJAX
+        addToCartButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            const form = this.closest('form');
+            const formData = $(form).serialize();
+            const currentQty = parseInt(quantityInput.value, 10) || 1;
+
+            $(this).addClass('pulse');
+
+            $.post(form.action, formData)
+                .done(() => {
+                    showCartAlert();
+                    $(addToCartButton).removeClass('pulse');
+
+                    // Cập nhật lại số lượng hiển thị sau khi thêm thành công
+                    let cartCount = parseInt(localStorage.getItem('cartCount') || "0");
+                    localStorage.setItem('cartCount', cartCount + currentQty);
+
+                    updateCartCountDisplay(cartCount + currentQty);
+                })
+                .fail(() => {
+                    alert('❌ Lỗi khi thêm vào giỏ hàng.');
+                    $(addToCartButton).removeClass('pulse');
+                });
+        });
+
+        // Hiển thị thông báo
+        function showCartAlert() {
+            cartAlert.classList.add('show');
+            setTimeout(() => cartAlert.classList.remove('show'), 2500);
+        }
+
+        // Cập nhật số lượng hiển thị trên giao diện (nếu có giỏ hàng ở header)
+        function updateCartCountDisplay(count) {
+            const badge = document.getElementById('cart-count');
+            if (badge) {
+                badge.textContent = count;
+            }
+        }
+
+        // Khi tải lại trang, lấy lại giá trị lưu trong localStorage
+        const savedCount = parseInt(localStorage.getItem('cartCount') || "0");
+        updateCartCountDisplay(savedCount);
     });
 </script>
-
-
 
 
 
