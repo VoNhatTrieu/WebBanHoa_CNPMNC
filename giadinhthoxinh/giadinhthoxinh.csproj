@@ -198,6 +198,7 @@
     <Compile Include="Areas\Admin\Controllers\ProductsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ProductSizesController.cs" />
     <Compile Include="Areas\Admin\Controllers\PromotesController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StatisticsController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReportController.cs" />
     <Compile Include="Areas\Admin\Controllers\ReviewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\SuppliersController.cs" />
@@ -546,6 +547,7 @@
     <Content Include="Content\assets\styles\responsive.css" />
     <Content Include="Content\assets\styles\single_responsive.css" />
     <Content Include="Content\assets\styles\single_styles.css" />
+    <Content Include="Content\assets\styles\Statistics.css" />
     <Content Include="Content\assets\styles\table_admin.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -2699,6 +2701,7 @@
     <Content Include="Areas\Admin\Views\Report\SanPhamBanChay.cshtml" />
     <Content Include="Areas\Admin\Views\Report\TKLoaiSanPham.cshtml" />
     <Content Include="Areas\Admin\Views\Chat\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Statistics\Index.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
