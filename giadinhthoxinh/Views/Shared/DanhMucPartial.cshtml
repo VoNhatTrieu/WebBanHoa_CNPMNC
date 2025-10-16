@@ -1,19 +1,56 @@
 ﻿@model IEnumerable<giadinhthoxinh.Models.tblCategory>
-@{ int? activeId = ViewBag.ActiveCategoryId as int?; }
+@{ 
+    int? activeId = ViewBag.ActiveCategoryId as int?; 
+    var db = new giadinhthoxinh.Models.giadinhthoxinhEntities1();
+}
 
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown">
+<li class="nav-item dropdown mega-menu-item">
+    <a class="nav-link dropdown-toggle" href="#" id="productDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="fa fa-leaf me-1"></i> Sản phẩm
     </a>
-    <ul class="dropdown-menu shadow-sm">
-        @foreach (var c in Model)
-        {
-            <li>
-                <a class="dropdown-item @(activeId == c.PK_iCategoryID ? "active" : "")"
-                   href="/Home/SanPhamTheoDanhMuc/@c.PK_iCategoryID">
-                    @c.sCategoryName
+    <div class="dropdown-menu mega-menu-dropdown" aria-labelledby="productDropdown">
+        <div class="mega-menu-content">
+            <div class="mega-menu-header">
+                <h5><i class="fa fa-leaf"></i> Danh Mục Sản Phẩm Hoa</h5>
+                <p>Chọn loại hoa bạn yêu thích</p>
+            </div>
+            <div class="mega-menu-grid">
+                @foreach (var c in Model)
+                {
+                    var productCount = c.tblProducts.Count();
+                    <a class="mega-menu-card @(activeId == c.PK_iCategoryID ? "active" : "")"
+                       href="/Home/SanPhamTheoDanhMuc/@c.PK_iCategoryID">
+                        <div class="mega-menu-icon">
+                            <i class="fa fa-@(GetFlowerIcon(c.sCategoryName))"></i>
+                        </div>
+                        <div class="mega-menu-text">
+                            <h6>@c.sCategoryName</h6>
+                            <span>@productCount sản phẩm <i class="fa fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+                }
+            </div>
+            <div class="mega-menu-footer">
+                <a href="/home/index" class="view-all-btn">
+                    <i class="fa fa-th-large"></i> Xem tất cả sản phẩm
                 </a>
-            </li>
-        }
-    </ul>
+            </div>
+        </div>
+    </div>
 </li>
+
+@functions {
+    string GetFlowerIcon(string categoryName)
+    {
+        if (categoryName.Contains("Hồng") || categoryName.Contains("Rose")) return "heart";
+        if (categoryName.Contains("Tulip")) return "pagelines";
+        if (categoryName.Contains("Lan") || categoryName.Contains("Orchid")) return "leaf";
+        if (categoryName.Contains("Cúc") || categoryName.Contains("Daisy")) return "sun-o";
+        if (categoryName.Contains("Hướng dương") || categoryName.Contains("Sunflower")) return "sun-o";
+        if (categoryName.Contains("Lily") || categoryName.Contains("Loa kèn")) return "bell-o";
+        if (categoryName.Contains("Cẩm chướng") || categoryName.Contains("Carnation")) return "certificate";
+        if (categoryName.Contains("Bó")) return "gift";
+        if (categoryName.Contains("Giỏ")) return "shopping-basket";
+        return "leaf"; // default icon
+    }
+}

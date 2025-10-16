@@ -10,10 +10,10 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/home/index" class="nav-link">Trang Chu</a>
+            <a href="/admin/home/index" class="nav-link">Trang chu</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="/admin/statistics/index" class="nav-link active">Thong Ke</a>
+            <a href="/admin/statistics/index" class="nav-link active">Thong ke</a>
         </li>
     </ul>
 }
@@ -116,8 +116,8 @@
     .stat-label {
         font-size: 14px;
         color: #7f8c8d;
-        font-weight: 500;
         text-transform: uppercase;
+        font-weight: 700;
         letter-spacing: 0.5px;
     }
 
@@ -197,6 +197,23 @@
         border-color: transparent;
         color: #fff;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .refresh-btn {
+        padding: 10px 25px;
+        border: 2px solid #e0e0e0;
+        background: #fff;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #555;
+    }
+
+    .refresh-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
     }
 
     .export-btn {
@@ -354,8 +371,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/admin/home/index">Trang Chu</a></li>
-                    <li class="breadcrumb-item active">Thong Ke</li>
+                    <li class="breadcrumb-item"><a href="/admin/home/index">Trang chu</a></li>
+                    <li class="breadcrumb-item active">Thong ke</li>
                 </ol>
             </div>
         </div>
@@ -368,13 +385,13 @@
         <div class="period-selector">
             <div class="period-buttons">
                 <button class="period-btn active" data-period="day">
-                    <i class="fas fa-calendar-day"></i> Hom Nay
+                    <i class="fas fa-calendar-day"></i> Hom nay
                 </button>
                 <button class="period-btn" data-period="week">
-                    <i class="fas fa-calendar-week"></i> Tuan Nay
+                    <i class="fas fa-calendar-week"></i> Tuan nay
                 </button>
                 <button class="period-btn" data-period="month">
-                    <i class="fas fa-calendar-alt"></i> Thang Nay
+                    <i class="fas fa-calendar-alt"></i> Thang nay
                 </button>
                 <button class="refresh-btn" onclick="refreshStatistics()">
                     <i class="fas fa-sync-alt"></i> Lam moi
@@ -392,7 +409,7 @@
                     <div class="stat-icon primary">
                         <i class="fas fa-shopping-cart"></i>
                     </div>
-                    <div class="stat-label">Tong Don Hang</div>
+                    <div class="stat-label">Tong don hang</div>
                     <div class="stat-value" id="totalOrders">0</div>
                 </div>
             </div>
@@ -402,7 +419,7 @@
                     <div class="stat-icon success">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
-                    <div class="stat-label">Tong Doanh Thu</div>
+                    <div class="stat-label">Tong doanh thu</div>
                     <div class="stat-value" id="totalRevenue">0d</div>
                 </div>
             </div>
@@ -412,7 +429,7 @@
                     <div class="stat-icon warning">
                         <i class="fas fa-box"></i>
                     </div>
-                    <div class="stat-label">San Pham Ban Ra</div>
+                    <div class="stat-label">San pham ban ra</div>
                     <div class="stat-value" id="totalProducts">0</div>
                 </div>
             </div>
@@ -422,7 +439,7 @@
                     <div class="stat-icon info">
                         <i class="fas fa-users"></i>
                     </div>
-                    <div class="stat-label">Khach Hang</div>
+                    <div class="stat-label">Khach hang</div>
                     <div class="stat-value" id="totalCustomers">0</div>
                     <div class="stat-change" id="customerChange">
                         <i class="fas fa-user-plus"></i> <span id="newCustomers">0</span> moi |
@@ -438,7 +455,7 @@
             <div class="col-lg-8">
                 <div class="chart-container">
                     <h3 class="chart-title">
-                        <i class="fas fa-chart-line"></i> Bieu Do Doanh Thu
+                        <i class="fas fa-chart-line"></i> Bieu do doanh thu
                     </h3>
                     <canvas id="revenueChart"></canvas>
                 </div>
@@ -448,7 +465,7 @@
             <div class="col-lg-4">
                 <div class="chart-container">
                     <h3 class="chart-title">
-                        <i class="fas fa-chart-pie"></i> Phan Bo Theo Danh Muc
+                        <i class="fas fa-chart-pie"></i> Phan bo theo danh muc
                     </h3>
                     <canvas id="categoryChart"></canvas>
                 </div>
@@ -460,16 +477,16 @@
             <div class="col-12">
                 <div class="top-products-table">
                     <h3 class="chart-title">
-                        <i class="fas fa-trophy"></i> Top 5 San Pham Ban Chay
+                        <i class="fas fa-trophy"></i> Top 5 san pham ban chay
                     </h3>
                     <div class="table-responsive">
                         <table class="product-table">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Ten San Pham</th>
-                                    <th>So Luong Ban</th>
-                                    <th>Doanh Thu</th>
+                                    <th>Ten san pham</th>
+                                    <th>So luong ban</th>
+                                    <th>Doanh thu</th>
                                 </tr>
                             </thead>
                             <tbody id="topProductsBody">
@@ -540,7 +557,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Khong the tai du lieu thong ke');
+                alert('Không thể tải dữ liệu thống kê');
             })
             .finally(() => {
                 hideLoading();
@@ -574,7 +591,7 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Doanh Thu (VND)',
+                    label: 'Doanh Thu (VNĐ)',
                     data: revenues,
                     borderColor: 'rgb(102, 126, 234)',
                     backgroundColor: 'rgba(102, 126, 234, 0.1)',
@@ -582,7 +599,7 @@
                     fill: true,
                     yAxisID: 'y'
                 }, {
-                    label: 'So Don Hang',
+                    label: 'Số Đơn Hàng',
                     data: orders,
                     borderColor: 'rgb(56, 239, 125)',
                     backgroundColor: 'rgba(56, 239, 125, 0.1)',
@@ -702,7 +719,7 @@
         const tbody = document.getElementById('topProductsBody');
         
         if (data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" class="no-data"><i class="fas fa-box-open"></i> Chua co du lieu</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="no-data"><i class="fas fa-box-open"></i> Chưa có dữ liệu</td></tr>';
             return;
         }
 
