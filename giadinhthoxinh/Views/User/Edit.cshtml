@@ -358,7 +358,7 @@
                                 <i class="fas fa-envelope"></i>
                                 Email
                             </label>
-                            <input type="email" class="form-control" value="vonam06062005@gmail.com" disabled>
+                            @Html.TextBoxFor(m => m.sEmail, new { @class = "form-control", @type = "email", @disabled = "disabled" })
                         </div>
 
                         <div class="form-group">
@@ -367,7 +367,7 @@
                                 Họ và tên
                                 <span class="required">*</span>
                             </label>
-                            <input type="text" class="form-control" value="nam" required>
+                            @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", @required = "required" })
                             <div class="error-message">
                                 <i class="fas fa-exclamation-circle"></i>
                                 Vui lòng nhập họ tên
@@ -380,7 +380,7 @@
                                 Số điện thoại
                                 <span class="required">*</span>
                             </label>
-                            <input type="tel" class="form-control" value="0981260096" required>
+                            @Html.TextBoxFor(m => m.sPhone, new { @class = "form-control", @type = "tel", @required = "required" })
                             <div class="error-message">
                                 <i class="fas fa-exclamation-circle"></i>
                                 Vui lòng nhập số điện thoại
