@@ -4,75 +4,542 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model giadinhthoxinh.Models.tblUser
-<div>
-    <section class="custom-section" style="background-color: #8fc4b7; width: 100vw; height: 150vh;">
-        <div class="container py-5 h-100 small-container">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-lg-8 col-xl-6">
-                    <div class="card rounded-3 small-card">
-                        <img src="~/Content/assets/images/banner/banner3.jpg"
-                             class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
-                             alt="Sample photo">
-                        <div class="card-body p-4 p-md-5">
-                            <h2 class="mb-3 pb-2 pb-md-0 mb-md-5 px-md-2 text-center m-0">Thông tin tài khoản</h2>
+<!-- Thêm Font Awesome CDN để hiển thị icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+/*trang sửa thông tin người dùng*/
+<style>
+    /* Reset chỉ áp dụng cho phần content, không ảnh hưởng footer */
+    .user-edit-page * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-                            @using (Html.BeginForm())
-                            {
-                                @Html.AntiForgeryToken() //Bảo vệ form khỏi các cuộc tấn công CSRF(Cross-Site Request Forgery)
+    .user-edit-page {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+    }
 
-                                <div class="form-horizontal">
+    .user-edit-page .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
-                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                                    <div class="hidden ">
-                                        <div class="col-md-10 ">
-                                            @Html.EditorFor(model => model.PK_iAccountID, new { htmlAttributes = new { @class = "form-control", placeholder = "Email", } })
-                                            
-                                        </div>
-                                    </div>
+    .user-edit-page .page-header {
+        text-align: center;
+        color: white;
+        margin-bottom: 40px;
+    }
 
-                                    <div class="form-group ">
-                                        <div class="col-md-10 ">
-                                            @Html.EditorFor(model => model.sEmail, new { htmlAttributes = new { @class = "form-control", placeholder = "Email",  } })
-                                            @Html.ValidationMessageFor(model => model.sEmail, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
+    .user-edit-page .page-header h1 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
 
-                          
+    .user-edit-page .page-header p {
+        font-size: 16px;
+        opacity: 0.9;
+    }
 
-                                    <div class="form-group">
-                                        <div class="col-md-10">
-                                            @Html.EditorFor(model => model.sUserName, new { htmlAttributes = new { @class = "form-control", placeholder = "Họ và tên" } })
-                                            @Html.ValidationMessageFor(model => model.sUserName, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
+    .user-edit-page .account-wrapper {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
-                                    <div class="form-group">
-                                        <div class="col-md-10">
-                                            @Html.EditorFor(model => model.sPhone, new { htmlAttributes = new { @class = "form-control", placeholder = "SĐT" } })
-                                            @Html.ValidationMessageFor(model => model.sPhone, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
+    /* Form Section */
+    .user-edit-page .form-section {
+        padding: 50px 60px;
+    }
 
-                                    <div class="form-group">
-                                        <div class="col-md-10">
-                                            @Html.EditorFor(model => model.sAddress, new { htmlAttributes = new { @class = "form-control", placeholder = "Địa chỉ" } })
-                                            @Html.ValidationMessageFor(model => model.sAddress, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
+    .user-edit-page .form-section h2 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-                                    <div class="d-flex" style="justify-content: space-evenly; width: 60%; margin: 0 auto">
-                                        
-                                      
-                                        <input type="submit" value="Lưu" class="btn color-main btn-sm" />
-                                        <button class="btn color-main btn-sm" style="background-color:orangered" ><a href="/home/index">Hủy</a></button>
-                                    </div>                                
+    .user-edit-page .form-section h2 i {
+        color: #667eea;
+    }
+
+    .user-edit-page .form-section .subtitle {
+        color: #6c757d;
+        margin-bottom: 35px;
+        font-size: 15px;
+    }
+
+    .user-edit-page .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+        margin-bottom: 25px;
+    }
+
+    .user-edit-page .form-group {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .user-edit-page .form-group.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .user-edit-page .form-group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .user-edit-page .form-group label i {
+        color: #667eea;
+        font-size: 18px;
+        width: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .user-edit-page .form-group label .required {
+        color: #dc3545;
+        margin-left: 3px;
+    }
+
+    .user-edit-page .form-control {
+        padding: 14px 18px;
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+        width: 100%;
+    }
+
+    .user-edit-page .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+    }
+
+    .user-edit-page .form-control:disabled {
+        background: #e9ecef;
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+
+    /* Custom Select Dropdown */
+    .user-edit-page .custom-select-wrapper {
+        position: relative;
+    }
+
+    .user-edit-page .custom-select-wrapper .form-control {
+        cursor: pointer;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 18px center;
+        padding-right: 45px;
+    }
+
+    .user-edit-page .custom-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        border: 2px solid #667eea;
+        border-radius: 12px;
+        margin-top: 5px;
+        box-shadow: 0 8px 25px rgba(102,126,234,0.2);
+        z-index: 1000;
+        display: none;
+        overflow: hidden;
+    }
+
+    .user-edit-page .custom-dropdown.show {
+        display: block;
+    }
+
+    .user-edit-page .dropdown-item {
+        padding: 12px 18px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #333;
+        font-size: 15px;
+    }
+
+    .user-edit-page .dropdown-item:hover {
+        background: #667eea;
+        color: white;
+    }
+
+    .user-edit-page .dropdown-item.selected {
+        background: #f0f3ff;
+        color: #667eea;
+        font-weight: 600;
+    }
+
+    .user-edit-page .error-message {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #dc3545;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+    .user-edit-page .error-message i {
+        font-size: 14px;
+    }
+
+    .user-edit-page .form-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 40px;
+        padding-top: 30px;
+        border-top: 2px solid #e9ecef;
+    }
+
+    .user-edit-page .btn {
+        padding: 14px 32px;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .user-edit-page .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        flex: 1;
+    }
+
+    .user-edit-page .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+    }
+
+    .user-edit-page .btn-secondary {
+        background: #6c757d;
+        color: white;
+        flex: 0.4;
+    }
+
+    .user-edit-page .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    .user-edit-page .btn-outline {
+        background: white;
+        color: #667eea;
+        border: 2px solid #667eea;
+    }
+
+    .user-edit-page .btn-outline:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @@media (max-width: 992px) {
+        .user-edit-page .form-section {
+            padding: 40px 30px;
+        }
+
+        .user-edit-page .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .user-edit-page {
+            padding: 20px 10px;
+        }
+
+        .user-edit-page .page-header h1 {
+            font-size: 28px;
+        }
+
+        .user-edit-page .form-section {
+            padding: 30px 20px;
+        }
+
+        .user-edit-page .form-actions {
+            flex-direction: column;
+        }
+
+        .user-edit-page .btn {
+            width: 100%;
+        }
+    }
+
+    /* Loading Animation */
+    .user-edit-page .loading {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .user-edit-page .loading.show {
+        display: flex;
+    }
+
+    .user-edit-page .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid rgba(255,255,255,0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+
+<div class="user-edit-page">
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-user-circle"></i> Thông Tin Tài Khoản</h1>
+            <p>Quản lý và cập nhật thông tin cá nhân của bạn</p>
+        </div>
+
+        <div class="account-wrapper">
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2>
+                    <i class="fas fa-user-edit"></i>
+                    Thông tin tài khoản
+                </h2>
+                <p class="subtitle">Quản lý thông tin cá nhân của bạn</p>
+
+                <form id="accountForm">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>
+                                <i class="fas fa-envelope"></i>
+                                Email
+                            </label>
+                            @Html.TextBoxFor(m => m.sEmail, new { @class = "form-control", @type = "email", @disabled = "disabled" })
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-user"></i>
+                                Họ và tên
+                                <span class="required">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.sUserName, new { @class = "form-control", @required = "required" })
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Vui lòng nhập họ tên
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-phone"></i>
+                                Số điện thoại
+                                <span class="required">*</span>
+                            </label>
+                            @Html.TextBoxFor(m => m.sPhone, new { @class = "form-control", @type = "tel", @required = "required" })
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Vui lòng nhập số điện thoại
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-venus-mars"></i>
+                                Giới tính
+                            </label>
+                            <div class="custom-select-wrapper">
+                                <input type="text" class="form-control" id="genderDisplay" value="Nam" readonly>
+                                <input type="hidden" id="genderValue" name="gender" value="male">
+                                <div class="custom-dropdown" id="genderDropdown">
+                                    <div class="dropdown-item" data-value="male">Nam</div>
+                                    <div class="dropdown-item" data-value="female">Nữ</div>
                                 </div>
-                            }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-birthday-cake"></i>
+                                Ngày sinh
+                            </label>
+                            <input type="date" class="form-control">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>
+                                <i class="fas fa-map-marker-alt"></i>
+                                Địa chỉ
+                            </label>
+                            <input type="text" class="form-control" placeholder="Nhập địa chỉ của bạn">
                         </div>
                     </div>
-                </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Lưu thay đổi
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-undo"></i>
+                            Hủy
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="changePassword()">
+                            <i class="fas fa-key"></i>
+                            Đổi mật khẩu
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-    </section>
+    </div>
 </div>
 
+<script>
+    // Custom Gender Select Handler
+    const genderDisplay = document.getElementById('genderDisplay');
+    const genderValue = document.getElementById('genderValue');
+    const genderDropdown = document.getElementById('genderDropdown');
+
+    // Toggle dropdown khi click vào input
+    genderDisplay.addEventListener('click', function (e) {
+        e.stopPropagation();
+        genderDropdown.classList.toggle('show');
+    });
+
+    // Xử lý khi chọn giá trị
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const value = this.getAttribute('data-value');
+            const text = this.textContent;
+
+            // Update display và value
+            genderDisplay.value = text;
+            genderValue.value = value;
+
+            // Remove selected class từ tất cả
+            document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+
+            // Add selected class cho item được chọn
+            this.classList.add('selected');
+
+            // Đóng dropdown
+            genderDropdown.classList.remove('show');
+
+            console.log('Đã chọn giới tính:', text, value);
+        });
+    });
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener('click', function () {
+        genderDropdown.classList.remove('show');
+    });
+
+    // Set giá trị mặc định (Nam) là selected
+    document.querySelector('.dropdown-item[data-value="male"]').classList.add('selected');
+
+    document.getElementById('accountForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const loading = document.getElementById('loading');
+        loading.classList.add('show');
+
+        // Lấy giá trị giới tính
+        const selectedGender = genderValue.value;
+        const selectedGenderText = genderDisplay.value;
+        console.log('Submit với giới tính:', selectedGenderText, selectedGender);
+
+        setTimeout(() => {
+            loading.classList.remove('show');
+            alert('✅ Cập nhật thông tin thành công!\nGiới tính: ' + selectedGenderText);
+        }, 1500);
+    });
+
+    function resetForm() {
+        if (confirm('Bạn có chắc muốn hủy các thay đổi?')) {
+            document.getElementById('accountForm').reset();
+            // Reset giới tính về Nam
+            genderDisplay.value = 'Nam';
+            genderValue.value = 'male';
+            document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+            document.querySelector('.dropdown-item[data-value="male"]').classList.add('selected');
+        }
+    }
+
+    function changePassword() {
+        alert('🔑 Chức năng đổi mật khẩu sẽ chuyển đến trang riêng');
+        // window.location.href = '/user/edit-password';
+    }
+
+    document.querySelectorAll('.error-message').forEach(error => {
+        error.style.display = 'none';
+    });
+
+    document.querySelectorAll('.form-control[required]').forEach(input => {
+        input.addEventListener('blur', function () {
+            const errorMsg = this.parentElement.querySelector('.error-message');
+            if (errorMsg) {
+                if (this.value.trim() === '') {
+                    errorMsg.style.display = 'flex';
+                    this.style.borderColor = '#dc3545';
+                } else {
+                    errorMsg.style.display = 'none';
+                    this.style.borderColor = '#e9ecef';
+                }
+            }
+        });
+
+        input.addEventListener('input', function () {
+            const errorMsg = this.parentElement.querySelector('.error-message');
+            if (errorMsg && this.value.trim() !== '') {
+                errorMsg.style.display = 'none';
+                this.style.borderColor = '#e9ecef';
+            }
+        });
+    });
+</script>
