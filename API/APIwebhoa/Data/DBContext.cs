@@ -16,6 +16,7 @@ namespace APIwebhoa.Data
         public DbSet<Models.NguyenLieu>NguyenLieus  { get; set; }
         public DbSet<Models.KhuyenMai> KhuyenMais { get; set; }
         public DbSet<DanhGia> DanhGias { get; set; }
+        public DbSet<MauSP> MauSPs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
