@@ -1,12 +1,8 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
-
-
 @section naviheader{
-    <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
@@ -15,20 +11,236 @@
 }
 
 <!-- Content Header (Page header) -->
-<section class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
+<section class="content-header animated-bg-fullscreen">
+    <div class="container-fluid content-container">
+        <div class="row mb-2 align-items-center">
             <div class="col-sm-6">
-                <h1>Chào ông chủ!</h1>
+                <h1 class="m-0 welcome-text">
+                    <i class="fas fa-crown icon-glow"></i>
+                    Chào ông chủ!
+                </h1>
+                <p class="greeting-text">
+                    <i class="far fa-calendar-alt mr-1"></i>
+                    Chúc bạn một ngày làm việc hiệu quả
+                </p>
             </div>
             <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Danh mục</li>
+                <ol class="breadcrumb float-sm-right breadcrumb-modern">
+                    <li class="breadcrumb-item">
+                        <a href="#"><i class="fas fa-home mr-1"></i>Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">Dashboard</li>
                 </ol>
             </div>
         </div>
-    </div> 
+    </div>
+
+    <!-- Animated Background Elements -->
+    <div class="bg-bubbles">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
 </section>
 
+<style>
+    .content-header.animated-bg-fullscreen {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        padding: 80px 0;
+        margin: 0 !important;
+        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+        overflow: hidden;
+    }
 
+    .content-container {
+        position: relative;
+        z-index: 10;
+        padding-top: 50px;
+    }
+
+    @@keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Floating Bubbles */
+    .bg-bubbles {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        overflow: hidden;
+    }
+
+    .bg-bubbles span {
+        position: absolute;
+        bottom: -100px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 50%;
+        animation: float 25s infinite;
+        backdrop-filter: blur(5px);
+    }
+
+    .bg-bubbles span:nth-child(1) {
+        left: 10%;
+        width: 80px;
+        height: 80px;
+        animation-delay: 0s;
+        animation-duration: 20s;
+    }
+
+    .bg-bubbles span:nth-child(2) {
+        left: 20%;
+        width: 60px;
+        height: 60px;
+        animation-delay: 2s;
+        animation-duration: 18s;
+    }
+
+    .bg-bubbles span:nth-child(3) {
+        left: 40%;
+        width: 100px;
+        height: 100px;
+        animation-delay: 4s;
+        animation-duration: 22s;
+    }
+
+    .bg-bubbles span:nth-child(4) {
+        left: 60%;
+        width: 70px;
+        height: 70px;
+        animation-delay: 0s;
+        animation-duration: 25s;
+    }
+
+    .bg-bubbles span:nth-child(5) {
+        left: 70%;
+        width: 90px;
+        height: 90px;
+        animation-delay: 3s;
+        animation-duration: 19s;
+    }
+
+    .bg-bubbles span:nth-child(6) {
+        left: 85%;
+        width: 50px;
+        height: 50px;
+        animation-delay: 1s;
+        animation-duration: 21s;
+    }
+
+    .bg-bubbles span:nth-child(7) {
+        left: 30%;
+        width: 65px;
+        height: 65px;
+        animation-delay: 5s;
+        animation-duration: 23s;
+    }
+
+    @@keyframes float {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 0;
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-1000px) rotate(720deg);
+            opacity: 0;
+        }
+    }
+
+    /* Text Styles */
+    .welcome-text {
+        position: relative;
+        z-index: 10;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        animation: fadeInUp 0.8s ease;
+    }
+
+    .icon-glow {
+        color: #ffd700;
+        animation: glow 2s ease-in-out infinite;
+        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+    }
+
+    @@keyframes glow {
+        0%, 100% { filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8)); }
+        50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 1)); }
+    }
+
+    .greeting-text {
+        position: relative;
+        z-index: 10;
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 16px;
+        margin-top: 10px;
+        margin-bottom: 0;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
+        animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Breadcrumb */
+    .breadcrumb-modern {
+        position: relative;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.25);
+        padding: 12px 25px;
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        animation: fadeInUp 0.8s ease 0.4s both;
+    }
+
+    .breadcrumb-modern .breadcrumb-item a {
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .breadcrumb-modern .breadcrumb-item a:hover {
+        color: #ffd700;
+        text-decoration: none;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .breadcrumb-modern .breadcrumb-item.active {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .breadcrumb-modern .breadcrumb-item + .breadcrumb-item::before {
+        color: rgba(255, 255, 255, 0.7);
+        content: "›";
+        font-size: 18px;
+    }
+</style>
