@@ -1,0 +1,259 @@
+/* Statistics Page Styles */
+.statistics-page {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+/* Card Animations */
+.stat-card {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+.stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+/* Refresh Button Styles */
+.refresh-btn {
+    padding: 10px 25px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 10px;
+}
+
+.refresh-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.refresh-btn i {
+    margin-right: 8px;
+}
+
+/* Enhanced Table Styles */
+.product-rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.product-name-cell {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.product-quantity-cell {
+    color: #3498db;
+    font-weight: 600;
+}
+
+.product-revenue-cell {
+    color: #27ae60;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+/* Progress Bar for Products */
+.revenue-progress {
+    width: 100%;
+    height: 6px;
+    background: #ecf0f1;
+    border-radius: 3px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.revenue-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    border-radius: 3px;
+    transition: width 1s ease;
+}
+
+/* Stat Card Gradient Backgrounds */
+.stat-gradient-1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-gradient-2 {
+    background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+}
+
+.stat-gradient-3 {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-gradient-4 {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.stat-gradient-5 {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+/* Tooltip Styles */
+.stat-tooltip {
+    position: relative;
+    cursor: help;
+}
+
+.stat-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    margin-bottom: 8px;
+}
+
+.stat-tooltip:hover::after {
+    opacity: 1;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state-icon {
+    font-size: 64px;
+    color: #bdc3c7;
+    margin-bottom: 20px;
+}
+
+.empty-state-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #7f8c8d;
+    margin-bottom: 10px;
+}
+
+.empty-state-text {
+    font-size: 14px;
+    color: #95a5a6;
+}
+
+/* Print Styles */
+@media print {
+    .period-selector,
+    .sidebar,
+    .main-header,
+    .main-footer {
+        display: none !important;
+    }
+
+    .stat-card,
+    .chart-container,
+    .top-products-table {
+        box-shadow: none !important;
+        page-break-inside: avoid;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .chart-container {
+        height: 350px;
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-card {
+        margin-bottom: 15px;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .chart-container {
+        height: 300px;
+        padding: 15px;
+    }
+
+    .product-table thead {
+        display: none;
+    }
+
+    .product-table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .product-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #ecf0f1;
+    }
+
+    .product-table tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .product-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #7f8c8d;
+    }
+}

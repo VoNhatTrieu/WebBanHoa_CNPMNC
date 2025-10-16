@@ -1,0 +1,755 @@
+@{
+    ViewBag.Title = "Thong Ke Ban Hang";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home/index" class="nav-link">Trang Chu</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/statistics/index" class="nav-link active">Thong Ke</a>
+        </li>
+    </ul>
+}
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<link href="~/Content/assets/styles/Statistics.css" rel="stylesheet" />
+
+<style>
+    .statistics-container {
+        padding: 20px;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        border: none;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-card.primary::before {
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-card.success::before {
+        background: linear-gradient(90deg, #38ef7d 0%, #11998e 100%);
+    }
+
+    .stat-card.warning::before {
+        background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .stat-card.info::before {
+        background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .stat-card.danger::before {
+        background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: #fff;
+        margin-bottom: 15px;
+    }
+
+    .stat-icon.primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-icon.success {
+        background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+    }
+
+    .stat-icon.warning {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .stat-icon.info {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .stat-icon.danger {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 10px 0;
+    }
+
+    .stat-label {
+        font-size: 14px;
+        color: #7f8c8d;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .stat-change {
+        font-size: 13px;
+        margin-top: 8px;
+    }
+
+    .stat-change.up {
+        color: #27ae60;
+    }
+
+    .stat-change.down {
+        color: #e74c3c;
+    }
+
+    .chart-container {
+        background: #fff;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 20px;
+        position: relative;
+        height: 400px;
+    }
+
+    .chart-container canvas {
+        max-height: 350px !important;
+    }
+
+    .chart-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #ecf0f1;
+    }
+
+    .period-selector {
+        background: #fff;
+        border-radius: 15px;
+        padding: 15px 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .period-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .period-btn {
+        padding: 10px 25px;
+        border: 2px solid #e0e0e0;
+        background: #fff;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #555;
+    }
+
+    .period-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+
+    .period-btn.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .export-btn {
+        padding: 10px 30px;
+        background: linear-gradient(135deg, #38ef7d 0%, #11998e 100%);
+        border: none;
+        border-radius: 25px;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .export-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(17, 153, 142, 0.4);
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .top-products-table {
+        background: #fff;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 20px;
+    }
+
+    .table-responsive {
+        margin-top: 15px;
+    }
+
+    .product-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+    }
+
+    .product-table thead th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #fff;
+        padding: 15px;
+        font-weight: 600;
+        text-align: left;
+        border: none;
+    }
+
+    .product-table thead th:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .product-table thead th:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .product-table tbody tr {
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+    }
+
+    .product-table tbody tr:hover {
+        background: #e9ecef;
+        transform: scale(1.02);
+    }
+
+    .product-table tbody td {
+        padding: 15px;
+        border: none;
+    }
+
+    .product-table tbody tr td:first-child {
+        border-radius: 10px 0 0 10px;
+    }
+
+    .product-table tbody tr td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+
+    .badge-rank {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 50%;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .badge-rank.rank-1 { background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); }
+    .badge-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%); }
+    .badge-rank.rank-3 { background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%); }
+    .badge-rank.rank-other { background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%); }
+
+    .no-data {
+        text-align: center;
+        padding: 40px;
+        color: #7f8c8d;
+        font-size: 16px;
+    }
+
+    .date-range {
+        font-size: 14px;
+        color: #7f8c8d;
+        margin-top: 5px;
+    }
+
+    @@media (max-width: 768px) {
+        .period-selector {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .period-buttons {
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+        }
+    }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">📊 Thong Ke Ban Hang</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/admin/home/index">Trang Chu</a></li>
+                    <li class="breadcrumb-item active">Thong Ke</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="content statistics-container">
+    <div class="container-fluid">
+        <!-- Period Selector -->
+        <div class="period-selector">
+            <div class="period-buttons">
+                <button class="period-btn active" data-period="day">
+                    <i class="fas fa-calendar-day"></i> Hom Nay
+                </button>
+                <button class="period-btn" data-period="week">
+                    <i class="fas fa-calendar-week"></i> Tuan Nay
+                </button>
+                <button class="period-btn" data-period="month">
+                    <i class="fas fa-calendar-alt"></i> Thang Nay
+                </button>
+                <button class="refresh-btn" onclick="refreshStatistics()">
+                    <i class="fas fa-sync-alt"></i> Lam moi
+                </button>
+            </div>
+            <div class="date-range" id="dateRange">
+                <i class="fas fa-calendar"></i> <span id="periodText"></span>
+            </div>
+        </div>
+
+        <!-- Overview Statistics -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card primary">
+                    <div class="stat-icon primary">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-label">Tong Don Hang</div>
+                    <div class="stat-value" id="totalOrders">0</div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card success">
+                    <div class="stat-icon success">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-label">Tong Doanh Thu</div>
+                    <div class="stat-value" id="totalRevenue">0d</div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card warning">
+                    <div class="stat-icon warning">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-label">San Pham Ban Ra</div>
+                    <div class="stat-value" id="totalProducts">0</div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card info">
+                    <div class="stat-icon info">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-label">Khach Hang</div>
+                    <div class="stat-value" id="totalCustomers">0</div>
+                    <div class="stat-change" id="customerChange">
+                        <i class="fas fa-user-plus"></i> <span id="newCustomers">0</span> moi |
+                        <i class="fas fa-redo"></i> <span id="returningCustomers">0</span> quay lai
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row">
+            <!-- Revenue Chart -->
+            <div class="col-lg-8">
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-line"></i> Bieu Do Doanh Thu
+                    </h3>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Category Distribution -->
+            <div class="col-lg-4">
+                <div class="chart-container">
+                    <h3 class="chart-title">
+                        <i class="fas fa-chart-pie"></i> Phan Bo Theo Danh Muc
+                    </h3>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Products Table -->
+        <div class="row">
+            <div class="col-12">
+                <div class="top-products-table">
+                    <h3 class="chart-title">
+                        <i class="fas fa-trophy"></i> Top 5 San Pham Ban Chay
+                    </h3>
+                    <div class="table-responsive">
+                        <table class="product-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Ten San Pham</th>
+                                    <th>So Luong Ban</th>
+                                    <th>Doanh Thu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="topProductsBody">
+                                <tr>
+                                    <td colspan="4" class="no-data">
+                                        <i class="fas fa-spinner fa-spin"></i> Dang tai du lieu...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<script>
+    let revenueChart = null;
+    let categoryChart = null;
+    let currentPeriod = 'day';
+
+    // Format số tiền
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(amount);
+    }
+
+    // Format số
+    function formatNumber(num) {
+        return new Intl.NumberFormat('vi-VN').format(num);
+    }
+
+    // Hiển thị loading
+    function showLoading() {
+        document.getElementById('loadingOverlay').style.display = 'flex';
+    }
+
+    // Ẩn loading
+    function hideLoading() {
+        document.getElementById('loadingOverlay').style.display = 'none';
+    }
+
+    // Tải dữ liệu thống kê
+    function loadStatistics(period) {
+        showLoading();
+        currentPeriod = period;
+
+        fetch('/Admin/Statistics/GetStatistics?period=' + period)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    updateOverview(result.data.overview);
+                    updateRevenueChart(result.data.revenueChart);
+                    updateCategoryChart(result.data.categoryStats);
+                    updateTopProducts(result.data.topProducts);
+                    updatePeriodText(result.data.startDate, result.data.endDate);
+                } else {
+                    alert('Lỗi: ' + result.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Khong the tai du lieu thong ke');
+            })
+            .finally(() => {
+                hideLoading();
+            });
+    }
+
+    // Cập nhật tổng quan
+    function updateOverview(data) {
+        document.getElementById('totalOrders').textContent = formatNumber(data.totalOrders);
+        document.getElementById('totalRevenue').textContent = formatCurrency(data.totalRevenue);
+        document.getElementById('totalProducts').textContent = formatNumber(data.totalProducts);
+        document.getElementById('totalCustomers').textContent = formatNumber(data.newCustomers);
+        document.getElementById('newCustomers').textContent = formatNumber(data.newCustomers);
+        document.getElementById('returningCustomers').textContent = formatNumber(data.returningCustomers);
+    }
+
+    // Cập nhật biểu đồ doanh thu
+    function updateRevenueChart(data) {
+        const ctx = document.getElementById('revenueChart');
+        
+        if (revenueChart) {
+            revenueChart.destroy();
+        }
+
+        const labels = data.map(item => item.date);
+        const revenues = data.map(item => item.revenue);
+        const orders = data.map(item => item.orders);
+
+        revenueChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh Thu (VND)',
+                    data: revenues,
+                    borderColor: 'rgb(102, 126, 234)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y'
+                }, {
+                    label: 'So Don Hang',
+                    data: orders,
+                    borderColor: 'rgb(56, 239, 125)',
+                    backgroundColor: 'rgba(56, 239, 125, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        ticks: {
+                            callback: function(value) {
+                                return formatCurrency(value);
+                            }
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: {
+                            drawOnChartArea: false,
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.datasetIndex === 0) {
+                                    label += formatCurrency(context.parsed.y);
+                                } else {
+                                    label += context.parsed.y;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Cập nhật biểu đồ danh mục
+    function updateCategoryChart(data) {
+        const ctx = document.getElementById('categoryChart');
+        
+        if (categoryChart) {
+            categoryChart.destroy();
+        }
+
+        const labels = data.map(item => item.categoryName);
+        const revenues = data.map(item => item.revenue);
+
+        const colors = [
+            'rgba(102, 126, 234, 0.8)',
+            'rgba(56, 239, 125, 0.8)',
+            'rgba(240, 147, 251, 0.8)',
+            'rgba(79, 172, 254, 0.8)',
+            'rgba(250, 112, 154, 0.8)'
+        ];
+
+        categoryChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: revenues,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += formatCurrency(context.parsed);
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Cập nhật top sản phẩm
+    function updateTopProducts(data) {
+        const tbody = document.getElementById('topProductsBody');
+        
+        if (data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" class="no-data"><i class="fas fa-box-open"></i> Chua co du lieu</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = data.map((product, index) => {
+            const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : 'rank-other';
+            return `
+                <tr>
+                    <td><span class="badge-rank ${rankClass}">${index + 1}</span></td>
+                    <td>
+                        <strong>${product.productName || 'N/A'}</strong>
+                        <div class="revenue-progress">
+                            <div class="revenue-progress-bar" style="width: ${product.revenuePercent || 0}%"></div>
+                        </div>
+                    </td>
+                    <td><i class="fas fa-box"></i> ${formatNumber(product.quantity)}</td>
+                    <td><strong>${formatCurrency(product.revenue)}</strong></td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Cập nhật text khoảng thời gian
+    function updatePeriodText(startDate, endDate) {
+        document.getElementById('periodText').textContent = `${startDate} - ${endDate}`;
+    }
+
+    // Event listeners cho các nút period
+    document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadStatistics(this.dataset.period);
+        });
+    });
+
+    // Load dữ liệu ban đầu
+    document.addEventListener('DOMContentLoaded', function() {
+        loadStatistics('day');
+    });
+
+    // Hàm làm mới dữ liệu
+    function refreshStatistics() {
+        loadStatistics(currentPeriod);
+    }
+
+    // Tự động làm mới mỗi 5 phút
+    setInterval(function() {
+        loadStatistics(currentPeriod);
+    }, 300000); // 5 phút = 300000ms
+</script>
