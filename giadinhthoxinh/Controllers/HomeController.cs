@@ -134,5 +134,67 @@ namespace giadinhthoxinh.Controllers
 
             return View();
         }
+
+        // AJAX Search Suggestions
+        [HttpGet]
+        public JsonResult SearchSuggestions(string term, int maxResults = 8)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(term))
+                {
+                    // Return popular products if no search term
+                    var totalCount = db.tblProducts.Count();
+                    var popularProducts = db.tblProducts
+                        .OrderByDescending(p => p.PK_iProductID)
+                        .Take(maxResults)
+                        .Select(p => new
+                        {
+                            id = p.PK_iProductID,
+                            name = p.sProductName,
+                            category = p.tblCategory.sCategoryName,
+                            price = p.fPrice,
+                            image = !string.IsNullOrEmpty(p.sImage) ? p.sImage : "/Content/assets/images/logo/logoshop.jpg"
+                        })
+                        .ToList();
+
+                    return Json(new { 
+                        success = true, 
+                        products = popularProducts,
+                        totalCount = totalCount 
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Search products by name or category
+                var query = db.tblProducts
+                    .Where(p => p.sProductName.Contains(term) || 
+                                p.tblCategory.sCategoryName.Contains(term));
+
+                var totalResults = query.Count();
+
+                var results = query
+                    .OrderByDescending(p => p.PK_iProductID)
+                    .Take(maxResults)
+                    .Select(p => new
+                    {
+                        id = p.PK_iProductID,
+                        name = p.sProductName,
+                        category = p.tblCategory.sCategoryName,
+                        price = p.fPrice,
+                        image = !string.IsNullOrEmpty(p.sImage) ? p.sImage : "/Content/assets/images/logo/logoshop.jpg"
+                    })
+                    .ToList();
+
+                return Json(new { 
+                    success = true, 
+                    products = results,
+                    totalCount = totalResults
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

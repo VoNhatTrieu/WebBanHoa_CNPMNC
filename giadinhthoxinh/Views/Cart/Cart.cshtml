@@ -3,91 +3,329 @@
 @{ ViewBag.Title = "Cart";
                 Layout = "~/Views/Shared/_Layout.cshtml"; }
 <link href="~/Content/assets/styles/Index1.css" rel="stylesheet" />
-<div class="new_arrivals">
-    <div class="page_selection">
 
-        <section class=" gradient-custom" style="background-color: #8fc4b7;">
-            <div class="container py-5">
-                <div class="row d-flex justify-content-center my-4">
-                    <div class="col-md-7">
-                        <div class="card mb-4">
-                            <div class="card-header py-3">
-                                <h5 class="mb-0">Giỏ hàng @ViewBag.soluongsp sản phẩm</h5>
-                            </div>
-                            <div class="card-body">
-                                <!-- Single item -->
+<style>
+    /* Custom styles cho trang giỏ hàng */
+    .cart-page {
+        background-color: #8fc4b7;
+        min-height: 80vh;
+        padding: 60px 0;
+    }
 
+    .cart-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px 15px 0 0 !important;
+        padding: 20px 25px !important;
+        border: none !important;
+    }
 
-                                @foreach (var item in Model)
-                                {
-                    <div class="row">
+        .cart-header h5 {
+            font-weight: 600;
+            font-size: 1.4rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-                        <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
-                            <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                                <img src="@Url.Content(item.LinkImage)"
-                                     class="w-100" alt="ảnh sản phẩm" />
-                                <a href="#!">
-                                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
-                                </a>
-                            </div>
+    .cart-item {
+        border-bottom: 2px solid #f0f0f0;
+        padding: 20px 0;
+        transition: background-color 0.3s ease;
+    }
 
+        .cart-item:hover {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 0 -20px;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+    .product-image {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .product-image:hover {
+            transform: scale(1.05);
+        }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+        .product-info strong {
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .product-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+    .price-highlight {
+        color: #d63031;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .btn-delete {
+        background-color: #ff6b6b;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        color: white;
+    }
+
+        .btn-delete:hover {
+            background-color: #ee5a6f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,107,107,0.3);
+        }
+
+    .cart-summary {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .total-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #d63031;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 25px;
+    }
+
+    .btn-continue, .btn-checkout {
+        padding: 14px 35px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-continue {
+        background-color: #ffc107;
+        color: #333;
+    }
+
+        .btn-continue:hover {
+            background-color: #ffb300;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,193,7,0.4);
+        }
+
+    .btn-checkout {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+        .btn-checkout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+        }
+
+    /* Empty cart styles */
+    .empty-cart {
+        text-align: center;
+        padding: 80px 20px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .empty-cart-icon {
+        font-size: 120px;
+        color: #ddd;
+        margin-bottom: 30px;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @@keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+    }
+
+    .empty-cart h3 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+
+    .empty-cart p {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 35px;
+    }
+
+    .empty-cart .btn-shop-now {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 16px 45px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .empty-cart .btn-shop-now:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+        }
+
+    @@media (max-width: 768px) {
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn-continue, .btn-checkout {
+            width: 100%;
+        }
+
+        .cart-page {
+            padding: 30px 0;
+        }
+
+        .empty-cart {
+            padding: 50px 15px;
+        }
+
+        .empty-cart-icon {
+            font-size: 80px;
+        }
+
+        .empty-cart h3 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<div class="cart-page">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center my-4">
+            <div class="col-md-10 col-lg-8">
+                @if (Model != null && Model.Count > 0)
+                {
+                    <div class="card mb-4 shadow-lg">
+                        <div class="card-header cart-header">
+                            <h5>
+                                <i class="fa fa-shopping-cart"></i>
+                                Giỏ hàng của bạn (@ViewBag.soluongsp sản phẩm)
+                            </h5>
                         </div>
+                        <div class="card-body" style="padding: 30px;">
+                            @foreach (var item in Model)
+                            {
+                                <div class="cart-item row">
+                                    <div class="col-lg-3 col-md-4 mb-3 mb-lg-0">
+                                        <div class="product-image">
+                                            <img src="@Url.Content(item.LinkImage)"
+                                                 class="w-100" alt="@item.ProductName"
+                                                 style="height: 150px; object-fit: cover;" />
+                                        </div>
+                                    </div>
 
-                        <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                    <div class="col-lg-7 col-md-6 mb-3 mb-lg-0">
+                                        <div class="product-info">
+                                            <strong>@item.ProductName</strong>
+                                            <p><i class="fa fa-palette"></i> Màu: Đang cập nhật</p>
+                                            <p><i class="fa fa-ruler"></i> Kích thước: Đang cập nhật</p>
+                                            <p><i class="fa fa-sort-amount-up"></i> Số lượng: <strong>@item.Quatity</strong></p>
+                                            <p>Đơn giá: @String.Format("{0:0,0}", item.Price) VNĐ</p>
+                                            <p class="price-highlight">
+                                                <i class="fa fa-tag"></i>
+                                                Thành tiền: @String.Format("{0:0,0}", item.ThanhTien) VNĐ
+                                            </p>
+                                        </div>
+                                    </div>
 
-                            <p><strong>@item.ProductName</strong></p>
-                            <p>Màu:...loading</p>
-                            <p>Kích thước:...loading</p>
-                            <p>Số lượng: @item.Quatity</p>
-                            <p>Đơn giá:@item.Price</p>
-                            <p>
-                                Thành tiền: @String.Format("{0:0,0}", item.ThanhTien) VNĐ
-                            <p>
-
-                                <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
-                                        title="xóa sản phẩm này" onclick="location.href = '@Url.Action("XoaGioHang","Cart",new { iMaSP = item.ProductID})'">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                </button>
-
-                        </div>
-                    </div>}
-
-
-
-
-
-                                <hr class="my-2 custom-hr" />
-                            </div>
-                            <hr class="my-4 custom-hr" />
-                            <div class="card-header py-3">
-                                <div class="card-body">
-                                    <ul class="list-group list-group-flush" style="margin-bottom: 0px">
-                                        <li class="list-group-item d-flex justify-content-end align-items-center border-0 px-0 mb-3">
-                                            <div>
-                                                <strong>Tổng tiền:&nbsp;&nbsp;</strong>
-                                            </div>
-                                            <span>@ViewBag.tongtien</span>
-                                        </li>
-                                    </ul>
-
-                                    <div class="align-center">
-                                        <a href="/home/index">
-                                            <button type="button" class="btn color-main progress-return" style="border: none">
-                                                Tiếp tục mua hàng
-                                            </button>
-                                        </a>
-                                        <a href="/cart/checkout">
-                                            <button type="button" class="btn bg-primary progress-checkout" style="border: none">
-                                                Tiến hành thanh toán
-                                            </button>
-                                        </a>
+                                    <div class="col-lg-2 col-md-2 text-center">
+                                        <button type="button"
+                                                class="btn btn-delete"
+                                                onclick="if(confirm('Bạn có chắc muốn xóa sản phẩm này?')) location.href = '@Url.Action("XoaGioHang","Cart",new { iMaSP = item.ProductID})'">
+                                            <i class="fa fa-trash-o"></i> Xóa
+                                        </button>
                                     </div>
                                 </div>
+                            }
+                        </div>
+
+                        <div class="cart-summary">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 style="margin: 0; color: #333;">
+                                    <i class="fa fa-calculator"></i> Tổng tiền:
+                                </h4>
+                                <span class="total-price">@ViewBag.tongtien</span>
+                            </div>
+
+                            <div class="action-buttons">
+                                <a href="/home/index" style="text-decoration: none;">
+                                    <button type="button" class="btn btn-continue">
+                                        <i class="fa fa-arrow-left"></i>
+                                        Tiếp tục mua hàng
+                                    </button>
+                                </a>
+                                <a href="/cart/checkout" style="text-decoration: none;">
+                                    <button type="button" class="btn btn-checkout">
+                                        <i class="fa fa-credit-card"></i>
+                                        Thanh toán
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
+                else
+                {
+                    <!-- Empty Cart UI -->
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">
+                            <i class="fa fa-shopping-cart"></i>
+                        </div>
+                        <h3>Giỏ hàng của bạn đang trống</h3>
+                        <p>Hãy khám phá những sản phẩm tuyệt vời của chúng tôi và thêm vào giỏ hàng nhé!</p>
+                        <a href="/home/index" style="text-decoration: none;">
+                            <button class="btn btn-shop-now">
+                                <i class="fa fa-shopping-bag"></i>
+                                Mua sắm ngay
+                            </button>
+                        </a>
+                    </div>
+                }
             </div>
-        </section>
+        </div>
     </div>
 </div>

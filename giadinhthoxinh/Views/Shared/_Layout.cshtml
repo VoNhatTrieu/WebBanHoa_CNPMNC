@@ -1,8 +1,9 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <title>Flower KingDom</title>
     <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Colo Shop Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,6 +16,7 @@
     <link href="~/Content/assets/styles/responsive.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="~/Content/assets/styles/Index1.css" rel="stylesheet" />
+    <link href="~/Content/assets/styles/mega-menu.css" rel="stylesheet" />
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -162,6 +164,457 @@
             color: white;
         }
 
+    /* ==================== MEGA MENU RESPONSIVE ==================== */
+    .mega-menu-item {
+        position: relative;
+    }
+
+    .mega-menu-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        background: #ffffff;
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        min-width: 650px;
+        max-width: 800px;
+        padding: 0;
+        margin-top: 8px;
+        z-index: 9999;
+        opacity: 0;
+        transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+    }
+
+    .mega-menu-item:hover .mega-menu-dropdown,
+    .mega-menu-dropdown.show {
+        display: block;
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+        animation: megaMenuSlideIn 0.4s ease-out;
+    }
+
+    @@keyframes megaMenuSlideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0) scale(1);
+        }
+    }
+
+    .mega-menu-content {
+        padding: 0;
+    }
+
+    .mega-menu-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px 30px;
+        text-align: center;
+        border-radius: 20px 20px 0 0;
+    }
+
+    .mega-menu-header h5 {
+        margin: 0 0 8px 0;
+        font-size: 22px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .mega-menu-header h5 i {
+        font-size: 26px;
+        animation: rotate360 3s linear infinite;
+    }
+
+    @@keyframes rotate360 {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .mega-menu-header p {
+        margin: 0;
+        font-size: 14px;
+        opacity: 0.95;
+    }
+
+    .mega-menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+        padding: 25px;
+        max-height: 450px;
+        overflow-y: auto;
+    }
+
+    .mega-menu-grid::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .mega-menu-grid::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .mega-menu-grid::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 10px;
+    }
+
+    .mega-menu-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 15px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        text-decoration: none;
+        color: #2d3748;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mega-menu-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(102,126,234,0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .mega-menu-card:hover::before {
+        left: 100%;
+    }
+
+    .mega-menu-card:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+        color: white;
+    }
+
+    .mega-menu-card.active {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+        color: white;
+        box-shadow: 0 8px 25px rgba(102,126,234,0.25);
+    }
+
+    .mega-menu-icon {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .mega-menu-icon i {
+        font-size: 28px;
+        color: #667eea;
+        transition: all 0.3s ease;
+    }
+
+    .mega-menu-card:hover .mega-menu-icon {
+        background: rgba(255,255,255,0.25);
+        transform: scale(1.15) rotate(10deg);
+    }
+
+    .mega-menu-card:hover .mega-menu-icon i,
+    .mega-menu-card.active .mega-menu-icon i {
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .mega-menu-card.active .mega-menu-icon {
+        background: rgba(255,255,255,0.25);
+    }
+
+    .mega-menu-text {
+        text-align: center;
+    }
+
+    .mega-menu-text h6 {
+        margin: 0 0 5px 0;
+        font-size: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .mega-menu-text span {
+        font-size: 12px;
+        opacity: 0.8;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    .mega-menu-card:hover .mega-menu-text span i {
+        transform: translateX(5px);
+        display: inline-block;
+    }
+
+    .mega-menu-footer {
+        padding: 20px 30px 25px;
+        text-align: center;
+        background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        border-radius: 0 0 20px 20px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white !important;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+    }
+
+    .view-all-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(102,126,234,0.4);
+    }
+
+    /* ==================== RESPONSIVE MEGA MENU ==================== */
+    @@media (max-width: 1200px) {
+        .mega-menu-dropdown {
+            min-width: 550px;
+        }
+        .mega-menu-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        }
+    }
+
+    @@media (max-width: 992px) {
+        .mega-menu-dropdown {
+            position: relative;
+            left: 0;
+            transform: none;
+            min-width: 100%;
+            margin-top: 10px;
+            border-radius: 15px;
+        }
+
+        .mega-menu-item:hover .mega-menu-dropdown,
+        .mega-menu-dropdown.show {
+            transform: none;
+        }
+
+        .mega-menu-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 20px;
+            max-height: 400px;
+        }
+
+        .mega-menu-header h5 {
+            font-size: 20px;
+        }
+
+        .mega-menu-card {
+            padding: 15px 10px;
+        }
+
+        .mega-menu-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .mega-menu-icon i {
+            font-size: 24px;
+        }
+
+        .mega-menu-text h6 {
+            font-size: 14px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .mega-menu-dropdown {
+            min-width: calc(100vw - 30px);
+            left: 15px;
+            right: 15px;
+            transform: none;
+        }
+
+        .mega-menu-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 15px;
+            max-height: 350px;
+        }
+
+        .mega-menu-header {
+            padding: 20px 15px;
+        }
+
+        .mega-menu-header h5 {
+            font-size: 18px;
+        }
+
+        .mega-menu-header p {
+            font-size: 13px;
+        }
+
+        .mega-menu-card {
+            flex-direction: row;
+            justify-content: flex-start;
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .mega-menu-icon {
+            width: 45px;
+            height: 45px;
+            margin-bottom: 0;
+        }
+
+        .mega-menu-icon i {
+            font-size: 22px;
+        }
+
+        .mega-menu-text {
+            text-align: left;
+            flex: 1;
+        }
+
+        .mega-menu-text h6 {
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .mega-menu-text span {
+            font-size: 11px;
+        }
+
+        .mega-menu-footer {
+            padding: 15px;
+        }
+
+        .view-all-btn {
+            padding: 10px 25px;
+            font-size: 13px;
+        }
+    }
+
+    /* Animation cho từng card khi dropdown mở */
+    .mega-menu-item:hover .mega-menu-card,
+    .mega-menu-dropdown.show .mega-menu-card {
+        animation: cardFadeIn 0.5s ease-out forwards;
+        opacity: 0;
+    }
+
+    @@keyframes cardFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Delay animation cho từng card */
+    .mega-menu-card:nth-child(1) { animation-delay: 0.05s; }
+    .mega-menu-card:nth-child(2) { animation-delay: 0.10s; }
+    .mega-menu-card:nth-child(3) { animation-delay: 0.15s; }
+    .mega-menu-card:nth-child(4) { animation-delay: 0.20s; }
+    .mega-menu-card:nth-child(5) { animation-delay: 0.25s; }
+    .mega-menu-card:nth-child(6) { animation-delay: 0.30s; }
+    .mega-menu-card:nth-child(7) { animation-delay: 0.35s; }
+    .mega-menu-card:nth-child(8) { animation-delay: 0.40s; }
+    .mega-menu-card:nth-child(9) { animation-delay: 0.45s; }
+    .mega-menu-card:nth-child(10) { animation-delay: 0.50s; }
+
+    /* Ripple effect cho menu cards */
+    .card-ripple {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.6);
+        transform: scale(0);
+        animation: rippleEffect 0.6s ease-out;
+        pointer-events: none;
+    }
+
+    @@keyframes rippleEffect {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+
+    /* Pulse effect cho Sản phẩm button */
+    .mega-menu-item .nav-link {
+        position: relative;
+    }
+
+    .mega-menu-item .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    .mega-menu-item:hover .nav-link::after,
+    .mega-menu-dropdown.show ~ .nav-link::after {
+        width: 80%;
+    }
+
+    /* Loading skeleton for mega menu (optional) */
+    .mega-menu-skeleton {
+        display: none;
+        padding: 25px;
+    }
+
+    .mega-menu-skeleton.loading {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+    }
+
+    .skeleton-card {
+        height: 150px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: skeletonLoading 1.5s infinite;
+        border-radius: 15px;
+    }
+
+    @@keyframes skeletonLoading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
     .search-section {
         display: flex;
         align-items: center;
@@ -169,6 +622,7 @@
         gap: 90px; /* khoảng cách đều giữa search, account, cart */
     }
 
+    /* ==================== SEARCH FORM WITH DROPDOWN ==================== */
     .search-form {
         display: flex;
         align-items: center;
@@ -176,8 +630,7 @@
         border-radius: 25px;
         padding: 2px;
         min-width: 250px;
-        /* xóa dòng này đi */
-        /* margin-right: 160px; */
+        position: relative;
     }
 
             .search-form .form-control {
@@ -207,6 +660,273 @@
                     background: #34495e;
                     transform: scale(1.05);
                 }
+
+    /* ==================== SEARCH DROPDOWN SUGGESTIONS ==================== */
+    .search-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        max-height: 500px;
+        overflow: hidden;
+        z-index: 9999;
+        display: none;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease, max-height 0.5s ease;
+    }
+
+    .search-dropdown.expanded {
+        max-height: 80vh;
+    }
+
+    .search-dropdown.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+        animation: searchDropFadeIn 0.3s ease-out;
+    }
+
+    @@keyframes searchDropFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .search-dropdown-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, #f8f9fa, #ffffff);
+        border-radius: 15px 15px 0 0;
+    }
+
+    .search-dropdown-header h6 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+        color: #667eea;
+    }
+
+    .search-dropdown-header span {
+        font-size: 12px;
+        color: #6c757d;
+    }
+
+    .search-dropdown-list {
+        padding: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+        transition: max-height 0.5s ease;
+    }
+
+    .search-dropdown.expanded .search-dropdown-list {
+        max-height: calc(80vh - 150px);
+    }
+
+    .search-dropdown-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .search-dropdown-list::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .search-dropdown-list::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 10px;
+    }
+
+    .search-product-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #2d3748;
+        transition: all 0.3s ease;
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+    }
+
+    .search-product-item:hover {
+        background: linear-gradient(135deg, rgba(102,126,234,0.08), rgba(118,75,162,0.08));
+        border-color: #667eea;
+        transform: translateX(5px);
+        box-shadow: 0 4px 12px rgba(102,126,234,0.15);
+    }
+
+    .search-product-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .search-product-item:hover .search-product-img {
+        border-color: #667eea;
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(102,126,234,0.2);
+    }
+
+    .search-product-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .search-product-name {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 4px;
+        color: #2d3748;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .search-product-category {
+        font-size: 12px;
+        color: #6c757d;
+        margin-bottom: 4px;
+    }
+
+    .search-product-price {
+        font-size: 14px;
+        font-weight: 700;
+        color: #667eea;
+    }
+
+    .search-dropdown-footer {
+        padding: 12px 20px;
+        border-top: 1px solid #e9ecef;
+        text-align: center;
+        background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+        border-radius: 0 0 15px 15px;
+    }
+
+    .search-view-all {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 25px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white !important;
+        text-decoration: none;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.3s ease;
+    }
+
+    .search-view-all:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102,126,234,0.3);
+    }
+
+    .search-view-all i {
+        transition: transform 0.3s ease;
+    }
+
+    .search-dropdown.expanded .search-view-all i.fa-compress {
+        animation: pulse 1s infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .search-empty {
+        padding: 40px 20px;
+        text-align: center;
+        color: #6c757d;
+    }
+
+    .search-empty i {
+        font-size: 48px;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    .search-empty p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    /* Loading skeleton */
+    .search-loading {
+        padding: 20px;
+    }
+
+    .search-skeleton-item {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+
+    .search-skeleton-img {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: skeletonLoading 1.5s infinite;
+    }
+
+    .search-skeleton-text {
+        flex: 1;
+    }
+
+    .search-skeleton-line {
+        height: 12px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: skeletonLoading 1.5s infinite;
+        border-radius: 4px;
+        margin-bottom: 8px;
+    }
+
+    .search-skeleton-line:nth-child(1) { width: 80%; }
+    .search-skeleton-line:nth-child(2) { width: 60%; }
+    .search-skeleton-line:nth-child(3) { width: 40%; }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .search-dropdown {
+            left: -15px;
+            right: -15px;
+            width: calc(100vw - 30px);
+        }
+
+        .search-product-item {
+            padding: 10px;
+        }
+
+        .search-product-img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .search-product-name {
+            font-size: 13px;
+        }
+    }
+
         /*tài khoản*/
         .header-icons {
             display: flex;
@@ -1329,13 +2049,49 @@
                         </div>
                         <div class="col-lg-3 col-12">
                             <div class="search-section">
-                                @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "search-form" }))
-                                {
-                                    var searchVal = Session["Search"] != null ? Session["Search"].ToString() : "";
-                                    <input class="form-control" name="searchString" type="text"
-                                           placeholder="Tìm kiếm sản phẩm" value="@searchVal" />
-                                    <button class="btn" type="submit"><i class="fa fa-search"></i></button>
-                                }
+                                <div style="position: relative; flex: 1;">
+                                    @using (Html.BeginForm("Search", "Home", FormMethod.Get, new { @class = "search-form", id = "searchForm" }))
+                                    {
+                                        var searchVal = Session["Search"] != null ? Session["Search"].ToString() : "";
+                                        <input class="form-control" id="searchInput" name="searchString" type="text"
+                                               placeholder="Tìm kiếm sản phẩm" value="@searchVal" autocomplete="off" />
+                                        <button class="btn" type="submit"><i class="fa fa-search"></i></button>
+                                    }
+                                    <!-- Search Dropdown -->
+                                    <div class="search-dropdown" id="searchDropdown">
+                                        <div class="search-dropdown-header">
+                                            <h6><i class="fa fa-search"></i> Gợi ý sản phẩm</h6>
+                                            <span id="searchResultCount"></span>
+                                        </div>
+                                        <div class="search-dropdown-list" id="searchDropdownList">
+                                            <!-- Loading skeleton -->
+                                            <div class="search-loading" id="searchLoading" style="display: none;">
+                                                <div class="search-skeleton-item">
+                                                    <div class="search-skeleton-img"></div>
+                                                    <div class="search-skeleton-text">
+                                                        <div class="search-skeleton-line"></div>
+                                                        <div class="search-skeleton-line"></div>
+                                                        <div class="search-skeleton-line"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="search-skeleton-item">
+                                                    <div class="search-skeleton-img"></div>
+                                                    <div class="search-skeleton-text">
+                                                        <div class="search-skeleton-line"></div>
+                                                        <div class="search-skeleton-line"></div>
+                                                        <div class="search-skeleton-line"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Results will be inserted here -->
+                                        </div>
+                                        <div class="search-dropdown-footer">
+                                            <a href="#" class="search-view-all" id="searchViewAll">
+                                                <i class="fa fa-th-large"></i> Xem tất cả kết quả
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!--để sửa giao diện mục tài khoản-->
                                 <div class="header-icons">
                                     @Html.Action("AccountPartial", "User")
@@ -1595,7 +2351,7 @@
             if (type === 'bot') {
                 messageDiv.innerHTML = `
                     <div class="message-avatar">
-                        <i class="fas fa-robot"></i>
+                        <i class="fa fa-robot"></i>
                     </div>
                     <div class="message-content">
                         <div class="message-bubble">${text}</div>
@@ -1609,7 +2365,7 @@
                         <div class="message-time">${time}</div>
                     </div>
                     <div class="message-avatar">
-                        <i class="fas fa-user"></i>
+                        <i class="fa fa-user"></i>
                     </div>
                 `;
             }
@@ -1686,6 +2442,375 @@
                 notificationBadge.style.display = 'flex';
             }
         }, 2000);
+
+        // ==================== SEARCH DROPDOWN WITH SUGGESTIONS ====================
+        (function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchDropdown = document.getElementById('searchDropdown');
+            const searchDropdownList = document.getElementById('searchDropdownList');
+            const searchLoading = document.getElementById('searchLoading');
+            const searchResultCount = document.getElementById('searchResultCount');
+            const searchViewAll = document.getElementById('searchViewAll');
+            const searchForm = document.getElementById('searchForm');
+
+            let searchTimeout;
+            let currentSearchTerm = '';
+
+            if (!searchInput || !searchDropdown) return;
+
+            // Show dropdown when input is focused
+            searchInput.addEventListener('focus', function() {
+                if (searchInput.value.trim() !== '') {
+                    performSearch(searchInput.value.trim());
+                } else {
+                    showRecentOrPopular();
+                }
+            });
+
+            // Search on input
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.trim();
+                currentSearchTerm = searchTerm;
+
+                clearTimeout(searchTimeout);
+
+                if (searchTerm === '') {
+                    showRecentOrPopular();
+                    return;
+                }
+
+                // Debounce search
+                searchTimeout = setTimeout(function() {
+                    performSearch(searchTerm);
+                }, 300);
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                    searchDropdown.classList.remove('show');
+                }
+            });
+
+            let isShowingAll = false;
+            let allProducts = [];
+
+            // Update view all link
+            searchViewAll.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (!isShowingAll) {
+                    // Show all products in dropdown
+                    isShowingAll = true;
+                    searchDropdown.classList.add('expanded');
+                    searchViewAll.innerHTML = '<i class="fa fa-compress"></i> Thu gọn';
+                    loadAllProducts();
+                } else {
+                    // Collapse back to limited results
+                    isShowingAll = false;
+                    searchDropdown.classList.remove('expanded');
+                    searchViewAll.innerHTML = '<i class="fa fa-th-large"></i> Xem tất cả kết quả';
+                    performSearch(currentSearchTerm || '');
+                }
+            });
+
+            // Perform search
+            function performSearch(searchTerm) {
+                searchDropdown.classList.add('show');
+                searchDropdown.classList.remove('expanded');
+                showLoading();
+                isShowingAll = false;
+                searchViewAll.innerHTML = '<i class="fa fa-th-large"></i> Xem tất cả kết quả';
+
+                // AJAX call to get search suggestions
+                $.ajax({
+                    url: '/Home/SearchSuggestions',
+                    type: 'GET',
+                    data: { term: searchTerm, maxResults: 8 },
+                    success: function(response) {
+                        if (response.success && response.products) {
+                            // Debug: Log image paths
+                            console.log('Search products:', response.products);
+                            
+                            allProducts = response.products; // Save all products
+                            const products = response.products.map(p => ({
+                                id: p.id,
+                                name: p.name,
+                                category: p.category,
+                                price: formatPrice(p.price),
+                                image: getProductImageUrl(p.image)
+                            }));
+                            
+                            // Debug: Log processed products
+                            console.log('Processed products:', products);
+                            
+                            displayResults(products, searchTerm);
+                            
+                            // Update button text based on results
+                            if (response.totalCount > 8) {
+                                searchViewAll.innerHTML = '<i class="fa fa-th-large"></i> Xem tất cả ' + response.totalCount + ' kết quả';
+                                searchViewAll.style.display = 'inline-flex';
+                            } else {
+                                searchViewAll.style.display = 'none';
+                            }
+                        } else {
+                            displayResults([], searchTerm);
+                        }
+                    },
+                    error: function() {
+                        hideLoading();
+                        searchDropdownList.innerHTML = `
+                            <div class="search-empty">
+                                <i class="fa fa-exclamation-triangle"></i>
+                                <p>Đã xảy ra lỗi khi tìm kiếm</p>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            // Load all products
+            function loadAllProducts() {
+                showLoading();
+
+                $.ajax({
+                    url: '/Home/SearchSuggestions',
+                    type: 'GET',
+                    data: { term: currentSearchTerm || '', maxResults: 100 },
+                    success: function(response) {
+                        if (response.success && response.products) {
+                            allProducts = response.products;
+                            const products = response.products.map(p => ({
+                                id: p.id,
+                                name: p.name,
+                                category: p.category,
+                                price: formatPrice(p.price),
+                                image: getProductImageUrl(p.image)
+                            }));
+                            displayResults(products, currentSearchTerm || '');
+                        }
+                    },
+                    error: function() {
+                        hideLoading();
+                    }
+                });
+            }
+
+            // Format price
+            function formatPrice(price) {
+                if (!price) return '0';
+                return parseFloat(price).toLocaleString('vi-VN');
+            }
+
+            // Get product image URL
+            function getProductImageUrl(imagePath) {
+                if (!imagePath) {
+                    return '/Content/assets/images/logo/logoshop.jpg';
+                }
+                
+                // If already full URL or starts with /, return as is
+                if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('/')) {
+                    return imagePath;
+                }
+                
+                // If path starts with ~, remove it and add /
+                if (imagePath.startsWith('~')) {
+                    return imagePath.replace('~', '');
+                }
+                
+                // Default: assume it's in Content/assets/images/
+                return '/Content/assets/images/' + imagePath;
+            }
+
+            // Show recent or popular products
+            function showRecentOrPopular() {
+                searchDropdown.classList.add('show');
+                searchDropdown.classList.remove('expanded');
+                searchResultCount.textContent = 'Sản phẩm phổ biến';
+                showLoading();
+                isShowingAll = false;
+
+                // AJAX call to get popular products
+                $.ajax({
+                    url: '/Home/SearchSuggestions',
+                    type: 'GET',
+                    data: { term: '', maxResults: 6 },
+                    success: function(response) {
+                        if (response.success && response.products) {
+                            const products = response.products.map(p => ({
+                                id: p.id,
+                                name: p.name,
+                                category: p.category,
+                                price: formatPrice(p.price),
+                                image: getProductImageUrl(p.image)
+                            }));
+                            displayResults(products, '');
+                            
+                            // Show view all button for popular products
+                            if (response.totalCount > 6) {
+                                searchViewAll.innerHTML = '<i class="fa fa-th-large"></i> Xem tất cả ' + response.totalCount + ' sản phẩm';
+                                searchViewAll.style.display = 'inline-flex';
+                            } else {
+                                searchViewAll.style.display = 'none';
+                            }
+                        } else {
+                            hideLoading();
+                        }
+                    },
+                    error: function() {
+                        hideLoading();
+                    }
+                });
+            }
+
+            // Display search results
+            function displayResults(products, searchTerm) {
+                hideLoading();
+
+                if (products.length === 0) {
+                    searchResultCount.textContent = 'Không tìm thấy';
+                    searchDropdownList.innerHTML = `
+                        <div class="search-empty">
+                            <i class="fa fa-search"></i>
+                            <p>Không tìm thấy sản phẩm "${searchTerm}"</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                searchResultCount.textContent = products.length + ' kết quả';
+
+                const resultsHTML = products.map(product => `
+                    <a href="/Home/ProductDetail/${product.id}" class="search-product-item">
+                        <img src="${product.image}" 
+                             alt="${product.name}" 
+                             class="search-product-img" 
+                             onerror="this.onerror=null; this.src='/Content/assets/images/logo/logoshop.jpg';" />
+                        <div class="search-product-info">
+                            <div class="search-product-name">${highlightText(product.name, searchTerm)}</div>
+                            <div class="search-product-category"><i class="fa fa-tag"></i> ${product.category}</div>
+                            <div class="search-product-price">${product.price} đ</div>
+                        </div>
+                    </a>
+                `).join('');
+
+                searchDropdownList.innerHTML = resultsHTML;
+            }
+
+            // Highlight search term in text
+            function highlightText(text, searchTerm) {
+                if (!searchTerm) return text;
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                return text.replace(regex, '<mark style="background: #fff59d; padding: 0 2px;">$1</mark>');
+            }
+
+            // Show loading
+            function showLoading() {
+                searchLoading.style.display = 'block';
+                searchDropdownList.innerHTML = '';
+                searchDropdownList.appendChild(searchLoading);
+            }
+
+            // Hide loading
+            function hideLoading() {
+                searchLoading.style.display = 'none';
+            }
+        })();
+
+        // ==================== MEGA MENU INTERACTIVE ====================
+        (function() {
+            const megaMenuItem = document.querySelector('.mega-menu-item');
+            const productDropdown = document.getElementById('productDropdown');
+            const megaMenuDropdown = document.querySelector('.mega-menu-dropdown');
+            
+            if (!megaMenuItem || !productDropdown || !megaMenuDropdown) return;
+
+            let closeTimeout;
+
+            // Desktop: Hover to open
+            if (window.innerWidth > 992) {
+                megaMenuItem.addEventListener('mouseenter', function() {
+                    clearTimeout(closeTimeout);
+                    megaMenuDropdown.classList.add('show');
+                });
+
+                megaMenuItem.addEventListener('mouseleave', function() {
+                    closeTimeout = setTimeout(function() {
+                        megaMenuDropdown.classList.remove('show');
+                    }, 300);
+                });
+            }
+
+            // Mobile & Tablet: Click to toggle
+            productDropdown.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Toggle dropdown
+                if (megaMenuDropdown.classList.contains('show')) {
+                    megaMenuDropdown.classList.remove('show');
+                } else {
+                    // Close other dropdowns first
+                    document.querySelectorAll('.dropdown-menu.show').forEach(function(dd) {
+                        dd.classList.remove('show');
+                    });
+                    megaMenuDropdown.classList.add('show');
+                }
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!megaMenuItem.contains(e.target)) {
+                    megaMenuDropdown.classList.remove('show');
+                }
+            });
+
+            // Smooth scroll for mega menu grid
+            const megaMenuGrid = document.querySelector('.mega-menu-grid');
+            if (megaMenuGrid) {
+                megaMenuGrid.addEventListener('wheel', function(e) {
+                    if (megaMenuGrid.scrollHeight > megaMenuGrid.clientHeight) {
+                        e.stopPropagation();
+                    }
+                });
+            }
+
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    if (window.innerWidth > 992) {
+                        // Reset to hover behavior on desktop
+                        megaMenuDropdown.classList.remove('show');
+                    }
+                }, 250);
+            });
+
+            // Add ripple effect to menu cards
+            const menuCards = document.querySelectorAll('.mega-menu-card');
+            menuCards.forEach(function(card) {
+                card.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('card-ripple');
+                    
+                    const rect = card.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    
+                    card.appendChild(ripple);
+                    
+                    setTimeout(function() {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        })();
 
         // FOOTER FX: Ripple + Magnetic + Petals
         (function(){
