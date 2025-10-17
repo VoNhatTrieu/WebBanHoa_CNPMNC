@@ -171,7 +171,8 @@ namespace giadinhthoxinh.Controllers
             ddh.iPaid = 0;
             ddh.dInvoidDate = DateTime.Now;
             ddh.fSurcharge= float.Parse(TongTien().ToString());          
-            ddh.sState = "Chờ xác nhận";
+            ddh.sState = "Đã xác nhận"; // Tự động xác nhận khi đặt hàng
+            ddh.sBiller = "Hệ thống"; // Người xác nhận là hệ thống
             int sum = 0;
             Console.WriteLine(ddh);
             db.tblOrders.Add(ddh);
@@ -184,7 +185,7 @@ namespace giadinhthoxinh.Controllers
                 ctDH.FK_iProductID = item.ProductID;
                 ctDH.iQuantity = item.Quatity;
                 ctDH.fPrice = item.Price;
-                ctDH.sStatus = "Chờ xác nhận"; // Trạng thái mặc định
+                ctDH.sStatus = "Đã xác nhận"; // Tự động xác nhận khi đặt hàng
                 db.tblCheckoutDetails.Add(ctDH);
                 // db.Chitietdonhangs.Add(ctDH);
             }

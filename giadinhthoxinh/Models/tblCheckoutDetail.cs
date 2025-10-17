@@ -19,7 +19,7 @@ namespace giadinhthoxinh.Models
         public Nullable<int> FK_iProductID { get; set; }
         public Nullable<int> iQuantity { get; set; }
         public Nullable<double> fPrice { get; set; }
-        public string sStatus { get; set; } // Trạng thái: "Chờ xác nhận" hoặc "Đã xác nhận"
+        public string sStatus { get; set; } // Trạng thái sản phẩm: Tự động "Đã xác nhận" khi đặt hàng
     
         public virtual tblOrder tblOrder { get; set; }
         public virtual tblProduct tblProduct { get; set; }

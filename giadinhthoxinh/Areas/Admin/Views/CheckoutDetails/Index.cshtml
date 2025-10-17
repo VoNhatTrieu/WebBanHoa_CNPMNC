@@ -14,33 +14,6 @@
 }
 
 <style>
-    /* Style cho nút xác nhận */
-    .btn-confirm-product {
-        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        font-size: 14px;
-        font-weight: 600;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
-    }
-
-    .btn-confirm-product:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
-        color: white;
-    }
-
-    .btn-confirm-product:disabled {
-        background: #6c757d;
-        cursor: not-allowed;
-        box-shadow: none;
-        opacity: 0.6;
-    }
-
     /* Badge trạng thái */
     .status-badge {
         display: inline-block;
@@ -58,23 +31,6 @@
     .status-confirmed {
         background-color: #d4edda;
         color: #155724;
-    }
-
-    /* Loading spinner nhỏ */
-    .spinner-small {
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 50%;
-        border-top: 2px solid #fff;
-        width: 14px;
-        height: 14px;
-        animation: spin 0.8s linear infinite;
-        display: inline-block;
-        margin-right: 5px;
-    }
-
-    @@keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
     }
 
     /* Toast notification */
@@ -120,8 +76,7 @@
     }
 </style>
 
-<!-- SweetAlert2 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<!-- SweetAlert2 đã được xóa vì không còn cần thiết -->
 
 <section class="content-header p-2">
 </section>
@@ -189,24 +144,8 @@
                                 </span>
                             </td>
                             <td>
-                                @if (!isConfirmed)
-                                {
-                                    <button type="button" 
-                                            class="btn btn-confirm-product" 
-                                            id="btn-confirm-@item.PK_iCheckoutDetailID"
-                                            onclick="confirmProduct(@item.PK_iCheckoutDetailID); return false;">
-                                        <i class="fas fa-check"></i> Xác nhận
-                                    </button>
-                                    <script>
-                                        console.log('Button rendered for ID: @item.PK_iCheckoutDetailID');
-                                    </script>
-                                }
-                                else
-                                {
-                                    <script>
-                                        console.log('Button HIDDEN for ID: @item.PK_iCheckoutDetailID (already confirmed)');
-                                    </script>
-                                }
+                                <!-- Chức năng xác nhận sản phẩm thủ công đã bị xóa -->
+                                <!-- Hệ thống tự động xác nhận sản phẩm khi khách hàng đặt hàng thành công -->
 
                                 @Html.ActionLink("sửa", "Edit", new { id = item.PK_iCheckoutDetailID }, new { @class = "btn btn-primary btn-warning" })
                                 @Html.ActionLink("chi tiết", "Details", new { id = item.PK_iCheckoutDetailID }, new { @class = "btn btn-primary btn-info" })
@@ -270,189 +209,6 @@
         }, 5000);
     }
 
-    // Hàm xác nhận sản phẩm
-    function confirmProduct(id) {
-        console.log('=== confirmProduct CALLED ===');
-        console.log('ID:', id);
-        console.log('jQuery available:', typeof jQuery !== 'undefined');
-        console.log('Swal available:', typeof Swal !== 'undefined');
-        
-        // TEST: Alert để đảm bảo function được gọi
-        alert('Function confirmProduct được gọi! ID: ' + id);
-        
-        if (typeof Swal === 'undefined') {
-            alert('SweetAlert2 chưa được load! Vui lòng refresh trang.');
-            return false;
-        }
-        
-        // TEST: Gọi trực tiếp AJAX không cần Swal
-        if (confirm('Bạn có chắc chắn muốn xác nhận sản phẩm ID ' + id + '?')) {
-            console.log('User confirmed via confirm(), sending AJAX...');
-            
-            const ajaxUrl = '@Url.Action("XacNhanSanPham", "CheckoutDetails", new { area = "Admin" })';
-            console.log('AJAX URL:', ajaxUrl);
-            
-            $.ajax({
-                url: ajaxUrl,
-                type: 'POST',
-                data: { id: id },
-                success: function(response) {
-                    console.log('AJAX SUCCESS:', response);
-                    if (response.success) {
-                        alert('Thành công! ' + response.message);
-                        location.reload();
-                    } else {
-                        alert('Lỗi: ' + response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX ERROR:', xhr, status, error);
-                    alert('Lỗi AJAX: ' + error);
-                }
-            });
-        }
-        
-        return false;
-    }
-
-    /* CODE CŨ VỚI SWAL - ĐÃ COMMENT LẠI ĐỂ TEST
-    function confirmProductWithSwal(id) {
-        Swal.fire({
-            title: 'Xác nhận sản phẩm?',
-            html: `
-                <p style="font-size: 16px; color: #666; margin: 15px 0;">
-                    Bạn có chắc chắn muốn xác nhận sản phẩm này không?
-                </p>
-                <p style="font-size: 14px; color: #999;">
-                    Sau khi xác nhận, trạng thái sẽ chuyển sang "Đã xác nhận" 
-                    và khách hàng có thể thấy cập nhật này.
-                </p>
-            `,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: '<i class="fas fa-check"></i> Xác nhận',
-            cancelButtonText: '<i class="fas fa-times"></i> Hủy',
-            buttonsStyling: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                console.log('User confirmed, sending AJAX request for id:', id);
-                
-                // Hiển thị loading
-                const btn = document.getElementById(`btn-confirm-${id}`);
-                if (!btn) {
-                    console.error('Button not found for id:', id);
-                    return;
-                }
-                
-                const originalText = btn.innerHTML;
-                btn.disabled = true;
-                btn.innerHTML = '<span class="spinner-small"></span> Đang xử lý...';
-
-                const ajaxUrl = '@Url.Action("XacNhanSanPham", "CheckoutDetails", new { area = "Admin" })';
-                console.log('AJAX URL:', ajaxUrl);
-                console.log('Sending data:', { id: id });
-
-                // Gọi AJAX
-                $.ajax({
-                    url: ajaxUrl,
-                    type: 'POST',
-                    data: { id: id },
-                    success: function(response) {
-                        console.log('Response:', response);
-                        if (response.success) {
-                        if (response.success) {
-                            // Hiển thị thông báo thành công
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Thành công!',
-                                html: `
-                                    <p style="font-size: 16px; margin: 15px 0;">
-                                        ${response.message}
-                                    </p>
-                                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left;">
-                                        <p style="margin: 5px 0;"><strong>Trạng thái mới:</strong> ${response.newStatus}</p>
-                                        <p style="margin: 5px 0;"><strong>Người xác nhận:</strong> ${response.confirmedBy}</p>
-                                        <p style="margin: 5px 0;"><strong>Thời gian:</strong> ${response.confirmedTime}</p>
-                                    </div>
-                                `,
-                                confirmButtonColor: '#28a745',
-                                timer: 3000,
-                                timerProgressBar: true
-                            }).then(() => {
-                                // Cập nhật UI
-                                updateProductStatus(id, response.newStatus);
-                                showToast('success', 'Xác nhận thành công!', 'Trạng thái sản phẩm đã được cập nhật.');
-                                
-                                // Reload trang sau 1.5 giây để đảm bảo database đã cập nhật
-                                setTimeout(() => {
-                                    location.reload();
-                                }, 1500);
-                            });
-                        } else {
-                            // Hiển thị lỗi
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi!',
-                                text: response.message,
-                                confirmButtonColor: '#dc3545'
-                            });
-                            
-                            // Khôi phục nút
-                            btn.disabled = false;
-                            btn.innerHTML = originalText;
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('AJAX Error:', {
-                            status: xhr.status,
-                            statusText: xhr.statusText,
-                            responseText: xhr.responseText,
-                            error: error
-                        });
-                        
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Lỗi kết nối!',
-                            html: `
-                                <p>Không thể kết nối đến máy chủ.</p>
-                                <p style="font-size: 12px; color: #999;">Status: ${xhr.status} - ${xhr.statusText}</p>
-                                <p style="font-size: 12px; color: #999;">Vui lòng kiểm tra console để biết thêm chi tiết.</p>
-                            `,
-                            confirmButtonColor: '#dc3545'
-                        });
-                        
-                        // Khôi phục nút
-                        btn.disabled = false;
-                        btn.innerHTML = originalText;
-                        
-                        showToast('error', 'Lỗi!', 'Không thể kết nối đến máy chủ.');
-                    }
-                });
-            }
-        });
-    }
-    */  // KẾT THÚC CODE CŨ VỚI SWAL - ĐÃ COMMENT
-
-    // Hàm cập nhật trạng thái trên UI
-    function updateProductStatus(id, newStatus) {
-        // Cập nhật badge trạng thái
-        const statusBadge = document.getElementById(`status-${id}`);
-        statusBadge.className = 'status-badge status-confirmed';
-        statusBadge.innerHTML = '<i class="fas fa-check-circle"></i> ' + newStatus;
-        
-        // Ẩn nút xác nhận
-        const btn = document.getElementById(`btn-confirm-${id}`);
-        btn.style.display = 'none';
-        
-        // Thêm hiệu ứng highlight
-        const row = document.getElementById(`row-${id}`);
-        row.style.transition = 'background-color 0.3s ease';
-        row.style.backgroundColor = '#d4edda';
-        
-        setTimeout(() => {
-            row.style.backgroundColor = '';
-        }, 2000);
-    }
+    // Chức năng xác nhận sản phẩm thủ công đã bị xóa
+    // Hệ thống tự động xác nhận sản phẩm khi khách hàng đặt hàng thành công
 </script>

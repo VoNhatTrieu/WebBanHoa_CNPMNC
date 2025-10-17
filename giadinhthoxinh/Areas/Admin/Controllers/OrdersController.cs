@@ -31,62 +31,8 @@ namespace giadinhthoxinh.Areas.Admin.Controllers
             return View(model);
         }
 
-        // Xác nhận đơn hàng - Chuyển từ "Chờ xác nhận" sang "Đã xác nhận"
-        [HttpPost]
-        public JsonResult XacNhanDonHang(int id)
-        {
-            try
-            {
-                var order = db.tblOrders.Find(id);
-                if (order == null)
-                {
-                    return Json(new { success = false, message = "Không tìm thấy đơn hàng!" });
-                }
-
-                // Kiểm tra trạng thái đơn hàng
-                if (order.sState != "Chờ xác nhận")
-                {
-                    return Json(new { success = false, message = "Đơn hàng đã được xác nhận trước đó!" });
-                }
-
-                // Kiểm tra quyền (Admin hoặc Nhân viên)
-                if (Session["Admin"] == null && Session["NhanVien"] == null)
-                {
-                    return Json(new { success = false, message = "Bạn không có quyền thực hiện thao tác này!" });
-                }
-
-                // Lấy thông tin người thực hiện
-                tblUser user = null;
-                if (Session["Admin"] != null)
-                {
-                    user = (tblUser)Session["Admin"];
-                }
-                else if (Session["NhanVien"] != null)
-                {
-                    user = (tblUser)Session["NhanVien"];
-                }
-
-                // Cập nhật trạng thái
-                order.sState = "Đã xác nhận";
-                order.sBiller = user.sUserName;
-                order.dInvoidDate = DateTime.Now; // Cập nhật thời gian xác nhận
-                
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-
-                return Json(new { 
-                    success = true, 
-                    message = "✅ Xác nhận đơn hàng thành công!", 
-                    newState = "Đã xác nhận",
-                    confirmedBy = user.sUserName,
-                    confirmedTime = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")
-                });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "Lỗi: " + ex.Message });
-            }
-        }
+        // Chức năng xác nhận đơn hàng thủ công đã bị xóa
+        // Hệ thống tự động xác nhận đơn hàng khi khách hàng đặt hàng thành công
 
         public ActionResult DuyetDonHang(int id)
         {
@@ -305,9 +251,25 @@ namespace giadinhthoxinh.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Gán trạng thái mặc định cho đơn mới
-                tblOrder.sState = "Chờ xác nhận";
+                // Tự động xác nhận đơn hàng khi tạo mới
+                tblOrder.sState = "Đã xác nhận";
                 tblOrder.dInvoidDate = DateTime.Now;
+                
+                // Gán người tạo đơn (Admin/Nhân viên)
+                if (Session["Admin"] != null)
+                {
+                    tblUser admin = (tblUser)Session["Admin"];
+                    tblOrder.sBiller = admin.sUserName;
+                }
+                else if (Session["NhanVien"] != null)
+                {
+                    tblUser nhanVien = (tblUser)Session["NhanVien"];
+                    tblOrder.sBiller = nhanVien.sUserName;
+                }
+                else
+                {
+                    tblOrder.sBiller = "Hệ thống";
+                }
 
                 db.tblOrders.Add(tblOrder);
                 db.SaveChanges();

@@ -15,12 +15,12 @@ namespace APIwebhoa.Data
         public DbSet<Models.NhaCungCap> NhaCungCaps { get; set; }
         public DbSet<Models.NguyenLieu>NguyenLieus  { get; set; }
         public DbSet<Models.KhuyenMai> KhuyenMais { get; set; }
-        public DbSet<DanhGia> DanhGias { get; set; }
-        public DbSet<MauSP> MauSPs { get; set; }
-        public DbSet<Order> tblOrder { get; set; }
+        public DbSet<Models.DanhGia> DanhGias { get; set; }
+        public DbSet<Models.MauSP> MauSPs { get; set; }
+        public DbSet<Models.Order> tblOrder { get; set; }
 
 
-        public DbSet<MaterSize> MaterSizes { get; set; }
+        public DbSet<Models.MaterSize> MaterSizes { get; set; }
 
       
 
