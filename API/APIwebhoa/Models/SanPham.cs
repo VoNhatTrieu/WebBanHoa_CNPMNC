@@ -41,6 +41,6 @@ namespace APIwebhoa.Models
         public int? Quantity { get; set; }     // cho phép NULL
 
         // Navigation property
-        public Category? Category { get; set; }
+        public DanhMuc? Category { get; set; }
     }
 }

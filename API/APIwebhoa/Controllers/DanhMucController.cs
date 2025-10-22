@@ -6,11 +6,11 @@ namespace APIwebhoa.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class DanhMucController : ControllerBase
     {
         private readonly DBContext _context;
 
-        public CategoryController(DBContext context)
+        public DanhMucController(DBContext context)
         {
             _context = context;
         }
@@ -18,30 +18,30 @@ namespace APIwebhoa.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_context.Categories.ToList());
+            return Ok(_context.DanhMucs.ToList());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category = _context.DanhMucs.Find(id);
             if (category == null) return NotFound();
             return Ok(category);
         }
 
         [HttpPost]
-        public IActionResult Create(Category category)
+        public IActionResult Create(DanhMuc category)
         {
-            _context.Categories.Add(category);
+            _context.DanhMucs.Add(category);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, Category category)
+        public IActionResult Update(int id, DanhMuc category)
         {
             if (id != category.Id) return BadRequest();
-            _context.Categories.Update(category);
+            _context.DanhMucs.Update(category);
             _context.SaveChanges();
             return NoContent();
         }
@@ -49,9 +49,9 @@ namespace APIwebhoa.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category = _context.DanhMucs.Find(id);
             if (category == null) return NotFound();
-            _context.Categories.Remove(category);
+            _context.DanhMucs.Remove(category);
             _context.SaveChanges();
             return NoContent();
         }

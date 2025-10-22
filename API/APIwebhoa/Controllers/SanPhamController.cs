@@ -7,11 +7,11 @@ namespace APIwebhoa.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class SanPhamController : ControllerBase
     {
         private readonly DBContext _context;
 
-        public ProductController(DBContext context)
+        public SanPhamController(DBContext context)
         {
             _context = context;
         }
@@ -19,14 +19,14 @@ namespace APIwebhoa.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var list = _context.Products.Include(p => p.Category).ToList();
+            var list = _context.SanPhams.Include(p => p.Category).ToList();
             return Ok(list);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var product = _context.Products
+            var product = _context.SanPhams
                 .Include(p => p.Category)
                 .FirstOrDefault(p => p.Id == id);
 
@@ -37,7 +37,7 @@ namespace APIwebhoa.Controllers
         [HttpPost]
         public IActionResult Create(SanPham product)
         {
-            _context.Products.Add(product);
+            _context.SanPhams.Add(product);
             _context.SaveChanges();
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
         }
@@ -46,7 +46,7 @@ namespace APIwebhoa.Controllers
         public IActionResult Update(int id, SanPham product)
         {
             if (id != product.Id) return BadRequest();
-            _context.Products.Update(product);
+            _context.SanPhams.Update(product);
             _context.SaveChanges();
             return NoContent();
         }
@@ -54,9 +54,9 @@ namespace APIwebhoa.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.SanPhams.Find(id);
             if (product == null) return NotFound();
-            _context.Products.Remove(product);
+            _context.SanPhams.Remove(product);
             _context.SaveChanges();
             return NoContent();
         }

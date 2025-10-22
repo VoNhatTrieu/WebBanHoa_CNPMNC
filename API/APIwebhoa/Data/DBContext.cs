@@ -8,21 +8,21 @@ namespace APIwebhoa.Data
         public DBContext(DbContextOptions<DBContext> options) : base(options)
         {
         }
-        public DbSet<Models.Category> Categories { get; set; }
-        public DbSet<Models.SanPham> Products { get; set; }
+        public DbSet<Models.DanhMuc> DanhMucs { get; set; }
+        public DbSet<Models.SanPham> SanPhams { get; set; }
         public DbSet<Models.TaiKhoan> TaiKhoans { get; set; }
         public DbSet<Models.PhanQuyen> PhanQuyens { get; set; }
         public DbSet<Models.NhaCungCap> NhaCungCaps { get; set; }
         public DbSet<Models.NguyenLieu>NguyenLieus  { get; set; }
-        public DbSet<Models.KhuyenMai> KhuyenMais { get; set; }
-        public DbSet<Models.DanhGia> DanhGias { get; set; }
-        public DbSet<Models.MauSP> MauSPs { get; set; }
-        public DbSet<Models.Order> tblOrder { get; set; }
+        public DbSet<Models.ChiTietDH> ChiTietDonHangs { get; set; }
+        public DbSet<Models.DonHang> DonHangs { get; set; }
 
 
-        public DbSet<Models.MaterSize> MaterSizes { get; set; }
 
-      
+
+
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

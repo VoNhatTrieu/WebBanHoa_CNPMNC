@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APIwebhoa.Models
 {
     [Table("tblCategory")]
-    public class Category
+    public class DanhMuc
     {
         [Key]
         [Column("PK_iCategoryID")]
