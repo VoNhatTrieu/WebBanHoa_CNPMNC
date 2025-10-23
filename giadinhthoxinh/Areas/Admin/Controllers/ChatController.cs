@@ -1,48 +1,143 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
+﻿using giadinhthoxinh.Models;
+using System;
+using System.Linq;
 using System.Web.Mvc;
-using giadinhthoxinh.Models;
 
 namespace giadinhthoxinh.Areas.Admin.Controllers
 {
     public class ChatController : Controller
     {
+        private ChatDbContext db = new ChatDbContext();
+
         public ActionResult Index()
         {
-            var messages = new List<string>(); // Thay đổi thành List<string> để hiển thị
+            var admin = Session["User"] as tblUser;
+            
+            // Nếu admin đã đăng nhập, dùng thông tin admin
+            if (admin != null)
+            {
+                ViewBag.AdminName = admin.sUserName;
+                ViewBag.AdminAccountId = admin.PK_iAccountID;
+            }
+            else
+            {
+                // Nếu chưa đăng nhập, dùng giá trị mặc định
+                ViewBag.AdminName = "Admin";
+                ViewBag.AdminAccountId = 0;
+            }
+            
+            return View();
+        }
 
+        [HttpGet]
+        public JsonResult GetPendingConversations()
+        {
             try
             {
-                string connStr = ConfigurationManager.ConnectionStrings["DbConn"].ConnectionString;
-
-                using (var conn = new SqlConnection(connStr))
-                using (var cmd = new SqlCommand("SELECT UserName, Message, SentAt FROM tblChatMessage ORDER BY SentAt ASC", conn))
-                {
-                    conn.Open();
-                    var rd = cmd.ExecuteReader();
-                    while (rd.Read())
+                var conversations = db.tblChatConversations
+                    .Where(c => c.sStatus == "Chờ admin" || c.sStatus == "Đang chat")
+                    .OrderByDescending(c => c.dUpdatedAt)
+                    .Select(c => new
                     {
-                        var userName = rd["UserName"].ToString();
-                        var message = rd["Message"].ToString();
-                        var sentAt = Convert.ToDateTime(rd["SentAt"]);
+                        conversationId = c.PK_iConversationID,
+                        customerEmail = c.sCustomerEmail,
+                        customerName = c.sCustomerName,
+                        status = c.sStatus,
+                        adminName = c.sAdminName,
+                        lastMessage = db.tblChatConversationMessages
+                            .Where(m => m.FK_iConversationID == c.PK_iConversationID)
+                            .OrderByDescending(m => m.dSentAt)
+                            .Select(m => m.sMessage)
+                            .FirstOrDefault(),
+                        updatedAt = c.dUpdatedAt
+                    })
+                    .ToList();
 
-                        // Format tin nhắn để hiển thị
-                        var formattedMessage = $"<div class='{(userName == "Admin" ? "text-primary" : "text-success")}'><b>{userName}:</b> {message} <small>({sentAt:HH:mm})</small></div>";
-                        messages.Add(formattedMessage);
-                    }
-                }
+                return Json(new { success = true, data = conversations }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                // Log lỗi để debug
-                System.Diagnostics.Debug.WriteLine("Load messages error: " + ex.Message);
-                messages.Add("<div class='text-danger'>Không thể tải tin nhắn cũ</div>");
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
 
-            ViewBag.Messages = messages;
-            return View();
+        [HttpGet]
+        public JsonResult GetConversationMessages(int conversationId)
+        {
+            try
+            {
+                var messages = db.tblChatConversationMessages
+                    .Where(m => m.FK_iConversationID == conversationId)
+                    .OrderBy(m => m.dSentAt)
+                    .Select(m => new
+                    {
+                        messageId = m.PK_iMessageID,
+                        senderType = m.senderType,
+                        senderName = m.sSenderName,
+                        message = m.sMessage,
+                        sentAt = m.dSentAt
+                    })
+                    .ToList();
+
+                return Json(new { success = true, data = messages }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult CreateConversation(string customerEmail, string customerName, int? customerAccountId)
+        {
+            try
+            {
+                var existingConversation = db.tblChatConversations
+                    .FirstOrDefault(c => c.sCustomerEmail == customerEmail && 
+                                       (c.sStatus == "Chờ admin" || c.sStatus == "Đang chat"));
+
+                if (existingConversation != null)
+                {
+                    return Json(new { 
+                        success = true, 
+                        conversationId = existingConversation.PK_iConversationID,
+                        message = "Đã kết nối lại cuộc trò chuyện" 
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+                var conversation = new tblChatConversation
+                {
+                    FK_iCustomerAccountID = customerAccountId,
+                    sCustomerEmail = customerEmail,
+                    sCustomerName = customerName,
+                    sStatus = "Chờ admin",
+                    dCreatedAt = DateTime.Now,
+                    dUpdatedAt = DateTime.Now
+                };
+
+                db.tblChatConversations.Add(conversation);
+                db.SaveChanges();
+
+                return Json(new { 
+                    success = true, 
+                    conversationId = conversation.PK_iConversationID,
+                    message = "Đã tạo cuộc trò chuyện mới" 
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

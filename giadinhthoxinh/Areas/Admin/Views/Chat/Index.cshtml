@@ -1,167 +1,160 @@
 ﻿@{
-    ViewBag.Title = "Chat với khách";
+    ViewBag.Title = "Chat với khách hàng";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<section class="content mt-3">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <h3 class="card-title">Hộp chat với khách hàng</h3>
-                <span id="connectionStatus" class="badge badge-warning">Đang kết nối...</span>
-            </div>
+<style>
+    .chat-container { display: flex; height: calc(100vh - 150px); border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
+    .customer-list { width: 350px; border-right: 1px solid #ddd; background: #f8f9fa; display: flex; flex-direction: column; }
+    .customer-list-header { padding: 15px; background: #007bff; color: white; font-weight: bold; }
+    .customer-items { flex: 1; overflow-y: auto; }
+    .customer-item { padding: 15px; border-bottom: 1px solid #ddd; cursor: pointer; transition: background 0.2s; }
+    .customer-item:hover { background: #e9ecef; }
+    .customer-item.active { background: #007bff; color: white; }
+    .customer-item .name { font-weight: bold; margin-bottom: 5px; }
+    .customer-item .email { font-size: 0.9em; color: #666; }
+    .customer-item.active .email { color: #fff; }
+    .customer-item .status { font-size: 0.8em; margin-top: 5px; }
+    .chat-window { flex: 1; display: flex; flex-direction: column; background: white; }
+    .chat-header { padding: 15px; background: #f8f9fa; border-bottom: 1px solid #ddd; font-weight: bold; }
+    .chat-messages { flex: 1; padding: 20px; overflow-y: auto; background: #fff; }
+    .message { margin-bottom: 15px; display: flex; }
+    .message.admin { justify-content: flex-end; }
+    .message.customer { justify-content: flex-start; }
+    .message-content { max-width: 60%; padding: 10px 15px; border-radius: 15px; word-wrap: break-word; }
+    .message.admin .message-content { background: #007bff; color: white; }
+    .message.customer .message-content { background: #e9ecef; color: #333; }
+    .message-info { font-size: 0.8em; margin-top: 5px; color: #666; }
+    .chat-input-area { padding: 15px; background: #f8f9fa; border-top: 1px solid #ddd; display: flex; gap: 10px; }
+    .chat-input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; }
+    .chat-input-area button { padding: 10px 25px; background: #007bff; color: white; border: none; border-radius: 20px; cursor: pointer; }
+    .chat-input-area button:hover { background: #0056b3; }
+    .no-conversation { flex: 1; display: flex; align-items: center; justify-content: center; color: #999; font-size: 1.2em; }
+</style>
 
-            <div class="card-body" id="chatbox"
-                 style="height:400px; overflow-y:auto; background:#f8f9fa; border: 1px solid #ddd;">
-                @if (ViewBag.Messages != null)
-                {
-                    foreach (var msg in ViewBag.Messages)
-                    {
-                        @Html.Raw(msg)
-                    }
-                }
-                <div id="debugInfo" style="color: blue; font-size: 12px; margin: 10px 0;">
-                    <div>Debug: Page loaded at <span id="loadTime"></span></div>
-                    <div>jQuery version: <span id="jqueryVer"></span></div>
-                    <div>SignalR status: <span id="signalrStatus">Not loaded</span></div>
-                </div>
+<div class="container-fluid">
+    <h2>Chat với khách hàng</h2>
+    <div class="chat-container">
+        <div class="customer-list">
+            <div class="customer-list-header">Danh sách khách hàng</div>
+            <div class="customer-items" id="customerList">
+                <div class="no-conversation">Chưa có khách hàng nào</div>
             </div>
-
-            <div class="card-footer">
-                <div class="input-group">
-                    <input type="text" id="adminInput" class="form-control" placeholder="Nhập tin nhắn..." maxlength="500" />
-                    <button id="adminSend" class="btn btn-primary">Gửi</button>
-                </div>
-                <small class="text-muted mt-1">Nhấn Enter hoặc nút Gửi để gửi tin nhắn</small>
-                <div style="margin-top: 10px;">
-                    <button id="testBtn" class="btn btn-info btn-sm">Test Button</button>
-                    <button id="forceEnable" class="btn btn-warning btn-sm">Force Enable</button>
-                    <span id="eventLog" style="margin-left: 10px; color: green; font-size: 12px;"></span>
-                </div>
+        </div>
+        <div class="chat-window">
+            <div class="chat-header" id="chatHeader">Chọn một khách hàng để bắt đầu chat</div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="no-conversation">Chọn một khách hàng từ danh sách bên trái</div>
+            </div>
+            <div class="chat-input-area" id="chatInputArea" style="display: none;">
+                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." />
+                <button onclick="sendMessage()">Gửi</button>
             </div>
         </div>
     </div>
-</section>
+</div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
-<script src="/signalr/hubs"></script>
+@@section Scripts {
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        var chatHub = $.connection.chatHub;
+        var adminName = '@@ViewBag.AdminName';
+        var adminAccountId = @@ViewBag.AdminAccountId;
+        var currentConversationId = null;
 
-<script>
-    $(document).ready(function () {
-        console.log("=== CHAT INITIALIZATION ===");
-        console.log("jQuery version:", $.fn.jquery);
-        
-        // Khởi tạo trạng thái
-        $('#loadTime').text(new Date().toLocaleTimeString());
-        $('#jqueryVer').text($.fn.jquery);
-        
-        // Test button
-        $('#testBtn').click(function () {
-            console.log("Test button works!");
-            $('#eventLog').text("jQuery works at " + new Date().toLocaleTimeString());
+        chatHub.client.customerConnected = function (conversationId, email, name) {
+            console.log('[ADMIN] ✅ New customer connected:', conversationId, email, name);
+            loadCustomerList();
+            alert('Có khách hàng mới: ' + name + ' (' + email + ')');
+        };
+
+        chatHub.client.receiveMessage = function (data) {
+            console.log('[ADMIN] ✅ Received message:', data);
+            if (currentConversationId == data.conversationId) {
+                appendMessage(data.senderType, data.senderName, data.message, data.sentAt);
+            }
+            loadCustomerList();
+        };
+
+        $.connection.hub.start().done(function () {
+            console.log('[ADMIN] ✅ SignalR connected successfully!');
+            console.log('[ADMIN] Admin name:', adminName, 'Account ID:', adminAccountId);
+            chatHub.server.joinAsAdmin(adminName)
+                .done(function() {
+                    console.log('[ADMIN] ✅ Joined AdminGroup successfully!');
+                })
+                .fail(function(err) {
+                    console.error('[ADMIN] ❌ Failed to join AdminGroup:', err);
+                });
+            loadCustomerList();
+            setInterval(loadCustomerList, 10000);
+        }).fail(function(err) {
+            console.error('[ADMIN] ❌ SignalR connection failed:', err);
         });
 
-        // Force enable button
-        $('#forceEnable').click(function () {
-            console.log("Force enabling send button...");
-            enableSendButton();
-        });
-
-        // Khởi tạo nút gửi ngay lập tức
-        enableSendButton();
-        
-        // Kiểm tra SignalR
-        if (typeof $.connection !== 'undefined') {
-            console.log("SignalR available, initializing...");
-            initializeSignalR();
-        } else {
-            console.log("SignalR not available, using fallback mode");
-            $('#signalrStatus').text("SignalR not available - Fallback mode").css('color', 'orange');
+        function loadCustomerList() {
+            $.get('@@Url.Action("GetPendingConversations", "Chat")', function (response) {
+                if (response.success) renderCustomerList(response.data);
+            });
         }
 
-        function enableSendButton() {
-            // Xóa event handlers cũ
-            $('#adminSend').off('click');
-            $('#adminInput').off('keypress');
-            
-            // Thêm event handlers mới
-            $('#adminSend').prop('disabled', false).click(function () {
-                sendMessage();
-            });
+        function renderCustomerList(conversations) {
+            var html = '';
+            if (conversations.length === 0) {
+                html = '<div class="no-conversation">Chưa có khách hàng nào</div>';
+            } else {
+                conversations.forEach(function (conv) {
+                    var activeClass = currentConversationId == conv.conversationId ? 'active' : '';
+                    var statusText = conv.status == 'Chờ admin' ? ' Chờ admin' : ' Đang chat';
+                    html += '<div class="customer-item ' + activeClass + '" onclick="selectCustomer(' + conv.conversationId + ')">';
+                    html += '<div class="name">' + conv.customerName + '</div>';
+                    html += '<div class="email">' + conv.customerEmail + '</div>';
+                    html += '<div class="status">' + statusText + '</div></div>';
+                });
+            }
+            $('#customerList').html(html);
+        }
 
-            $('#adminInput').keypress(function (e) {
-                if (e.which === 13) {
-                    sendMessage();
-                }
+        function selectCustomer(conversationId) {
+            currentConversationId = conversationId;
+            chatHub.server.pickupConversation(conversationId, adminAccountId, adminName);
+            $.get('@@Url.Action("GetConversationMessages", "Chat")', { conversationId: conversationId }, function (response) {
+                if (response.success) renderMessages(response.data);
             });
-            
-            console.log("Send button enabled");
-            $('#eventLog').text("Send button enabled at " + new Date().toLocaleTimeString());
+            $('#chatInputArea').show();
+            loadCustomerList();
+        }
+
+        function renderMessages(messages) {
+            var html = '';
+            messages.forEach(function (msg) {
+                var senderClass = msg.senderType == 'admin' ? 'admin' : 'customer';
+                var time = new Date(msg.sentAt).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                html += '<div class="message ' + senderClass + '"><div class="message-content"><div>' + msg.message + '</div>';
+                html += '<div class="message-info">' + msg.senderName + ' - ' + time + '</div></div></div>';
+            });
+            $('#chatMessages').html(html);
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+        }
+
+        function appendMessage(senderType, senderName, message, sentAt) {
+            var senderClass = senderType == 'admin' ? 'admin' : 'customer';
+            var time = sentAt || new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            var html = '<div class="message ' + senderClass + '"><div class="message-content"><div>' + message + '</div>';
+            html += '<div class="message-info">' + senderName + ' - ' + time + '</div></div></div>';
+            $('#chatMessages').append(html);
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
         }
 
         function sendMessage() {
-            var message = $('#adminInput').val().trim();
-            if (message) {
-                console.log("Sending message:", message);
-                
-                // Hiển thị tin nhắn ngay lập tức
-                var msg = '<div class="text-primary"><b>Admin:</b> ' + message + '</div>';
-                $('#chatbox').append(msg);
-                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
-                
-                // Gửi qua SignalR nếu có
-                if (typeof $.connection !== 'undefined' && $.connection.chatHub) {
-                    try {
-                        $.connection.chatHub.server.sendMessage("Admin", message);
-                    } catch (e) {
-                        console.log("SignalR send failed, but message displayed locally:", e);
-                    }
-                } else {
-                    console.log("SignalR not available, message saved locally only");
-                }
-                
-                // Xóa input
-                $('#adminInput').val('');
-            }
+            if (!currentConversationId) { alert('Vui lòng chọn khách hàng!'); return; }
+            var message = $('#messageInput').val().trim();
+            if (!message) return;
+            chatHub.server.sendConversationMessage(currentConversationId, 'admin', adminName, message, adminAccountId);
+            $('#messageInput').val('');
         }
 
-        function initializeSignalR() {
-            try {
-                var chatHub = $.connection.chatHub;
-                if (!chatHub) {
-                    console.log("ChatHub not found");
-                    $('#signalrStatus').text("ChatHub not found").css('color', 'red');
-                    return;
-                }
-
-                console.log("ChatHub found, setting up...");
-                $('#signalrStatus').text("Setting up...").css('color', 'blue');
-
-                // Setup message handler
-                chatHub.client.broadcastMessage = function (user, message) {
-                    console.log("Received message:", user, message);
-                    var msg = '<div class="text-info"><b>' + user + ':</b> ' + message + '</div>';
-                    $('#chatbox').append(msg);
-                    $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
-                };
-
-                // Start connection
-                $.connection.hub.start()
-                    .done(function () {
-                        console.log("SignalR connected successfully!");
-                        $('#signalrStatus').text("Connected!").css('color', 'green');
-                        $('#connectionStatus').text("Đã kết nối").removeClass('badge-warning').addClass('badge-success');
-                    })
-                    .fail(function (error) {
-                        console.error("SignalR connection failed:", error);
-                        $('#signalrStatus').text("Connection failed").css('color', 'red');
-                    });
-
-            } catch (e) {
-                console.error("SignalR initialization error:", e);
-                $('#signalrStatus').text("Init error: " + e.message).css('color', 'red');
-            }
-        }
-    });
-</script>
+        $('#messageInput').keypress(function (e) { if (e.which == 13) sendMessage(); });
+    </script>
+}
