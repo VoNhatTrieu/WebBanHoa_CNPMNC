@@ -2167,7 +2167,7 @@
                     <button class="suggestion" data-reply="Giá hoa tươi hôm nay dao động từ 200.000đ đến 2.000.000đ tùy loại và mẫu. Bạn có thể xem catalog của shop để chọn mẫu ưng ý nhé! 🌹">
                         <i class="fa fa-tag"></i> Bảng giá
                     </button>
-                    <button class="suggestion" data-reply="Bạn có thể liên hệ hotline 0123 456 789 hoặc inbox Fanpage để được tư vấn chi tiết hơn ạ! 📞">
+                    <button class="suggestion live-chat" data-action="live-chat">
                         <i class="fa fa-phone"></i> Tư vấn
                     </button>
                     <button class="suggestion" data-reply="Shop mở cửa từ 8:00 sáng đến 21:00 tối hàng ngày, kể cả cuối tuần và lễ! 🕐">
@@ -2325,6 +2325,12 @@
         // Suggestion buttons
         suggestions.forEach(btn => {
             btn.addEventListener('click', () => {
+                // Kiểm tra nếu là button live chat
+                if (btn.classList.contains('live-chat')) {
+                    handleLiveChatRequest();
+                    return;
+                }
+
                 const question = btn.textContent.trim();
                 const answer = btn.dataset.reply;
 
@@ -2442,6 +2448,180 @@
                 notificationBadge.style.display = 'flex';
             }
         }, 2000);
+
+        // ==================== LIVE CHAT WITH ADMIN ====================
+        var currentConversationId = null;
+        var liveChatMode = false;
+        var chatHub = null;
+
+        // Initialize SignalR
+        function initializeLiveChat() {
+            if (chatHub) return; // Already initialized
+            
+            chatHub = $.connection.chatHub;
+            
+            // Receive message from admin
+            chatHub.client.receiveMessage = function(data) {
+                if (liveChatMode && currentConversationId == data.conversationId) {
+                    addMessage(data.message, 'bot', data.senderName);
+                }
+            };
+
+            // Admin joined notification
+            chatHub.client.adminJoined = function(adminName) {
+                addMessage('Admin ' + adminName + ' đã tham gia hỗ trợ bạn! 👨‍💼', 'bot');
+            };
+
+            // Start SignalR connection
+            $.connection.hub.start().done(function() {
+                console.log('SignalR connected for customer');
+            }).fail(function(err) {
+                console.error('SignalR connection failed:', err);
+            });
+        }
+
+        // Handle live chat request
+        function handleLiveChatRequest() {
+            // Get customer info from session (if logged in)
+            var customerEmail = '@(ViewBag.User != null ? ViewBag.User.sEmail : "")';
+            var customerName = '@(ViewBag.User != null ? ViewBag.User.sUserName : "")';
+            var customerAccountId = @(ViewBag.User != null ? ViewBag.User.PK_iAccountID : "null");
+
+            // If not logged in, ask for email
+            if (!customerEmail) {
+                customerEmail = prompt('Vui lòng nhập email của bạn để được tư vấn:');
+                if (!customerEmail) return;
+                
+                customerName = prompt('Vui lòng nhập tên của bạn:');
+                if (!customerName) customerName = 'Khách';
+            }
+
+            // Initialize SignalR if not yet
+            initializeLiveChat();
+
+            // Show loading
+            showTypingIndicator();
+            addMessage('Đang kết nối đến admin...', 'user');
+
+            // ĐỢI SignalR connect xong rồi mới tạo conversation
+            $.connection.hub.start().done(function() {
+                console.log('SignalR connected, now creating conversation...');
+                
+                // Create conversation via AJAX
+                $.ajax({
+                    url: '@Url.Action("CreateConversation", "Chat", new { area = "Admin" })',
+                    type: 'POST',
+                    data: {
+                        customerEmail: customerEmail,
+                        customerName: customerName,
+                        customerAccountId: customerAccountId
+                    },
+                    success: function(response) {
+                        hideTypingIndicator();
+                        if (response.success) {
+                            currentConversationId = response.conversationId;
+                            liveChatMode = true;
+                            
+                            // Clear chatbox and show live chat message
+                            chatboxBody.innerHTML = '';
+                            addMessage('Đã kết nối với admin! Vui lòng chờ trong giây lát...', 'bot');
+                            
+                            // Join conversation via SignalR (SignalR đã connect rồi)
+                            console.log('Joining conversation:', currentConversationId);
+                            chatHub.server.joinConversation(currentConversationId, customerEmail, customerName)
+                                .done(function() {
+                                    console.log('Successfully joined conversation');
+                                })
+                                .fail(function(err) {
+                                    console.error('Failed to join conversation:', err);
+                                });
+
+                            // Update form handler for live chat
+                            chatboxForm.onsubmit = function(e) {
+                                e.preventDefault();
+                                sendLiveChatMessage();
+                            };
+                        } else {
+                            console.error('Server response:', response);
+                            addMessage('Không thể kết nối: ' + (response.message || 'Lỗi không xác định'), 'bot');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        hideTypingIndicator();
+                        console.error('AJAX Error:', status, error);
+                        console.error('Response:', xhr.responseText);
+                        addMessage('Không thể kết nối: ' + xhr.responseText, 'bot');
+                    }
+                });
+            }).fail(function(err) {
+                hideTypingIndicator();
+                console.error('SignalR connection failed:', err);
+                addMessage('Không thể kết nối SignalR: ' + err, 'bot');
+            });
+        }
+
+        // Send live chat message
+        function sendLiveChatMessage() {
+            if (!currentConversationId || !liveChatMode) return;
+
+            const message = chatboxInput.value.trim();
+            if (!message) return;
+
+            var customerEmail = '@(ViewBag.User != null ? ViewBag.User.sEmail : "Khách")';
+            var customerName = '@(ViewBag.User != null ? ViewBag.User.sUserName : "Khách")';
+            
+            // Add to UI immediately
+            addMessage(message, 'user');
+            chatboxInput.value = '';
+
+            // Send via SignalR
+            chatHub.server.sendConversationMessage(currentConversationId, 'customer', customerName, message);
+        }
+
+        // Update addMessage to support sender name
+        const originalAddMessage = addMessage;
+        addMessage = function(text, type, senderName) {
+            const time = new Date().toLocaleTimeString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}`;
+
+            const displayName = senderName || (type === 'bot' ? 'Bot' : 'Bạn');
+
+            if (type === 'bot') {
+                messageDiv.innerHTML = `
+                    <div class="message-avatar">
+                        <i class="fa ${liveChatMode ? 'fa-user-tie' : 'fa-robot'}"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-bubble">${text}</div>
+                        <div class="message-time">${displayName} - ${time}</div>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-bubble">${text}</div>
+                        <div class="message-time">${displayName} - ${time}</div>
+                    </div>
+                    <div class="message-avatar">
+                        <i class="fa fa-user"></i>
+                    </div>
+                `;
+            }
+
+            chatboxBody.appendChild(messageDiv);
+            chatboxBody.scrollTop = chatboxBody.scrollHeight;
+
+            if (!state.isOpen && type === 'bot') {
+                messageCount++;
+                notificationBadge.textContent = messageCount;
+                notificationBadge.style.display = 'flex';
+            }
+        };
 
         // ==================== SEARCH DROPDOWN WITH SUGGESTIONS ====================
         (function() {
