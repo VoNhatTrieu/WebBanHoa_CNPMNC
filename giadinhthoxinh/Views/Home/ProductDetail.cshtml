@@ -15,7 +15,7 @@
 <link href="~/Content/assets/styles/single_styles.css" rel="stylesheet" />
 <link href="~/Content/assets/styles/single_responsive.css" rel="stylesheet" />
 
-<style> 
+<style>
     /* Hiệu ứng nút cộng trừ */
     .quantity_selector button {
         transition: transform 0.15s ease, background-color 0.2s ease;
@@ -165,6 +165,118 @@
             transform: translateY(0);
             pointer-events: auto;
         }
+    /* Kiểu dáng phần bình luận */
+    .comments-section {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .comment-form textarea {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        transition: all 0.3s ease;
+    }
+
+        .comment-form textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+
+    .comment-item {
+        background: #f8f9fa;
+        border-radius: 8px;
+        transition: background-color 0.2s ease;
+    }
+
+        .comment-item:hover {
+            background: #f1f3f5;
+        }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+    }
+
+    .comment-content {
+        color: #333;
+        line-height: 1.5;
+        margin-left: 52px;
+    }
+
+    .text-primary {
+        color: #007bff !important;
+    }
+    /* CSS cho thông báo bình luận */
+.comment-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4caf50;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.comment-alert.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* CSS cho form bình luận */
+.comment-form {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.comment-form.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.comment-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* CSS cho danh sách bình luận */
+.comments-list {
+    max-height: 600px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.comments-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.comments-list::-webkit-scrollbar-thumb {
+    background-color: #ddd;
+    border-radius: 3px;
+}
+
+.comment-item {
+    animation: fadeIn 0.3s ease;
+}
+
+@@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 </style>
 @if (Model != null)
 {
@@ -268,13 +380,55 @@
                                    value="Thêm vào giỏ" />
 
                         </div>
-                    }  
+                    }
                 </div>
             </div>
         </div>
 
     </div>
     <div id="cartAlert" class="cart-alert">🛒 Thêm vào giỏ hàng thành công!</div>
+    <!-- Phần bình luận sản phẩm -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="comments-section">
+                <h3 class="mb-4">Bình luận</h3>
+
+                <!-- Form bình luận -->
+                @if (Session["idUser"] != null)
+                {
+                    using (Html.BeginForm("AddComment", "Comment", FormMethod.Post, new { @class = "comment-form mb-4" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="productId" value="@Model.PK_iProductID" />
+
+                        <div class="form-group">
+                            <textarea name="content"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Nhập bình luận của bạn..."
+                                      required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">
+                            <i class="fa fa-paper-plane me-1"></i> Gửi bình luận
+                        </button>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        Vui lòng <a href="@Url.Action("Login", "User")">đăng nhập</a> để bình luận
+                    </div>
+                }
+
+                <!-- Danh sách bình luận -->
+                <div class="comments-list mt-4">
+                    @Html.Action("LoadComment", "Comment", new { productId = Model.PK_iProductID })
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 }
 
 
@@ -354,6 +508,64 @@
         const savedCount = parseInt(localStorage.getItem('cartCount') || "0");
         updateCartCountDisplay(savedCount);
     });
+    // JavaScript cho phần bình luận
+document.addEventListener('DOMContentLoaded', function () {
+    // Khởi tạo biến
+    const commentForm = document.querySelector('.comment-form');
+    const commentsList = document.querySelector('.comments-list');
+    const commentInput = document.querySelector('textarea[name="content"]');
+
+    // Nếu có form bình luận (đã đăng nhập)
+    if (commentForm) {
+        commentForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (!commentInput.value.trim()) {
+                alert('Vui lòng nhập nội dung bình luận!');
+                return;
+            }
+
+            // Gửi bình luận bằng AJAX
+            $.ajax({
+                url: '@Url.Action("AddComment", "Comment")',
+                type: 'POST',
+                data: {
+                    productId: @Model.PK_iProductID,
+                    content: commentInput.value,
+                    __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                },
+                success: function () {
+                    // Làm mới danh sách bình luận
+                    $.get('@Url.Action("LoadComment", "Comment")', { productId: @Model.PK_iProductID }, function (data) {
+                        commentsList.innerHTML = data;
+                        commentInput.value = ''; // Xóa nội dung đã nhập
+                        showCommentAlert('✅ Đã gửi bình luận thành công!');
+                    });
+                },
+                error: function () {
+                    alert('❌ Có lỗi xảy ra khi gửi bình luận.');
+                }
+            });
+        });
+    }
+
+    // Hiển thị thông báo sau khi bình luận
+    function showCommentAlert(message) {
+        const alert = document.createElement('div');
+        alert.className = 'comment-alert';
+        alert.textContent = message;
+        document.body.appendChild(alert);
+
+        setTimeout(() => {
+            alert.classList.add('show');
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }, 2000);
+        }, 100);
+    }
+});
+
 </script>
 
 

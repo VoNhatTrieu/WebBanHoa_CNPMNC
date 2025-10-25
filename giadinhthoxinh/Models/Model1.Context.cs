@@ -75,6 +75,8 @@ public partial class giadinhthoxinhEntities1 : DbContext
 
     public virtual DbSet<tblUser> tblUsers { get; set; }
 
+    public virtual DbSet<tblComment> tblComments { get; set; }
+
 
     public virtual ObjectResult<pro_getCategory_Result> pro_getCategory()
     {

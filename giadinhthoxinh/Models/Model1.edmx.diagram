@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="0407060aad9649a8985e4dda422c5230" Name="Diagram1" ZoomLevel="74">
+      <Diagram DiagramId="0407060aad9649a8985e4dda422c5230" Name="Diagram1" ZoomLevel="63">
         <EntityTypeShape EntityType="giadinhthoxinhEntities.tblCategory" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="giadinhthoxinhEntities.tblCheckinDetail" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
         <EntityTypeShape EntityType="giadinhthoxinhEntities.tblCheckoutDetail" Width="1.5" PointX="8.25" PointY="11.375" IsExpanded="true" />
@@ -46,6 +46,9 @@
         <AssociationConnector Association="giadinhthoxinhEntities.FK_tblProductPrice_tblProduct" ManuallyRouted="false" />
         <AssociationConnector Association="giadinhthoxinhEntities.FK_tblProductSize_tblProduct" ManuallyRouted="false" />
         <AssociationConnector Association="giadinhthoxinhEntities.fk_review_account" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="giadinhthoxinhEntities.tblComment" Width="1.5" PointX="9.125" PointY="3.125" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_Comment_Product" />
+        <AssociationConnector Association="giadinhthoxinhEntities.FK_Comment_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="giadinhthoxinhEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="giadinhthoxinhEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tblCategory">
           <Key>
             <PropertyRef Name="PK_iCategoryID" />
@@ -32,6 +32,17 @@
           <Property Name="iQuantity" Type="int" />
           <Property Name="fPrice" Type="float" />
           <Property Name="sStatus" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblComment">
+          <Key>
+            <PropertyRef Name="PK_iCommentID" />
+          </Key>
+          <Property Name="PK_iCommentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FK_iProductID" Type="int" Nullable="false" />
+          <Property Name="FK_iAccountID" Type="int" Nullable="false" />
+          <Property Name="sContent" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="dtCreateDate" Type="datetime" Nullable="false" />
+          <Property Name="bStatus" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tblImage">
           <Key>
@@ -113,6 +124,7 @@
           <Property Name="fSurcharge" Type="float" />
           <Property Name="iPaid" Type="int" />
           <Property Name="sState" Type="nvarchar" MaxLength="50" />
+          <Property Name="iTotal" Type="int" />
         </EntityType>
         <EntityType Name="tblPermission">
           <Key>
@@ -136,6 +148,7 @@
           <Property Name="sSize" Type="nvarchar" MaxLength="20" />
           <Property Name="sImage" Type="nvarchar" MaxLength="250" />
           <Property Name="sUnit" Type="nvarchar" MaxLength="20" />
+          <Property Name="iQuantity" Type="int" />
         </EntityType>
         <EntityType Name="tblProductColor">
           <Key>
@@ -251,6 +264,30 @@
             </Principal>
             <Dependent Role="tblCheckoutDetail">
               <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_Product">
+          <End Role="tblProduct" Type="Self.tblProduct" Multiplicity="1" />
+          <End Role="tblComment" Type="Self.tblComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblComment">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_User">
+          <End Role="tblUser" Type="Self.tblUser" Multiplicity="1" />
+          <End Role="tblComment" Type="Self.tblComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblComment">
+              <PropertyRef Name="FK_iAccountID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -597,6 +634,7 @@
           <EntitySet Name="tblCategory" EntityType="Self.tblCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCheckinDetail" EntityType="Self.tblCheckinDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCheckoutDetail" EntityType="Self.tblCheckoutDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblComment" EntityType="Self.tblComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblImage" EntityType="Self.tblImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblImportMaterial" EntityType="Self.tblImportMaterial" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblImportOrder" EntityType="Self.tblImportOrder" Schema="dbo" store:Type="Tables" />
@@ -629,6 +667,14 @@
           <AssociationSet Name="fk_checkoutDetail_product" Association="Self.fk_checkoutDetail_product">
             <End Role="tblProduct" EntitySet="tblProduct" />
             <End Role="tblCheckoutDetail" EntitySet="tblCheckoutDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_Product" Association="Self.FK_Comment_Product">
+            <End Role="tblProduct" EntitySet="tblProduct" />
+            <End Role="tblComment" EntitySet="tblComment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_User" Association="Self.FK_Comment_User">
+            <End Role="tblUser" EntitySet="tblUser" />
+            <End Role="tblComment" EntitySet="tblComment" />
           </AssociationSet>
           <AssociationSet Name="fk_img_product" Association="Self.fk_img_product">
             <End Role="tblProduct" EntitySet="tblProduct" />
@@ -699,8 +745,7 @@
             <End Role="tblUser" EntitySet="tblUser" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="giadinhthoxinhEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -833,6 +878,7 @@
           <Property Name="sState" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tblCheckoutDetails" Relationship="Self.fk_checkoutDetail_order" FromRole="tblOrder" ToRole="tblCheckoutDetail" />
           <NavigationProperty Name="tblUser" Relationship="Self.fk_order_account" FromRole="tblOrder" ToRole="tblUser" />
+          <Property Name="iTotal" Type="Int32" />
         </EntityType>
         <EntityType Name="tblPermission">
           <Key>
@@ -866,6 +912,8 @@
           <NavigationProperty Name="tblProductColors" Relationship="Self.FK_tblProductColor_tblProduct" FromRole="tblProduct" ToRole="tblProductColor" />
           <NavigationProperty Name="tblProductPrices" Relationship="Self.FK_tblProductPrice_tblProduct" FromRole="tblProduct" ToRole="tblProductPrice" />
           <NavigationProperty Name="tblProductSizes" Relationship="Self.FK_tblProductSize_tblProduct" FromRole="tblProduct" ToRole="tblProductSize" />
+          <Property Name="iQuantity" Type="Int32" />
+          <NavigationProperty Name="tblComments" Relationship="giadinhthoxinhEntities.FK_Comment_Product" FromRole="tblProduct" ToRole="tblComment" />
         </EntityType>
         <EntityType Name="tblProductColor">
           <Key>
@@ -946,6 +994,7 @@
           <NavigationProperty Name="tblOrders" Relationship="Self.fk_order_account" FromRole="tblUser" ToRole="tblOrder" />
           <NavigationProperty Name="tblPermission" Relationship="Self.fk_user_permission" FromRole="tblUser" ToRole="tblPermission" />
           <NavigationProperty Name="tblReviews" Relationship="Self.fk_review_account" FromRole="tblUser" ToRole="tblReview" />
+          <NavigationProperty Name="tblComments" Relationship="giadinhthoxinhEntities.FK_Comment_User" FromRole="tblUser" ToRole="tblComment" />
         </EntityType>
         <Association Name="fk_product_category">
           <End Role="tblCategory" Type="Self.tblCategory" Multiplicity="1" />
@@ -1310,7 +1359,7 @@
           <FunctionImport Name="pro_getReceiver" ReturnType="Collection(giadinhthoxinhEntities.pro_getReceiver_Result)" />
           <FunctionImport Name="pro_getSupplier" ReturnType="Collection(giadinhthoxinhEntities.pro_getSupplier_Result)" />
           <FunctionImport Name="proAddCategory">
-            <Parameter Name="sCategoryName" Mode="In" Type="String" />
+          <Parameter Name="sCategoryName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="proAddCheckoutDetail">
             <Parameter Name="FK_iOrderID" Mode="In" Type="Int32" />
@@ -1350,53 +1399,53 @@
             <Parameter Name="iState" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="procSelectCheckinDeatailrByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectCheckinDeatailrByID_Result)">
-            <Parameter Name="PK_iCheckinDetailID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iCheckinDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="procSelectImageByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectImageByID_Result)">
-            <Parameter Name="PK_iImageID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iImageID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="procSelectImportOrderByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectImportOrderByID_Result)">
-            <Parameter Name="PK_iImportOrderID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iImportOrderID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="procSelectUserByID" ReturnType="Collection(giadinhthoxinhEntities.procSelectUserByID_Result)">
-            <Parameter Name="PK_iAccountID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iAccountID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteCategory">
-            <Parameter Name="sCategoryID" Mode="In" Type="Int32" />
+          <Parameter Name="sCategoryID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteCheckinDetail">
-            <Parameter Name="PK_iCheckinDetailID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iCheckinDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteCheckoutDetail">
-            <Parameter Name="PK_iCheckoutDetailID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iCheckoutDetailID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteImage">
-            <Parameter Name="PK_iImageID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iImageID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteImportOrder">
-            <Parameter Name="PK_iImportOrderID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iImportOrderID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteOrder">
-            <Parameter Name="PK_iOrderID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iOrderID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeletePermission">
-            <Parameter Name="PK_iPermissionID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iPermissionID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteProduct">
-            <Parameter Name="PK_iProductID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iProductID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeletePromote">
-            <Parameter Name="PK_iPromoteID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iPromoteID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteSupplier">
-            <Parameter Name="PK_iSupplierID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iSupplierID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proDeleteUser">
-            <Parameter Name="PK_iAccountID" Mode="In" Type="Int32" />
+          <Parameter Name="PK_iAccountID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proGetAllImageToDisplay" ReturnType="Collection(giadinhthoxinhEntities.proGetAllImageToDisplay_Result)" />
           <FunctionImport Name="proGetImageByIDToDisplay" ReturnType="Collection(String)">
-            <Parameter Name="sId" Mode="In" Type="Int32" />
+          <Parameter Name="sId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="proPermissionNameDisplayUser" ReturnType="Collection(giadinhthoxinhEntities.proPermissionNameDisplayUser_Result)" />
           <FunctionImport Name="proUpdateCategory">
@@ -1439,6 +1488,15 @@
             <Parameter Name="sAddress" Mode="In" Type="String" />
             <Parameter Name="iState" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="tblComments" EntityType="giadinhthoxinhEntities.tblComment" />
+          <AssociationSet Name="FK_Comment_Product" Association="giadinhthoxinhEntities.FK_Comment_Product">
+            <End Role="tblProduct" EntitySet="tblProducts" />
+            <End Role="tblComment" EntitySet="tblComments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comment_User" Association="giadinhthoxinhEntities.FK_Comment_User">
+            <End Role="tblUser" EntitySet="tblUsers" />
+            <End Role="tblComment" EntitySet="tblComments" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="pro_getCategory_Result">
           <Property Type="Int32" Name="PK_iCategoryID" Nullable="false" />
@@ -1514,6 +1572,43 @@
           <Property Type="String" Name="sPermissionName" Nullable="true" MaxLength="50" />
           <Property Type="Int32" Name="iState" Nullable="true" />
         </ComplexType>
+        <EntityType Name="tblComment">
+          <Key>
+            <PropertyRef Name="PK_iCommentID" />
+          </Key>
+          <Property Name="PK_iCommentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FK_iProductID" Type="Int32" Nullable="false" />
+          <Property Name="FK_iAccountID" Type="Int32" Nullable="false" />
+          <Property Name="sContent" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="dtCreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="bStatus" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tblProduct" Relationship="giadinhthoxinhEntities.FK_Comment_Product" FromRole="tblComment" ToRole="tblProduct" />
+          <NavigationProperty Name="tblUser" Relationship="giadinhthoxinhEntities.FK_Comment_User" FromRole="tblComment" ToRole="tblUser" />
+        </EntityType>
+        <Association Name="FK_Comment_Product">
+          <End Type="giadinhthoxinhEntities.tblProduct" Role="tblProduct" Multiplicity="1" />
+          <End Type="giadinhthoxinhEntities.tblComment" Role="tblComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProduct">
+              <PropertyRef Name="PK_iProductID" />
+            </Principal>
+            <Dependent Role="tblComment">
+              <PropertyRef Name="FK_iProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comment_User">
+          <End Type="giadinhthoxinhEntities.tblUser" Role="tblUser" Multiplicity="1" />
+          <End Type="giadinhthoxinhEntities.tblComment" Role="tblComment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUser">
+              <PropertyRef Name="PK_iAccountID" />
+            </Principal>
+            <Dependent Role="tblComment">
+              <PropertyRef Name="FK_iAccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1626,6 +1721,7 @@
           <EntitySetMapping Name="tblOrders">
             <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblOrder">
               <MappingFragment StoreEntitySet="tblOrder">
+                <ScalarProperty Name="iTotal" ColumnName="iTotal" />
                 <ScalarProperty Name="PK_iOrderID" ColumnName="PK_iOrderID" />
                 <ScalarProperty Name="FK_iAccountID" ColumnName="FK_iAccountID" />
                 <ScalarProperty Name="sCustomerName" ColumnName="sCustomerName" />
@@ -1652,6 +1748,7 @@
           <EntitySetMapping Name="tblProducts">
             <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblProduct">
               <MappingFragment StoreEntitySet="tblProduct">
+                <ScalarProperty Name="iQuantity" ColumnName="iQuantity" />
                 <ScalarProperty Name="PK_iProductID" ColumnName="PK_iProductID" />
                 <ScalarProperty Name="FK_iCategoryID" ColumnName="FK_iCategoryID" />
                 <ScalarProperty Name="FK_iPromoteID" ColumnName="FK_iPromoteID" />
@@ -1884,6 +1981,18 @@
           <FunctionImportMapping FunctionImportName="proUpdatePromote" FunctionName="giadinhthoxinhEntities.Store.proUpdatePromote" />
           <FunctionImportMapping FunctionImportName="proUpdateSupplier" FunctionName="giadinhthoxinhEntities.Store.proUpdateSupplier" />
           <FunctionImportMapping FunctionImportName="proUpdateUser" FunctionName="giadinhthoxinhEntities.Store.proUpdateUser" />
+          <EntitySetMapping Name="tblComments">
+            <EntityTypeMapping TypeName="giadinhthoxinhEntities.tblComment">
+              <MappingFragment StoreEntitySet="tblComment">
+                <ScalarProperty Name="bStatus" ColumnName="bStatus" />
+                <ScalarProperty Name="dtCreateDate" ColumnName="dtCreateDate" />
+                <ScalarProperty Name="sContent" ColumnName="sContent" />
+                <ScalarProperty Name="FK_iAccountID" ColumnName="FK_iAccountID" />
+                <ScalarProperty Name="FK_iProductID" ColumnName="FK_iProductID" />
+                <ScalarProperty Name="PK_iCommentID" ColumnName="PK_iCommentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

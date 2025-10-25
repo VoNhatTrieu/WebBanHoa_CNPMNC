@@ -13,13 +13,28 @@ namespace giadinhthoxinh.Models
 {
 
 using System;
+    using System.Collections.Generic;
     
-public partial class pro_getCategory_Result
+public partial class tblComment
 {
 
-    public int PK_iCategoryID { get; set; }
+    public int PK_iCommentID { get; set; }
 
-    public string sCategoryName { get; set; }
+    public int FK_iProductID { get; set; }
+
+    public int FK_iAccountID { get; set; }
+
+    public string sContent { get; set; }
+
+    public System.DateTime dtCreateDate { get; set; }
+
+    public bool bStatus { get; set; }
+
+
+
+    public virtual tblProduct tblProduct { get; set; }
+
+    public virtual tblUser tblUser { get; set; }
 
 }
 

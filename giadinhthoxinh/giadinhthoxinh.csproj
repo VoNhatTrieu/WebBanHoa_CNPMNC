@@ -204,6 +204,7 @@
     <Compile Include="Areas\Admin\Controllers\SuppliersController.cs" />
     <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -272,6 +273,9 @@
     <Compile Include="Models\tblCheckoutDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblComment.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblImage.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -321,12 +325,6 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblUser.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblChatConversation.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblChatConversationMessage.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TkLoaiSp.cs" />
@@ -2749,6 +2747,7 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\EditPassword.cshtml" />
     <Content Include="Views\Shared\DanhMucPartial.cshtml" />
+    <Content Include="Views\Comment\_CommentList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

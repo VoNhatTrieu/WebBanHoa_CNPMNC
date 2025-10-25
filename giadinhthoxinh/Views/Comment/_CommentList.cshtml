@@ -1,0 +1,18 @@
+﻿@using System.Linq
+@model IEnumerable<giadinhthoxinh.Models.tblComment>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Chưa có bình luận nào.</p>
+}
+else
+{
+    foreach (var c in Model)
+    {
+        <div class="border rounded p-2 mb-2 bg-light">
+            <strong>@(c.tblUser != null ? c.tblUser.sUserName : "Người dùng")</strong><br />
+            <span>@c.sContent</span><br />
+            <small class="text-secondary">@c.dtCreateDate.ToString("dd/MM/yyyy HH:mm")</small>
+        </div>
+    }
+}
