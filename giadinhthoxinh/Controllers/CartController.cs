@@ -136,14 +136,160 @@ namespace giadinhthoxinh.Controllers
             }
                 
                 
-            return View();
+           
         }
         /*
          * Thanh toán 
          * giohang.lstproduct.Clear();
          */
+        // ===== PHƯƠNG THỨC 1: Đặt hàng thường  =====
         [HttpPost]
-    
+        public ActionResult DatHangTamThoi()
+        {
+            if (Session["User"] == null)
+            {
+                return Json(new { success = false, message = "Chưa đăng nhập" });
+            }
+
+            try
+            {
+                tblOrder ddh = new tblOrder();
+                List<ProductInCart> gh = LayGioHang();
+                tblUser kh = (tblUser)Session["User"];
+
+                ddh.FK_iAccountID = kh.PK_iAccountID;
+                ddh.sDeliveryAddress = Request.Form["sDeliveryAddress"];
+                ddh.sCustomerName = Request.Form["sCustomerName"];
+                ddh.sCustomerPhone = Request.Form["sCustomerPhone"];
+                ddh.iDeliveryMethod = int.Parse(Request.Form["iDeliveryMethod"]);
+                ddh.iPaid = 0;  // Chưa thanh toán
+                ddh.dInvoidDate = DateTime.Now;
+                ddh.fSurcharge = float.Parse(TongTien().ToString());
+                ddh.sState = "Đã xác nhận";  // Trạng thái chờ xác nhận
+                ddh.sBiller = "Thanh toán khi nhận hàng";  // ✅ Ghi phương thức thanh toán
+
+                db.tblOrders.Add(ddh);
+                db.SaveChanges();
+
+                // Thêm chi tiết đơn hàng
+                foreach (var item in gh)
+                {
+                    tblCheckoutDetail ctDH = new tblCheckoutDetail();
+                    ctDH.FK_iOrderID = ddh.PK_iOrderID;
+                    ctDH.FK_iProductID = item.ProductID;
+                    ctDH.iQuantity = item.Quatity;
+                    ctDH.fPrice = item.Price;
+                    ctDH.sStatus = "Đã xác nhận";
+                    db.tblCheckoutDetails.Add(ctDH);
+                }
+
+                db.SaveChanges();
+                Session["GioHang"] = null;
+
+                return Json(new { success = true, message = "Đặt hàng thành công" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
+            }
+        }
+
+        // ===== PHƯƠNG THỨC 2: Đặt hàng và thanh toán VNPay =====
+        [HttpPost]
+        public ActionResult DatHangVNPay()
+        {
+            if (Session["User"] == null)
+            {
+                return Json(new { success = false, message = "Chưa đăng nhập" });
+            }
+
+            try
+            {
+                tblOrder ddh = new tblOrder();
+                List<ProductInCart> gh = LayGioHang();
+                tblUser kh = (tblUser)Session["User"];
+
+                ddh.FK_iAccountID = kh.PK_iAccountID;
+                ddh.sDeliveryAddress = Request.Form["sDeliveryAddress"];
+                ddh.sCustomerName = Request.Form["sCustomerName"];
+                ddh.sCustomerPhone = Request.Form["sCustomerPhone"];
+                ddh.iDeliveryMethod = int.Parse(Request.Form["iDeliveryMethod"]);
+                ddh.iPaid = 1;  // Chưa thanh toán
+                ddh.dInvoidDate = DateTime.Now;
+                ddh.fSurcharge = float.Parse(TongTien().ToString());
+                ddh.sState = "Đã thanh toán";  // Trạng thái: chờ thanh toán
+                ddh.sBiller = "VNPay";  // ✅ Ghi phương thức thanh toán là VNPay
+
+                db.tblOrders.Add(ddh);
+                db.SaveChanges();
+
+                // Thêm chi tiết đơn hàng
+                foreach (var item in gh)
+                {
+                    tblCheckoutDetail ctDH = new tblCheckoutDetail();
+                    ctDH.FK_iOrderID = ddh.PK_iOrderID;
+                    ctDH.FK_iProductID = item.ProductID;
+                    ctDH.iQuantity = item.Quatity;
+                    ctDH.fPrice = item.Price;
+                    ctDH.sStatus = "Đã thanh toán";
+                    db.tblCheckoutDetails.Add(ctDH);
+                }
+
+                db.SaveChanges();
+                Session["GioHang"] = null;
+
+                // Tính số tiền thanh toán
+                decimal tongTien = (decimal)ddh.fSurcharge;
+                int amountInVND = (int)Math.Ceiling(tongTien / 1000) * 1000;
+
+                if (amountInVND < 5000)
+                    amountInVND = 5000;
+
+                if (amountInVND > 1000000000)
+                    amountInVND = 1000000000;
+
+                return Json(new
+                {
+                    success = true,
+                    orderId = ddh.PK_iOrderID,
+                    amount = amountInVND,
+                    message = "Đặt hàng thành công, chuyển sang VNPay"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
+            }
+        }
+        // ===== PHƯƠNG THỨC 3: Update trạng thái khi thanh toán VNPay thành công =====
+        // (Cái này update trong VnPayController.cs Return() action)
+        public ActionResult UpdateOrderAfterVNPaySuccess(int orderId)
+        {
+            try
+            {
+                var order = db.tblOrders.Find(orderId);
+                if (order != null)
+                {
+                    order.sState = "Đã xác nhận";  // ✅ Thay đổi từ "Chờ thanh toán" -> "Đã xác nhận"
+                    order.iPaid = 1;
+
+                    var orderDetails = db.tblCheckoutDetails.Where(x => x.FK_iOrderID == orderId);
+                    foreach (var item in orderDetails)
+                    {
+                        item.sStatus = "Đã xác nhận";
+                    }
+
+                    db.SaveChanges();
+                }
+                return Json(new { success = true });
+            }
+            catch
+            {
+                return Json(new { success = false });
+            }
+        }
+        [HttpPost]
+
         public ActionResult DatHang()
         {
             //Kiểm tra đăng đăng nhập
@@ -151,50 +297,73 @@ namespace giadinhthoxinh.Controllers
             {
                 return RedirectToAction("Login", "User");
             }
-            //Kiểm tra giỏ hàng
-            if (Session["User"] == null)
-            {
-                RedirectToAction("Index", "Home");
-            }
-           
-            //Thêm đơn hàng
-            tblOrder ddh = new tblOrder();
-            List<ProductInCart> gh = LayGioHang();
-          
-            tblUser kh = (tblUser)Session["User"];
-            //ddh.ma_DH = SinhMaDH();
-            ddh.FK_iAccountID = kh.PK_iAccountID;
-            ddh.sDeliveryAddress = Request.Form["sDeliveryAddress"];
-            ddh.sCustomerName = Request.Form["sCustomerName"];
-            ddh.sCustomerPhone = Request.Form["sCustomerPhone"];
-            ddh.iDeliveryMethod= int.Parse(Request.Form["iDeliveryMethod"]);
-            ddh.iPaid = 0;
-            ddh.dInvoidDate = DateTime.Now;
-            ddh.fSurcharge= float.Parse(TongTien().ToString());          
-            ddh.sState = "Đã xác nhận"; // Tự động xác nhận khi đặt hàng
-            ddh.sBiller = "Hệ thống"; // Người xác nhận là hệ thống
-            int sum = 0;
-            Console.WriteLine(ddh);
-            db.tblOrders.Add(ddh);
-            db.SaveChanges();
-            //Thêm chi tiết đơn hàng
-            foreach (var item in gh)
-            {
-                tblCheckoutDetail ctDH = new tblCheckoutDetail();
-                ctDH.FK_iOrderID = ddh.PK_iOrderID;
-                ctDH.FK_iProductID = item.ProductID;
-                ctDH.iQuantity = item.Quatity;
-                ctDH.fPrice = item.Price;
-                ctDH.sStatus = "Đã xác nhận"; // Tự động xác nhận khi đặt hàng
-                db.tblCheckoutDetails.Add(ctDH);
-                // db.Chitietdonhangs.Add(ctDH);
-            }
-            db.SaveChanges();
-            Session["GioHang"] = null;
-            return RedirectToAction("OrderDetail", new { id = ddh.PK_iOrderID });
-        
-        }
 
+            try
+            {
+                //Thêm đơn hàng
+                tblOrder ddh = new tblOrder();
+                List<ProductInCart> gh = LayGioHang();
+                tblUser kh = (tblUser)Session["User"];
+
+                ddh.FK_iAccountID = kh.PK_iAccountID;
+                ddh.sDeliveryAddress = Request.Form["sDeliveryAddress"];
+                ddh.sCustomerName = Request.Form["sCustomerName"];
+                ddh.sCustomerPhone = Request.Form["sCustomerPhone"];
+                ddh.iDeliveryMethod = int.Parse(Request.Form["iDeliveryMethod"]);
+                ddh.iPaid = 0;
+                ddh.dInvoidDate = DateTime.Now;
+                ddh.fSurcharge = float.Parse(TongTien().ToString());
+                ddh.sState = "Đã xác nhận";
+                ddh.sBiller = "Hệ thống";
+
+                db.tblOrders.Add(ddh);
+                db.SaveChanges();
+
+                //Thêm chi tiết đơn hàng
+                foreach (var item in gh)
+                {
+                    tblCheckoutDetail ctDH = new tblCheckoutDetail();
+                    ctDH.FK_iOrderID = ddh.PK_iOrderID;
+                    ctDH.FK_iProductID = item.ProductID;
+                    ctDH.iQuantity = item.Quatity;
+                    ctDH.fPrice = item.Price;
+                    ctDH.sStatus = "Đã xác nhận";
+                    db.tblCheckoutDetails.Add(ctDH);
+                }
+
+                db.SaveChanges();
+
+                // Xóa giỏ hàng
+                Session["GioHang"] = null;
+
+                // Tính số tiền thanh toán
+                decimal tongTien = (decimal)ddh.fSurcharge;
+                int amountInVND = (int)Math.Ceiling(tongTien / 1000) * 1000;
+
+                if (amountInVND < 5000)
+                    amountInVND = 5000;
+
+                if (amountInVND > 1000000000)
+                    amountInVND = 1000000000;
+
+                // Trả về JSON để AJAX xử lý
+                return Json(new
+                {
+                    success = true,
+                    orderId = ddh.PK_iOrderID,
+                    amount = amountInVND,
+                    message = "Đặt hàng thành công"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = "Lỗi: " + ex.Message
+                });
+            }
+        }
         // Lịch sử đơn hàng
         public ActionResult OrderHistory()
         {

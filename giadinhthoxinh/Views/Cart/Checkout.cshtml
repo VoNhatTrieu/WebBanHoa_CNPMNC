@@ -405,6 +405,7 @@
                     @using (Html.BeginForm("DatHang", "Cart", FormMethod.Post, new { @id = "checkoutForm", enctype = "multipart/form-data" }))
                     {
                         @Html.AntiForgeryToken()
+                        <input type="hidden" id="paymentMethod" name="paymentMethod" value="" />
 
                         <!-- Họ và tên -->
                         <div class="form-group">
@@ -454,27 +455,21 @@
                         </div>
 
                         <!-- Phương thức giao hàng -->
-                        <select id="iDeliveryMethod"
-                                name="iDeliveryMethod"
-                                class="form-control"
-                                required
-                                style="
-                        padding: 12px 16px !important;       /* giảm padding để cùng chiều cao */
-                        height: 46px !important;             /* cùng chiều cao với input */
-                        line-height: 1.5 !important;
-                        border-radius: 10px !important;
-                        font-size: 15px !important;
-                        background-color: #f8f9fa !important;
-                        border: 2px solid #e9ecef !important;
-                        width: 100% !important;
-                        color: #000 !important;
-                        -webkit-appearance: menulist !important;
-                        -moz-appearance: menulist !important;">
-
-                            <option value="">-- Chọn phương thức giao hàng --</option>
-                            <option value="1">Giao hàng tận nơi (Phí ship theo khu vực)</option>
-                            <option value="2">Nhận tại cửa hàng (Miễn phí)</option>
-                        </select>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fa fa-truck"></i>
+                                Phương thức giao hàng
+                                <span class="required">*</span>
+                            </label>
+                            <select id="iDeliveryMethod"
+                                    name="iDeliveryMethod"
+                                    class="form-control"
+                                    required>
+                                <option value="">-- Chọn phương thức giao hàng --</option>
+                                <option value="1">Giao hàng tận nơi (Phí ship theo khu vực)</option>
+                                <option value="2">Nhận tại cửa hàng (Miễn phí)</option>
+                            </select>
+                        </div>
 
                         <!-- Ghi chú -->
                         <div class="form-group">
@@ -489,34 +484,36 @@
                                       placeholder="Ghi chú về đơn hàng, ví dụ: thời gian giao hàng, yêu cầu đặc biệt..."></textarea>
                         </div>
 
-                        <!-- Order Summary (Optional - nếu có ViewBag data) -->
-                        if (ViewBag.TongTien != null)
-                        {
-                            <div class="order-summary">
-                                <h5>
-                                    <i class="fa fa-list-alt"></i>
-                                    Tổng quan đơn hàng
-                                </h5>
-                                <div class="order-summary-item">
-                                    <span>Tổng tiền hàng:</span>
-                                    <span>@ViewBag.TongTien</span>
-                                </div>
-                                <div class="order-summary-item">
-                                    <span>Phí vận chuyển:</span>
-                                    <span>Miễn phí</span>
-                                </div>
-                                <div class="order-summary-total">
-                                    <span>Tổng thanh toán:</span>
-                                    <span>@ViewBag.TongTien</span>
-                                </div>
+                        <!-- Order Summary -->
+                        <div class="order-summary">
+                            <h5>
+                                <i class="fa fa-list-alt"></i>
+                                Tổng quan đơn hàng
+                            </h5>
+                            <div class="order-summary-item">
+                                <span>Tổng tiền hàng:</span>
+                                <span>@ViewBag.TongTien</span>
                             </div>
-                        }
+                            <div class="order-summary-item">
+                                <span>Phí vận chuyển:</span>
+                                <span>Miễn phí</span>
+                            </div>
+                            <div class="order-summary-total">
+                                <span>Tổng thanh toán:</span>
+                                <span>@ViewBag.TongTien</span>
+                            </div>
+                        </div>
 
-                        <!-- Submit Section -->
+                        <!-- Submit Section - 2 nút hiển thị cùng lúc -->
                         <div class="submit-section">
-                            <button type="submit" class="btn-submit" id="btnSubmit">
+                            <button type="button" class="btn-submit" id="btnSubmit">
                                 <i class="fa fa-check-circle"></i>
                                 Xác nhận đặt hàng
+                            </button>
+
+                            <button type="button" class="btn-submit" id="btnVNPay" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);">
+                                <i class="fa fa-credit-card"></i>
+                                Thanh toán VNPay
                             </button>
 
                             <a href="/cart/cart" class="btn-back">
@@ -525,57 +522,107 @@
                             </a>
                         </div>
                     }
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<script>
-    const form = document.getElementById('checkoutForm');
-    const overlay = document.getElementById('loadingOverlay');
+                    <script>
+                        const form = document.getElementById('checkoutForm');
+                        const overlay = document.getElementById('loadingOverlay');
+                        const btnSubmit = document.getElementById('btnSubmit');
+                        const btnVNPay = document.getElementById('btnVNPay');
+                        const paymentMethodInput = document.getElementById('paymentMethod');
 
-    form.addEventListener('submit', function (e) {
-        e.preventDefault(); // chặn gửi tạm thời
-        overlay.classList.add('show'); // bật hiệu ứng loading
+                        // Hàm validate form
+                        function validateForm() {
+                            const phone = document.getElementById('sCustomerPhone').value.trim();
+                            const name = document.getElementById('sCustomerName').value.trim();
+                            const address = document.getElementById('sDeliveryAddress').value.trim();
+                            const deliveryMethod = document.getElementById('iDeliveryMethod').value;
+                            const phoneRegex = /^[0-9]{10,11}$/;
 
-        const phone = document.getElementById('sCustomerPhone').value.trim();
-        const name = document.getElementById('sCustomerName').value.trim();
-        const address = document.getElementById('sDeliveryAddress').value.trim();
-        const deliveryMethod = document.getElementById('iDeliveryMethod').value;
+                            if (!phoneRegex.test(phone)) {
+                                alert('⚠️ Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.');
+                                return false;
+                            }
 
-        const phoneRegex = /^[0-9]{10,11}$/;
+                            if (name.length < 3) {
+                                alert('⚠️ Họ và tên phải có ít nhất 3 ký tự!');
+                                return false;
+                            }
 
-        if (!phoneRegex.test(phone)) {
-            alert('⚠️ Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.');
-            overlay.classList.remove('show');
-            return;
-        }
+                            if (address.length < 10) {
+                                alert('⚠️ Vui lòng nhập địa chỉ chi tiết!');
+                                return false;
+                            }
 
-        if (name.length < 3) {
-            alert('⚠️ Họ và tên phải có ít nhất 3 ký tự!');
-            overlay.classList.remove('show');
-            return;
-        }
+                            if (!deliveryMethod) {
+                                alert('⚠️ Vui lòng chọn phương thức giao hàng!');
+                                return false;
+                            }
 
-        if (address.length < 10) {
-            alert('⚠️ Vui lòng nhập địa chỉ chi tiết!');
-            overlay.classList.remove('show');
-            return;
-        }
+                            return true;
+                        }
 
-        if (!deliveryMethod) {
-            alert('⚠️ Vui lòng chọn phương thức giao hàng!');
-            overlay.classList.remove('show');
-            return;
-        }
+                        // Nút "Xác nhận đặt hàng" - thanh toán khi nhận hàng
+                        btnSubmit.addEventListener('click', function (e) {
+                            e.preventDefault();
 
-        // Nếu hợp lệ thì gửi form
-        form.submit();
-    });
+                            if (!validateForm()) return;
 
-    // Auto-format phone number
-    document.getElementById('sCustomerPhone').addEventListener('input', function (e) {
-        this.value = this.value.replace(/[^0-9]/g, '');
-    });
-</script>
+                            paymentMethodInput.value = 'Thanh toán khi nhận hàng';
+                            overlay.classList.add('show');
+
+                            $.ajax({
+                                url: '/Cart/DatHangTamThoi',
+                                type: 'POST',
+                                data: $(form).serialize(),
+                                success: function (response) {
+                                    overlay.classList.remove('show');
+                                    if (response.success) {
+                                        alert('✅ Đặt hàng thành công!');
+                                        window.location.href = '/Cart/OrderHistory';
+                                    } else {
+                                        alert('❌ ' + response.message);
+                                    }
+                                },
+                                error: function () {
+                                    overlay.classList.remove('show');
+                                    alert('❌ Lỗi khi đặt hàng. Vui lòng thử lại!');
+                                }
+                            });
+                        });
+
+                        // Nút "Thanh toán VNPay"
+                        btnVNPay.addEventListener('click', function (e) {
+                            e.preventDefault();
+
+                            if (!validateForm()) return;
+
+                            paymentMethodInput.value = 'Thanh toán bằng VNPay';
+                            overlay.classList.add('show');
+
+                            $.ajax({
+                                url: '/Cart/DatHangVNPay',
+                                type: 'POST',
+                                data: $(form).serialize(),
+                                success: function (response) {
+                                    overlay.classList.remove('show');
+                                    if (response.success) {
+                                        // Lưu orderId để sau khi VNPay return, có thể xử lý
+                                        sessionStorage.setItem('pendingOrderId', response.orderId);
+                                        // Chuyển sang VNPay
+                                        window.location.href = '/VnPay/Pay?orderId=' + response.orderId + '&amount=' + response.amount;
+                                    } else {
+                                        alert('❌ ' + response.message);
+                                    }
+                                },
+                                error: function () {
+                                    overlay.classList.remove('show');
+                                    alert('❌ Lỗi khi đặt hàng. Vui lòng thử lại!');
+                                }
+                            });
+                        });
+
+                        // Auto-format phone number
+                        document.getElementById('sCustomerPhone').addEventListener('input', function (e) {
+                            this.value = this.value.replace(/[^0-9]/g, '');
+                        });
+                    </script>

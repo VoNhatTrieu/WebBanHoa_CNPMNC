@@ -49,29 +49,60 @@ namespace giadinhthoxinh.Areas.Admin.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PK_iProductID,FK_iCategoryID,FK_iPromoteID,sProductName,sDescribe,fPrice,sColor,sSize,sImage,sUnit")] tblProduct tblProduct, HttpPostedFileBase fileAnh)
+        public ActionResult Create(HttpPostedFileBase fileAnh)
         {
-            if (ModelState.IsValid && fileAnh.ContentLength > 0)
+            try
             {
-                //Lưu file
-                string rootFolder = Server.MapPath("/Data/");
-                string pathImage = rootFolder + fileAnh.FileName;
-                fileAnh.SaveAs(pathImage);
-                //Lưu url hình ảnh
-                tblProduct.sImage = "/Data/" + fileAnh.FileName;
+                tblProduct product = new tblProduct();
 
-                db.tblProducts.Add(tblProduct);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                // Lấy các giá trị từ form
+                int.TryParse(Request.Form["FK_iCategoryID"], out int catId);
+                int.TryParse(Request.Form["FK_iPromoteID"], out int promoId);
+
+                product.FK_iCategoryID = catId;
+                product.FK_iPromoteID = promoId;
+                product.sProductName = Request.Form["sProductName"];
+                product.sDescribe = Request.Form["sDescribe"];
+                product.sColor = Request.Form["sColor"];
+                product.sSize = Request.Form["sSize"];
+                product.sUnit = Request.Form["sUnit"];
+
+                // ✅ Làm sạch giá tiền
+                string rawPrice = Request.Form["fPrice"];
+                if (!string.IsNullOrEmpty(rawPrice))
+                {
+                    rawPrice = rawPrice.Replace(".", "").Replace(",", "");
+                    if (float.TryParse(rawPrice, out float priceValue))
+                        product.fPrice = priceValue;
+                    else
+                        ModelState.AddModelError("fPrice", "Giá không hợp lệ.");
+                }
+
+                // ✅ Xử lý upload ảnh
+                if (fileAnh != null && fileAnh.ContentLength > 0)
+                {
+                    string rootFolder = Server.MapPath("/Data/");
+                    string fileName = System.IO.Path.GetFileName(fileAnh.FileName);
+                    string pathImage = System.IO.Path.Combine(rootFolder, fileName);
+                    fileAnh.SaveAs(pathImage);
+                    product.sImage = "/Data/" + fileName;
+                }
+
+                if (ModelState.IsValid)
+                {
+                    db.tblProducts.Add(product);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            //else
-            //{
-            //    ModelState.AddModelError("FileAnh", "Ảnh không được để trống");
-            //}
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Lỗi: " + ex.Message);
+            }
 
-            ViewBag.FK_iCategoryID = new SelectList(db.tblCategories, "PK_iCategoryID", "sCategoryName", tblProduct.FK_iCategoryID);
-            ViewBag.FK_iPromoteID = new SelectList(db.tblPromotes, "PK_iPromoteID", "sPromoteName", tblProduct.FK_iPromoteID);
-            return View(tblProduct);
+            ViewBag.FK_iCategoryID = new SelectList(db.tblCategories, "PK_iCategoryID", "sCategoryName");
+            ViewBag.FK_iPromoteID = new SelectList(db.tblPromotes, "PK_iPromoteID", "sPromoteName");
+            return View();
         }
 
         // GET: Admin/Products/Edit/5

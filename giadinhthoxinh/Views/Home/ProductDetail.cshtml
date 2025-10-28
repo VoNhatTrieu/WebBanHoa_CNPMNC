@@ -345,8 +345,13 @@
                         <div class="free_delivery d-flex flex-row align-items-center justify-content-center">
                             <span class="ti-truck"></span><span>miễn phí vận chuyển</span>
                         </div>
-                        <div class="original_price">@oldPrice</div>
-                        <div class="product_price">@Model.fPrice</div>
+                        <div class="original_price">
+                            @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} đ", oldPrice)
+                        </div>
+                        <div class="product_price">
+                            @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} đ", Model.fPrice)
+                        </div>
+
                         <ul class="star_rating">
                             <li><i class="fa fa-star" aria-hidden="true"></i></li>
                             <li><i class="fa fa-star" aria-hidden="true"></i></li>

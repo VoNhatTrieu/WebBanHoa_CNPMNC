@@ -81,7 +81,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-2">Hình thức thanh toán</label>
                             <div class="col-md-10">
-                                <input type="radio" name="iDeliveryMethod" value="0"  style="margin-left: 20px"/>Thanh toán online 
+                                <input type="radio" name="iDeliveryMethod" value="0"  style="margin-left: 20px" checked/>Thanh toán online 
                                 <input type="radio" name="iDeliveryMethod" value="1" style="margin-left: 40px" checked/>Thanh toán khi nhận hàng
                                 @Html.ValidationMessageFor(model => model.iDeliveryMethod, "", new { @class = "text-danger" })
                             </div>

@@ -1,0 +1,346 @@
+﻿@model giadinhthoxinh.Models.VnPaymentResponseModel
+@{
+    ViewBag.Title = "Kết quả thanh toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .payment-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .payment-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        width: 100%;
+        overflow: hidden;
+        animation: slideUp 0.6s ease-out;
+    }
+
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .payment-header {
+        padding: 50px 30px 40px;
+        text-align: center;
+        background-size: 400% 400%;
+        animation: gradientShift 8s ease infinite;
+    }
+
+    .payment-header.success {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%, #10b981 200%);
+        color: white;
+    }
+
+    .payment-header.failed {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%, #ef4444 200%);
+        color: white;
+    }
+
+    @@keyframes gradientShift {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+
+    .payment-icon {
+        font-size: 70px;
+        margin-bottom: 20px;
+        display: inline-block;
+        animation: bounce 0.7s ease-out;
+    }
+
+    @@keyframes bounce {
+        0% {
+            transform: scale(0.3);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.15);
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .payment-title {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: -0.5px;
+    }
+
+    .payment-subtitle {
+        font-size: 15px;
+        opacity: 0.95;
+        font-weight: 500;
+    }
+
+    .payment-content {
+        padding: 45px 35px;
+    }
+
+    .info-item {
+        background: linear-gradient(135deg, #f8f9fa 0%, #f0f1f3 100%);
+        border-left: 5px solid;
+        padding: 18px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-header.success ~ .payment-content .info-item {
+        border-left-color: #10b981;
+    }
+
+    .payment-header.failed ~ .payment-content .info-item {
+        border-left-color: #ef4444;
+    }
+
+    .info-label {
+        font-size: 12px;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .info-value {
+        font-size: 18px;
+        color: #1f2937;
+        font-weight: 700;
+        word-break: break-all;
+        font-family: 'Courier New', monospace;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-badge.success {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-badge.failed {
+        background: #fee2e2;
+        color: #7f1d1d;
+    }
+
+    .divider {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+        margin: 35px 0;
+    }
+
+    .success-message {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+        color: #166534;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .success-message li {
+        margin-bottom: 8px;
+    }
+
+    .failed-message {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 30px;
+        color: #991b1b;
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px 25px;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-secondary {
+        background: #e5e7eb;
+        color: #1f2937;
+        border: 2px solid #d1d5db;
+    }
+
+    .btn-secondary:hover {
+        background: #d1d5db;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    @@media (max-width: 600px) {
+        .payment-content {
+            padding: 30px 20px;
+        }
+
+        .payment-header {
+            padding: 40px 20px 30px;
+        }
+
+        .payment-title {
+            font-size: 26px;
+        }
+
+        .info-value {
+            font-size: 16px;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 14px;
+        }
+    }
+</style>
+
+<div class="payment-container">
+    <div class="payment-card">
+        @if (Model.Success)
+        {
+            <div class="payment-header success">
+                <div class="payment-icon">✅</div>
+                <h1 class="payment-title">Thanh toán thành công!</h1>
+                <p class="payment-subtitle">Cảm ơn bạn đã tin tưởng chúng tôi</p>
+            </div>
+
+            <div class="payment-content">
+                <div class="info-item">
+                    <div class="info-label">📋 Mã đơn hàng</div>
+                    <div class="info-value">@Model.OrderId</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">🔐 Mã giao dịch</div>
+                    <div class="info-value">@Model.TransactionId</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">📊 Trạng thái</div>
+                    <div class="info-value">
+                        <span class="status-badge success">@Model.VnPayResponseCode</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="success-message">
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li>✓ Đơn hàng của bạn đã được xác nhận và lưu trữ</li>
+                        <li>✓ Email xác nhận đã được gửi đến địa chỉ email của bạn</li>
+                        <li>✓ Hàng hóa sẽ được giao trong 2-3 ngày làm việc</li>
+                        <li>✓ Bạn có thể theo dõi đơn hàng trong mục "Đơn hàng của tôi"</li>
+                    </ul>
+                </div>
+
+                <div class="button-group">
+                    <a href="/Cart/Cart" class="btn btn-secondary">← Quay lại giỏ hàng</a>
+                    <a href="/" class="btn btn-primary">Tiếp tục mua sắm →</a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="payment-header failed">
+                <div class="payment-icon">❌</div>
+                <h1 class="payment-title">Thanh toán thất bại!</h1>
+                <p class="payment-subtitle">Vui lòng kiểm tra và thử lại</p>
+            </div>
+
+            <div class="payment-content">
+                <div class="info-item">
+                    <div class="info-label">⚠️ Mã lỗi</div>
+                    <div class="info-value">@Model.VnPayResponseCode</div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="failed-message">
+                    <p><strong>Lý do:</strong> Giao dịch của bạn không được hoàn thành thành công.</p>
+                    <p style="margin-top: 12px;">Vui lòng kiểm tra:</p>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Thông tin thẻ tín dụng/ghi nợ</li>
+                        <li>Số dư tài khoản</li>
+                        <li>Kết nối internet</li>
+                    </ul>
+                </div>
+
+                <div class="button-group">
+                    <a href="/Cart/Cart" class="btn btn-secondary">← Quay lại giỏ hàng</a>
+                   
+                </div>
+            </div>
+        }
+    </div>
+</div>
