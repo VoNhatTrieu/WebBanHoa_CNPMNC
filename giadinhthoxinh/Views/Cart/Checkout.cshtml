@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Checkout";
+    ViewBag.Title = "Xác nhận đơn hàng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -381,9 +381,9 @@
             <div class="checkout-header">
                 <h1>
                     <i class="fa fa-shopping-bag"></i>
-                    Thanh Toán Đơn Hàng
+                    Xác Nhận Đơn Hàng
                 </h1>
-                <p>Vui lòng điền đầy đủ thông tin để hoàn tất đơn hàng</p>
+                <p>Vui lòng điền đầy đủ thông tin và chọn phương thức thanh toán</p>
             </div>
 
             <!-- Main Card -->
@@ -504,16 +504,16 @@
                             </div>
                         </div>
 
-                        <!-- Submit Section - 2 nút hiển thị cùng lúc -->
+                        <!-- Submit Section - 2 phương thức thanh toán -->
                         <div class="submit-section">
                             <button type="button" class="btn-submit" id="btnSubmit">
-                                <i class="fa fa-check-circle"></i>
-                                Xác nhận đặt hàng
+                                <i class="fa fa-hand-holding-usd"></i>
+                                Thanh toán khi nhận hàng
                             </button>
 
                             <button type="button" class="btn-submit" id="btnVNPay" style="background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);">
                                 <i class="fa fa-credit-card"></i>
-                                Thanh toán VNPay
+                                Thanh toán bằng VNPay
                             </button>
 
                             <a href="/cart/cart" class="btn-back">

@@ -139,10 +139,12 @@ namespace giadinhthoxinh.Controllers
            
         }
         /*
-         * Thanh toán 
-         * giohang.lstproduct.Clear();
+         * ===== HỆ THỐNG THANH TOÁN ĐƠN HÀNG =====
+         * Có 2 phương thức thanh toán:
+         * 1. Thanh toán khi nhận hàng (COD): iPaid = 0
+         * 2. Thanh toán bằng VNPay: iPaid = 1
          */
-        // ===== PHƯƠNG THỨC 1: Đặt hàng thường  =====
+        // ===== PHƯƠNG THỨC 1: Đặt hàng và thanh toán khi nhận hàng (COD) =====
         [HttpPost]
         public ActionResult DatHangTamThoi()
         {
@@ -162,10 +164,10 @@ namespace giadinhthoxinh.Controllers
                 ddh.sCustomerName = Request.Form["sCustomerName"];
                 ddh.sCustomerPhone = Request.Form["sCustomerPhone"];
                 ddh.iDeliveryMethod = int.Parse(Request.Form["iDeliveryMethod"]);
-                ddh.iPaid = 0;  // Chưa thanh toán
+                ddh.iPaid = 0;  // ✅ Thanh toán khi nhận hàng (COD)
                 ddh.dInvoidDate = DateTime.Now;
                 ddh.fSurcharge = float.Parse(TongTien().ToString());
-                ddh.sState = "Đã xác nhận";  // Trạng thái chờ xác nhận
+                ddh.sState = "Đã xác nhận";  // ✅ Trạng thái: đã xác nhận đơn hàng
                 ddh.sBiller = "Thanh toán khi nhận hàng";  // ✅ Ghi phương thức thanh toán
 
                 db.tblOrders.Add(ddh);
@@ -214,10 +216,10 @@ namespace giadinhthoxinh.Controllers
                 ddh.sCustomerName = Request.Form["sCustomerName"];
                 ddh.sCustomerPhone = Request.Form["sCustomerPhone"];
                 ddh.iDeliveryMethod = int.Parse(Request.Form["iDeliveryMethod"]);
-                ddh.iPaid = 1;  // Chưa thanh toán
+                ddh.iPaid = 1;  // ✅ Đã thanh toán qua VNPay
                 ddh.dInvoidDate = DateTime.Now;
                 ddh.fSurcharge = float.Parse(TongTien().ToString());
-                ddh.sState = "Đã thanh toán";  // Trạng thái: chờ thanh toán
+                ddh.sState = "Đã xác nhận";  // ✅ Trạng thái: đã xác nhận đơn hàng
                 ddh.sBiller = "VNPay";  // ✅ Ghi phương thức thanh toán là VNPay
 
                 db.tblOrders.Add(ddh);
@@ -231,7 +233,7 @@ namespace giadinhthoxinh.Controllers
                     ctDH.FK_iProductID = item.ProductID;
                     ctDH.iQuantity = item.Quatity;
                     ctDH.fPrice = item.Price;
-                    ctDH.sStatus = "Đã thanh toán";
+                    ctDH.sStatus = "Đã xác nhận";
                     db.tblCheckoutDetails.Add(ctDH);
                 }
 
@@ -261,8 +263,8 @@ namespace giadinhthoxinh.Controllers
                 return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
         }
-        // ===== PHƯƠNG THỨC 3: Update trạng thái khi thanh toán VNPay thành công =====
-        // (Cái này update trong VnPayController.cs Return() action)
+        // ===== PHƯƠNG THỨC 3: Cập nhật trạng thái khi thanh toán VNPay thành công =====
+        // (Được gọi từ VnPayController.cs Return() action)
         public ActionResult UpdateOrderAfterVNPaySuccess(int orderId)
         {
             try
@@ -270,8 +272,8 @@ namespace giadinhthoxinh.Controllers
                 var order = db.tblOrders.Find(orderId);
                 if (order != null)
                 {
-                    order.sState = "Đã xác nhận";  // ✅ Thay đổi từ "Chờ thanh toán" -> "Đã xác nhận"
-                    order.iPaid = 1;
+                    order.sState = "Đã xác nhận";  // ✅ Xác nhận đơn hàng sau khi thanh toán thành công
+                    order.iPaid = 1;  // ✅ Đã thanh toán qua VNPay
 
                     var orderDetails = db.tblCheckoutDetails.Where(x => x.FK_iOrderID == orderId);
                     foreach (var item in orderDetails)

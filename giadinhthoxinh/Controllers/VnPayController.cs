@@ -72,7 +72,7 @@ namespace giadinhthoxinh.Controllers
                 response.VnPayResponseCode = responseCode;
                 response.Success = responseCode == "00";
 
-                // ✅ NẾU THANH TOÁN THÀNH CÔNG - CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG
+                // ✅ NẾU THANH TOÁN VNPAY THÀNH CÔNG - CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG
                 if (response.Success)
                 {
                     try
@@ -83,16 +83,16 @@ namespace giadinhthoxinh.Controllers
 
                         if (order != null)
                         {
-                            // ✅ Cập nhật trạng thái: "Chờ thanh toán" → "Đã thanh toán"
-                            order.sState = "Đã thanh toán";
-                            order.iPaid = 1;
+                            // ✅ Cập nhật trạng thái: thanh toán VNPay thành công → "Đã xác nhận"
+                            order.sState = "Đã xác nhận";
+                            order.iPaid = 1;  // ✅ Đã thanh toán qua VNPay
                             order.sBiller = "VNPay";  // ✅ Ghi phương thức thanh toán
 
                             // Cập nhật chi tiết đơn hàng
                             var orderDetails = db.tblCheckoutDetails.Where(x => x.FK_iOrderID == orderId);
                             foreach (var item in orderDetails)
                             {
-                                item.sStatus = "Đã thanh toán";
+                                item.sStatus = "Đã xác nhận";
                             }
 
                             db.SaveChanges();
